@@ -1,0 +1,190 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\geometry{margin=1in}
+\setstretch{1.2}
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{CSC207 Project Blueprint}}\\[0.5em]
+    \textbf{Group: TUT0501-13}\\[0.3em]
+    \textbf{Team Name: Full marks}\\[1em]
+\end{center}
+
+\section{Domain}
+
+\noindent
+\textbf{Convert YouTube videos to mp3 audios}\\[0.5em]
+An application that allows a user to paste a YouTube link, download the video as an MP4 file using yt-dlp, and then convert that MP4 file into an MP3 audio file using FFmpeg.
+
+
+\section{User Stories}
+
+\begin{enumerate}
+    \item As a user, I want to paste a YouTube video link and download it as an MP4 file so that I can watch it offline.
+    \item As a user, I want to convert a downloaded MP4 file into MP3 format so that I can keep only the audio for music or lectures.
+    \item As a user, I want to choose where the downloaded and converted files are saved so that I can easily find them later.
+    \item As a user, I want to see a progress indicator for downloading and converting so that I know when each task is complete.
+    \item As a user, I want to paste a YouTube playlist link to download its contents so that I can quickly obtain related videos.
+    \item As a user, I want to choose which playlist videos to exclude from conversion so that I can download only the desired items.
+\end{enumerate}
+
+\section{Use Cases}
+
+\subsection{Use Case 1: Download YouTube Video (MP4)}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item User pastes a YouTube video URL.
+    \item System validates the URL.
+    \item System calls \texttt{yt-dlp} (via command line) to download the video in MP4 format.
+    \item System saves the MP4 file to the selected folder.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item Invalid URL $\rightarrow$ show error message.
+    \item Network failure $\rightarrow$ display retry option.
+\end{itemize}
+
+
+\subsection{Use Case 2: Convert MP4 to MP3}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item User selects a downloaded MP4 file.
+    \item System uses \texttt{FFmpeg} to extract audio and save it as MP3.
+    \item System saves the new MP3 file in the selected folder.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item If conversion fails, show error message.
+    \item If an MP3 with the same name exists, ask to overwrite or rename.
+\end{itemize}
+
+
+\subsection{Use Case 3: Choose Save Location}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item Before download or conversion, user selects a destination folder.
+    \item System stores the selected path in settings.
+    \item System saves all future files (MP4 and MP3) to this folder.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item If the folder path is invalid or inaccessible, system prompts user to choose another location.
+    \item If no path is selected, system uses default “Downloads” directory.
+\end{itemize}
+
+
+\subsection{Use Case 4: Show Progress}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item During download or conversion, system displays progress (e.g., 0–100\%).
+    \item When complete, system shows “Download finished” or “Conversion complete” with file path.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item If the process is canceled, stop the operation and remove partial files.
+\end{itemize}
+
+
+\subsection{Use Case 5: Download YouTube Playlist as MP4 Files}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item User enters YouTube playlist URL.
+    \item System displays names of all videos with checkboxes (all selected by default).
+    \item User may deselect or reselect specific videos.
+    \item System uses \texttt{yt-dlp} to download the selected videos as MP4 files.
+    \item System saves files to the specified folder.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item Invalid playlist URL $\rightarrow$ show error message.
+    \item Network issue while validating URL $\rightarrow$ prompt retry or cancel.
+    \item For unavailable or region-locked videos $\rightarrow$ show “skipped” message and continue remaining downloads.
+\end{itemize}
+
+
+\subsection{Use Case 6: Exclude Playlist Videos from Conversion}
+\textbf{Main Flow:}
+\begin{itemize}
+    \item After downloading a playlist, system shows list of all MP4 videos.
+    \item Each video has a checkbox to include or exclude from MP3 conversion.
+    \item User confirms selection.
+    \item System uses \texttt{FFmpeg} to convert only the checked videos to MP3 format.
+    \item System saves the MP3 files to the chosen folder.
+\end{itemize}
+
+\textbf{Alternative Flows:}
+\begin{itemize}
+    \item If no videos are selected, system shows a message: “No items selected for conversion.”
+    \item If conversion for a video fails, system logs the error and continues remaining conversions.
+\end{itemize}
+
+
+\section{MVP (Minimal Viable Product)}
+
+\begin{center}
+\begin{tabular}{|l|l|c|}
+\hline
+\textbf{Lead} & \textbf{Use Case} & \textbf{User Story} \\
+\hline
+Jason & Download YouTube Video (MP4) & 1 \\
+Natasha & Convert MP4 to MP3 & 2 \\
+Mohamed & Choose Save Location & 3 \\
+Daniel & Show Progress & 4 \\
+Christina & Download YouTube Playlist as MP4 Files & 5 \\
+Ricky & Exclude Playlist Videos from Conversion & 6 \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\section{Proposed Entities for the Domain}
+
+\begin{center}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Entity Name} & \textbf{Instance Variables} \\
+\hline
+DownloadTask & String url, String status, String outputPath, double progress \\
+\hline
+ConversionTask & String sourceFilePath, String targetFilePath, String status \\
+\hline
+UserSettings & String downloadDirectory, String audioDirectory, boolean autoOpenFolder \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Proposed API for the Project}
+
+\subsection*{API 1: yt-dlp (Command-Line API)}
+\textbf{Link:} \texttt{https://github.com/yt-dlp/yt-dlp}\\[0.3em]
+\textbf{Purpose:} Downloads YouTube videos as MP4 files.\\[0.3em]
+\textbf{Integration:} Java’s \texttt{ProcessBuilder} executes the command:
+\begin{verbatim}
+yt-dlp -f mp4 <URL>
+\end{verbatim}
+\textbf{Status:} Successfully tested manually outside Java; integration via process execution confirmed feasible.
+
+\subsection*{API 2: FFmpeg (Command-Line API)}
+\textbf{Link:} \texttt{https://github.com/yt-dlp/FFmpeg-Builds}\\[0.3em]
+\textbf{Purpose:} Converts MP4 files into MP3 format.\\[0.3em]
+\textbf{Integration:} Called using:
+\begin{verbatim}
+ffmpeg -i input.mp4 output.mp3
+\end{verbatim}
+\textbf{Status:} Tested manually; conversion from MP4 to MP3 confirmed successful.
+
+\end{document}
