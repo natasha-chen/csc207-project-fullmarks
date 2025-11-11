@@ -8,8 +8,31 @@ public class Converter {
 
     public static void main(String[] args) {
         String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // input link
-        //String outputFolder = System.getenv("USERPROFILE") + "\\Desktop\\mp4 video\\"; // file path for Windows
-        String outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/"; // file path for Mac
+        String outputFolder;
+
+        try {
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win")) {
+                // Windows
+                outputFolder = System.getenv("USERPROFILE") + "\\Desktop\\mp4_video\\";
+            } else if (os.contains("mac")) {
+                // macOS
+                outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/";
+            } else {
+                // Linux or other Unix-like OS
+                outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/";
+            }
+
+        } catch (Exception e) {
+            // fallback if something goes wrong
+            outputFolder = System.getProperty("user.dir") + "/mp4_video/";
+        }
+
+        System.out.println("Using output folder: " + outputFolder);
+
+        // ensure folder exists
+        new java.io.File(outputFolder).mkdirs();
 
         // downloading YouTube video as mp4 file
         downloadVideo(url, outputFolder);
