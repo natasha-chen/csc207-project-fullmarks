@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-public class converter {
+public class Converter {
 
     public static void main(String[] args) {
         String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // input link
-        String outputFolder = System.getenv("USERPROFILE") + "\\Desktop\\mp4 video\\"; // file path
+        //String outputFolder = System.getenv("USERPROFILE") + "\\Desktop\\mp4 video\\"; // file path for Windows
+        String outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/"; // file path for Mac
 
         // downloading YouTube video as mp4 file
         downloadVideo(url, outputFolder);
