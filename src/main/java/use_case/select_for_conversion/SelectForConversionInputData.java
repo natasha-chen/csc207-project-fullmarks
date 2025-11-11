@@ -7,8 +7,14 @@ import java.util.ArrayList;
  */
 public class SelectForConversionInputData {
 
+
     private final ArrayList<String> playlist;
     public SelectForConversionInputData(ArrayList<String> playlist) {
         this.playlist = playlist;
     }
+
+    public ArrayList<String> getPlaylist() {
+        return playlist;
+    }
+
 }

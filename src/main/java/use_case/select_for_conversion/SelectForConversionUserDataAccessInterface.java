@@ -5,4 +5,7 @@ package use_case.select_for_conversion;
  */
 public interface SelectForConversionUserDataAccessInterface {
 
+    /**
+     * Updates the system to record
+     */
 }
