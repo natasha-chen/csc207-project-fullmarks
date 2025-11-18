@@ -61,4 +61,4 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
     public void setProgressController(ProgressController controller) {
         this.progressController = controller;
     }
-}
+    }
