@@ -1,29 +1,45 @@
 ﻿package interface_adapter.ProgressBar;
 
-import usecase.ProgressOutputBoundary;
-import view.ProgressView;
+import use_case.progress.ProgressOutputBoundary;
+import use_case.progress.ProgressOutputData;
 
-public class ProgressPresenter implements ProgressOutputBoundary  {
-    private final ProgressView view;
+/**
+ * Presenter for progress updates.
+ * Converts ProgressOutputData into ProgressState stored in the ViewModel.
+ */
+public class ProgressPresenter implements ProgressOutputBoundary {
 
-    public ProgressPresenter(ProgressView view) {
-        this.view = view;
+    private final ProgressViewModel viewModel;
+
+    public ProgressPresenter(ProgressViewModel viewModel) {
+        this.viewModel = viewModel;
     }
 
     @Override
     public void updateProgress(double percent, String message) {
-        view.showProgress(percent, message);
+        ProgressState state = viewModel.getState();
+        state.setPercent(percent);
+        state.setMessage(message);
+
+        viewModel.firePropertyChanged();
     }
 
     @Override
     public void complete(String message) {
-        view.showCompletion(message);
+        ProgressState state = viewModel.getState();
+        state.setPercent(100.0);
+        state.setMessage(message);
+        state.setComplete(true);
+
+        viewModel.firePropertyChanged();
     }
 
     @Override
     public void error(String message) {
-        view.showError(message);
-    }
-}
+        ProgressState state = viewModel.getState();
+        state.setMessage(message);
+        state.setError(true);
 
+        viewModel.firePropertyChanged();
+    }
 }

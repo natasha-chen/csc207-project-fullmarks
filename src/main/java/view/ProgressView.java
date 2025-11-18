@@ -1,8 +1,8 @@
 package view;
 
-import interface_adapter.progress.ProgressController;
-import interface_adapter.progress.ProgressState;
-import interface_adapter.progress.ProgressViewModel;
+import interface_adapter.ProgressBar.ProgressController;
+import interface_adapter.ProgressBar.ProgressState;
+import interface_adapter.ProgressBar.ProgressViewModel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -8,6 +8,7 @@ public class ProgressState {
     private double percent = 0.0;
     private String message = "Ready";
     private boolean isError = false;
+    private boolean isComplete = false;
 
     public double getPercent() {
         return percent;
@@ -32,4 +33,8 @@ public class ProgressState {
     public void setError(boolean error) {
         isError = error;
     }
+
+    public boolean isComplete() {return isComplete;}
+
+    public void setComplete(boolean complete) {isComplete = complete;}
 }

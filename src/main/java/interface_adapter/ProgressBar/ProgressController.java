@@ -1,23 +1,30 @@
 ﻿package interface_adapter.ProgressBar;
+
 import use_case.progress.ProgressInputBoundary;
-
+/**
+ * Handles requests such as starting a download or cancelling it.
+ */
 public class ProgressController {
-    private final ProgressInputBoundary interacter;
 
-    public ProgressController(ProgressInputBoundary interacter){
-        this.interacter = interacter;
+    private final ProgressInputBoundary interactor;
+
+    public ProgressController(ProgressInputBoundary interactor) {
+        this.interactor = interactor;
     }
 
     /**
-     * Executes the Login Use Case.
-     * @param url the url of the YouTube video
+     * Starts the long-running process (download or conversion).
+     *
+     * @param url the URL of the video to download
      */
-    public void startDownload(String url){
-        interacter.execute(url);
+    public void startDownload(String url) {
+        interactor.execute(url);  /**  depends on the download interacter to do the download action */
     }
 
-    public void cancelDownload(){
-        interacter.cancel;
+    /**
+     * Cancels the long-running process.
+     */
+    public void cancelDownload() {
+        interactor.cancel();
     }
-
 }
