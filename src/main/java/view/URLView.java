@@ -1,4 +1,5 @@
 package view;
+import interface_adapter.url.URLViewModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -13,7 +14,15 @@ import java.beans.PropertyChangeListener;
  */
 public class URLView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    private final URLViewModel urlViewModel;
+
     JTextField textField = new JTextField(30); // 30 columns wide
+
+    public URLView(URLViewModel urlViewModel) {
+        this.urlViewModel = urlViewModel;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
 

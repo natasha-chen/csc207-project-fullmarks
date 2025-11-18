@@ -1,7 +1,21 @@
-package interface_adapter.url;
+﻿package interface_adapter.url;
 
-/**
- * The state for the URL View Model.
- */
 public class URLState {
+    private String url;
+
+    public URLState(String url) {
+        this.url = url;
+    }
+
+    public URLState(URLState urlState) {
+        url = urlState.getUrl();
+
+    }
+
+    public String getUrl() {
+        return url;
+    }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }
