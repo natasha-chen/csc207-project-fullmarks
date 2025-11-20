@@ -1,18 +1,19 @@
 package use_case.select_for_conversion;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Output Data for the Select for Conversion Use Case.
+ * Output Data for the Select for Conversion Use Case. I don't know what the difference should be between Input Data
+ * and Output Data. Perhaps include the URLs and titles of each video?
  */
 public class SelectForConversionOutputData {
-    public final ArrayList<String> selectedVideos;
+    public final List<String> validSelectedVideos;
 
-    public SelectForConversionOutputData(ArrayList<String> videos) {
-        this.selectedVideos = videos;
+    public SelectForConversionOutputData(List<String> videos) {
+        this.validSelectedVideos = videos;
     }
 
-    public ArrayList<String> getVideos() {
-        return selectedVideos;
+    public List<String> getVideos() {
+        return validSelectedVideos;
     }
 }
