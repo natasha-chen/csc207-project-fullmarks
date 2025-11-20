@@ -1,4 +1,4 @@
-package entity;
+package data_access;
 
 public class PathManager {
 
