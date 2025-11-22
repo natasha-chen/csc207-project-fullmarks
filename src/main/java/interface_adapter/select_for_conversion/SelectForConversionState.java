@@ -9,11 +9,9 @@ import java.util.List;
  */
 
 public class SelectForConversionState {
-    // private String username;
     private List<VideoData> playlistVideoData;
     private String errorMessage;
 
-    // public String getUsername() {return username;}
 
     public List<VideoData> getPlaylistData() {return this.playlistVideoData;}
 
@@ -22,8 +20,6 @@ public class SelectForConversionState {
     public void setPlaylistData(List<VideoData> playlistData) {this.playlistVideoData = playlistData;}
 
     public void setConversionError(String errorMessage) {this.errorMessage = errorMessage;}
-
-    // public void setUsername(String username) {this.username = username;}
 
     @Override
     public String toString() {

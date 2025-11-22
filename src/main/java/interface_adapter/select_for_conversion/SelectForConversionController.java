@@ -19,10 +19,10 @@ public class SelectForConversionController {
 
     /**
      * Executes the Select for Conversion Use Case.
-     * @param downloadTasks the Map of url to chosen format
+     * @param convertTasks the List of VideoData
      */
-    public void execute(List<VideoData> downloadTasks) {
-        final SelectForConversionInputData selectForConversionInputData = new SelectForConversionInputData(downloadTasks);
+    public void execute(List<VideoData> convertTasks) {
+        final SelectForConversionInputData selectForConversionInputData = new SelectForConversionInputData(convertTasks);
         selectForConversionUseCaseInteractor.execute(selectForConversionInputData);
     }
 

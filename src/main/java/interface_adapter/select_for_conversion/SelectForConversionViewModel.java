@@ -12,7 +12,7 @@ public class SelectForConversionViewModel extends ViewModel<SelectForConversionS
     public static final String VIDEO_TITLE_LABEL = "Video";
     public static final String MP3_LABEL = "MP3";
 
-    public static final String CANCEL_BUTTON_LABEL = "Cancel";
+    public static final String SKIP_BUTTON_LABEL = "Skip";
     public static final String BEGIN_BUTTON_LABEL = "Begin";
 
     public SelectForConversionViewModel() {

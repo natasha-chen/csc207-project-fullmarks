@@ -4,6 +4,7 @@ import interface_adapter.select_for_conversion.SelectForConversionController;
 import interface_adapter.select_for_conversion.SelectForConversionState;
 import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import custom_datatype.VideoData;
+
 import java.util.List;
 
 import java.awt.event.ItemEvent;
@@ -19,14 +20,13 @@ public class PlaylistView extends JPanel {
     private transient SelectForConversionController selectForConversionController = null;
     private transient SelectForConversionState currentState;
 
-    private final JButton cancel;
+    private final JButton skip;
     private final JButton begin;
 
     public PlaylistView(SelectForConversionViewModel selectForConversionViewModel) {
         this.currentState = selectForConversionViewModel.getState();
 
         this.selectForConversionViewModel = selectForConversionViewModel;
-        selectForConversionViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel(SelectForConversionViewModel.TITLE_LABEL);
         title.setAlignmentX(CENTER_ALIGNMENT);
@@ -43,22 +43,22 @@ public class PlaylistView extends JPanel {
         List<VideoData> playlist = currentState.getPlaylistData();
         for (int i = 0; i < playlist.size();  i++) {
             final int index = i;
-            bodyPanelLeft.add(new JLabel("Placeholder Video Title"));
+            bodyPanelLeft.add(new JLabel(playlist.get(index).getTitle()));
             JCheckBox mp3Check = new JCheckBox("");
 
             mp3Check.addItemListener(evt -> playlist.get(index).setMp3Bool(evt.getStateChange() == ItemEvent.SELECTED));
-            bodyPanelRight.add(new JCheckBox());
+            bodyPanelRight.add(mp3Check);
         }
         bodyPanel.add(bodyPanelLeft);
         bodyPanel.add(bodyPanelRight);
 
         final JPanel buttonPanel = new JPanel();
-        cancel = new JButton(SelectForConversionViewModel.CANCEL_BUTTON_LABEL);
+        skip = new JButton(SelectForConversionViewModel.SKIP_BUTTON_LABEL);
         begin = new JButton(SelectForConversionViewModel.BEGIN_BUTTON_LABEL);
         buttonPanel.add(begin);
-        buttonPanel.add(cancel);
+        buttonPanel.add(skip);
 
-        cancel.addActionListener(evt -> selectForConversionController.switchToUrlView());
+        skip.addActionListener(evt -> selectForConversionController.switchToUrlView());
 
         begin.addActionListener(evt -> selectForConversionController.execute(currentState.getPlaylistData()));
 
