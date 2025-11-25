@@ -5,6 +5,8 @@ import interface_adapter.select_for_conversion.SelectForConversionState;
 import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import custom_datatype.VideoData;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import java.awt.event.ItemEvent;
@@ -13,7 +15,7 @@ import javax.swing.*;
 /**
  * The View for the Playlist Use Case.
  */
-public class PlaylistView extends JPanel {
+public class SelectForConversionView extends JPanel implements PropertyChangeListener {
     private static final String VIEW_NAME = "Select for Conversion";
 
     private transient SelectForConversionViewModel selectForConversionViewModel;
@@ -23,10 +25,10 @@ public class PlaylistView extends JPanel {
     private final JButton skip;
     private final JButton begin;
 
-    public PlaylistView(SelectForConversionViewModel selectForConversionViewModel) {
-        this.currentState = selectForConversionViewModel.getState();
-
+    public SelectForConversionView(SelectForConversionViewModel selectForConversionViewModel) {
         this.selectForConversionViewModel = selectForConversionViewModel;
+        this.selectForConversionViewModel.addPropertyChangeListener(this);
+        this.currentState = selectForConversionViewModel.getState();
 
         final JLabel title = new JLabel(SelectForConversionViewModel.TITLE_LABEL);
         title.setAlignmentX(CENTER_ALIGNMENT);
@@ -41,13 +43,16 @@ public class PlaylistView extends JPanel {
         bodyPanelLeft.add(bodyPanelLeftLabel);
         bodyPanelRight.add(bodyPanelRightLabel);
         List<VideoData> playlist = currentState.getPlaylistData();
-        for (int i = 0; i < playlist.size();  i++) {
-            final int index = i;
-            bodyPanelLeft.add(new JLabel(playlist.get(index).getTitle()));
-            JCheckBox mp3Check = new JCheckBox("");
+        if (playlist != null) {
+            for (int i = 0; i < playlist.size();  i++) {
+                final int index = i;
+                bodyPanelLeft.add(new JLabel(playlist.get(index).getTitle()));
+                JCheckBox mp3Check = new JCheckBox("");
 
-            mp3Check.addItemListener(evt -> playlist.get(index).setMp3Bool(evt.getStateChange() == ItemEvent.SELECTED));
-            bodyPanelRight.add(mp3Check);
+                mp3Check.addItemListener(evt ->
+                        playlist.get(index).setMp3Bool(evt.getStateChange() == ItemEvent.SELECTED));
+                bodyPanelRight.add(mp3Check);
+            }
         }
         bodyPanel.add(bodyPanelLeft);
         bodyPanel.add(bodyPanelRight);
@@ -67,6 +72,15 @@ public class PlaylistView extends JPanel {
         this.add(title);
         this.add(bodyPanel);
         this.add(buttonPanel);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final SelectForConversionState state = (SelectForConversionState) evt.getNewValue();
+        if (state.getSelectForConversionError() != null) {
+            System.out.println("Help");
+            JOptionPane.showMessageDialog(this, state.getSelectForConversionError());
+        }
     }
 
     public String getViewName() {
