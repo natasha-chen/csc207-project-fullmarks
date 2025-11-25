@@ -38,6 +38,7 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
 
     @Override
     public void prepareFailView(String error) {
+        System.out.println("FailView triggered.");
         final SelectForConversionState selectForConversionState = selectForConversionViewModel.getState();
         selectForConversionState.setConversionError(error);
         selectForConversionViewModel.firePropertyChange();
@@ -45,6 +46,7 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
 
     @Override
     public void switchToUrlView() {
+        System.out.println("SwitchToUrlView triggered.");
         System.out.println("viewManagerModel.setState(urlViewModel.getViewName());");
         System.out.println("viewManagerModel.firePropertyChange();");
 

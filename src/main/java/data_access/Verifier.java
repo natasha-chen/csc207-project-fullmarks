@@ -39,7 +39,7 @@ public class Verifier {
 
     public static void main(String[] args) throws Exception {
         Verifier fetcher = new Verifier();
-        JSONObject info = fetcher.fetchInfo("https://www.youtube.com/watch?v=zLJkI4mEudY");
+        JSONObject info = fetcher.fetchInfo("");
 
         System.out.println("Title: " + info.getString("title"));
         System.out.println("Duration: " + info.getDouble("duration"));

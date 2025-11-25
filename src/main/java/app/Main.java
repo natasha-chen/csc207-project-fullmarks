@@ -1,7 +1,16 @@
 package app;
 
+import javax.swing.JFrame;
+
 public class Main {
-    static void main(String[] args) {
-        //TODO: add TODOs
+    public static void main(String[] args) {
+        AppBuilder appBuilder = new AppBuilder();
+        JFrame application = appBuilder
+                .addSelectForConversionView()
+                .addSelectForConversionUseCase()
+                .build();
+        application.pack();
+        application.setLocationRelativeTo(null);
+        application.setVisible(true);
     }
 }

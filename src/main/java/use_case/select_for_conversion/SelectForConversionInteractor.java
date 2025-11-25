@@ -24,6 +24,11 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
      */
     @Override
     public SelectForConversionOutputData execute(SelectForConversionInputData selectForConversionInputData) {
+        if (selectForConversionInputData.getVideoDataList() == null || selectForConversionInputData.getVideoDataList().isEmpty()) {
+            selectForConversionPresenter.prepareFailView("Empty playlist.");
+//            selectForConversionPresenter.switchToUrlView();
+            return new SelectForConversionOutputData(new ArrayList<>());
+        }
         List<VideoData> playlist = selectForConversionInputData.getVideoDataList();
         boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::getMp3Bool);
         List<VideoData> newList = new ArrayList<>();
@@ -31,7 +36,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
             for (VideoData videoData : playlist) {
                 if  (videoData.getMp3Bool())
                 {
-                    System.out.println("This is the part where I download " + videoData.getTitle());
+                    System.out.println("This is the part where I convert " + videoData.getTitle());
                     newList.add(videoData);
                 }
             }
