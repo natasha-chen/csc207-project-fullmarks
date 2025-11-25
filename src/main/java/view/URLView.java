@@ -1,4 +1,5 @@
 package view;
+import interface_adapter.url.URLViewModel;
 
 import interface_adapter.url.URLViewModel;
 import interface_adapter.url.URLState;
