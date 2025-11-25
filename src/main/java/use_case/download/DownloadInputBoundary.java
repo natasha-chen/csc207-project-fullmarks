@@ -1,4 +1,6 @@
 package use_case.download;
 
-public class DownloadInputBoundary {
+public interface DownloadInputBoundary {
+
+    void execute(DownloadInputData inputData);
 }

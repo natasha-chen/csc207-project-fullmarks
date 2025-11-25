@@ -33,11 +33,11 @@ public class ProgressInteractor implements ProgressInputBoundary {
         ProgressOutputData data = new ProgressOutputData(
                 0,
                 "Download has been cancelled.",
-                true,
+                false,
                 true
         );
 
-        progressOutputBoundary.updateProgress(data);
+        progressOutputBoundary.error(data);
     }
 
     /**
@@ -47,6 +47,7 @@ public class ProgressInteractor implements ProgressInputBoundary {
      * @param percent the completion percentage (0–100)
      * @param message a status message to present
      */
+    @Override
     public void reportProgress(int percent, String message) {
         if (!cancelled) {
             ProgressOutputData data = new ProgressOutputData(
@@ -65,6 +66,7 @@ public class ProgressInteractor implements ProgressInputBoundary {
      *
      * @return true if cancellation was requested
      */
+    @Override
     public boolean isCancelled() {
         return cancelled;
     }

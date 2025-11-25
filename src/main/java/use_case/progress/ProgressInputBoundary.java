@@ -5,11 +5,15 @@ package use_case.progress;
  */
 public interface ProgressInputBoundary {
 
+    void reportProgress(int percent, String message);
+
     /**
      * Cancels the ongoing long-running process. After this executes, the process should be
      * stopped as soon as possible.
      */
     void cancel();
+
+    boolean isCancelled();
     }
 
 
