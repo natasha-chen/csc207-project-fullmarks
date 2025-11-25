@@ -1,18 +1,15 @@
-package interface_adapter.url;
+package interface_adapter.login;
 
-/**
- * The state for the URL View Model.
- */
-public class URLState {
+public class LoginState {
     private String username = "";
-    private String url = "";
-    private String error = null;
+    private String password = "";
+    private String error;
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
-    public String getUrl() { return url; }
-    public void setUrl(String url) { this.url = url; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     public String getError() { return error; }
     public void setError(String error) { this.error = error; }
