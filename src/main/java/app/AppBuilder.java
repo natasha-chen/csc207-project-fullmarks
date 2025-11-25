@@ -1,5 +1,6 @@
 package app;
 
+<<<<<<< Updated upstream
 import interface_adapter.ViewManagerModel;
 
 import interface_adapter.signup.SignupViewModel;
@@ -96,4 +97,26 @@ public class AppBuilder {
 
         return cardPanel;
     }
+=======
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * AppBuilder is the class that would handle creating the UI
+ * It has instances of each of the views, DownloadView, ConvertView, SaveToView, ProgressView
+ */
+public class AppBuilder {
+    private final JPanel cardPanel = new JPanel();
+    private final CardLayout cardLayout = new CardLayout();
+    //TODO: figure out Entity Factory
+    final viewManagerModel viewManagerModel = new ViewManagerModel();
+    ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
+
+    private DownloadView downloadView;
+    private ConvertView convertView;
+    private SavetoView savetoView;
+    private ProgressView progressView;
+    private PlaylistView excludeView;
+
+>>>>>>> Stashed changes
 }
