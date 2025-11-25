@@ -24,7 +24,7 @@ public class VideoData {
 
     public String getTitle() {return title;}
 
-    public boolean getMp3bool() {return mp3Bool;}
+    public boolean getMp3Bool() {return mp3Bool;}
 
     public void setMp3Bool(boolean mp3Bool) {this.mp3Bool = mp3Bool;}
 

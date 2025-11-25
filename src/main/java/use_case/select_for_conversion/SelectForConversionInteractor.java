@@ -1,7 +1,6 @@
 package use_case.select_for_conversion;
 
 import custom_datatype.VideoData;
-import data_access.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -24,15 +23,17 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
      * @param selectForConversionInputData the input data for this use case
      */
     @Override
-    public void execute(SelectForConversionInputData selectForConversionInputData) {
+    public SelectForConversionOutputData execute(SelectForConversionInputData selectForConversionInputData) {
         List<VideoData> playlist = selectForConversionInputData.getVideoDataList();
         boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::getMp3Bool);
+        List<VideoData> newList = new ArrayList<>();
         if (anyMp3Bool) {
-            System.out.println("TODO: I either convert the video (modify InputData to have folderPath)");
-            System.out.println("or I execute a Use Case that converts it");
-            List<VideoData> newList = new ArrayList<>();
             for (VideoData videoData : playlist) {
-                if  (videoData.getMp3Bool()) {newList.add(videoData);}
+                if  (videoData.getMp3Bool())
+                {
+                    System.out.println("This is the part where I download " + videoData.getTitle());
+                    newList.add(videoData);
+                }
             }
             selectForConversionPresenter.prepareSuccessView(new SelectForConversionOutputData(newList));
         }
@@ -40,6 +41,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
             // No mp3Bools triggers fail view
             selectForConversionPresenter.prepareFailView("No videos selected for conversion.");
         }
+        return new SelectForConversionOutputData(newList);
     }
 
 
