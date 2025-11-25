@@ -1,4 +1,4 @@
-﻿package interface_adapter.ProgressBar;
+package interface_adapter.ProgressBar;
 
 import use_case.progress.ProgressInputBoundary;
 /**
@@ -6,10 +6,14 @@ import use_case.progress.ProgressInputBoundary;
  */
 public class ProgressController {
 
-    private final ProgressInputBoundary interactor;
+    private final DownloadInputBoundary downloadInteractor;
+    private final ProgressInputBoundary progressInteractor;
 
-    public ProgressController(ProgressInputBoundary interactor) {
-        this.interactor = interactor;
+    public ProgressController(DownloadInputBoundary downloadInteractor,
+                              ProgressInputBoundary progressInteractor) {
+
+        this.downloadInteractor = downloadInteractor;
+        this.progressInteractor = progressInteractor;
     }
 
     /**
@@ -18,13 +22,13 @@ public class ProgressController {
      * @param url the URL of the video to download
      */
     public void startDownload(String url) {
-        interactor.execute(url);  /**  depends on the download interacter to do the download action */
+        downloadInteractor.execute(url);  /**  depends on the download interacter to do the download action */
     }
 
     /**
      * Cancels the long-running process.
      */
     public void cancelDownload() {
-        interactor.cancel();
+        progressInteractor.cancel();
     }
 }

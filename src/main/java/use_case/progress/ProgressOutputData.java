@@ -19,5 +19,13 @@ public class ProgressOutputData {
         this.isCancelled = isCancelled;
     }
 
+    public int getPercent() { return percent; }
+
+    public String getMessage() { return message; }
+
+    public boolean isDone() { return isDone; }
+
+    public boolean isCancelled() { return isCancelled; }
+
 }
 

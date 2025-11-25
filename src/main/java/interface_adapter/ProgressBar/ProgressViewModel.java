@@ -1,4 +1,4 @@
-﻿package interface_adapter.ProgressBar;
+package interface_adapter.ProgressBar;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyChangeListener;

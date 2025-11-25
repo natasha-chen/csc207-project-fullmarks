@@ -1,5 +1,4 @@
-﻿package interface_adapter.ProgressBar;
-
+package interface_adapter.ProgressBar;
 /**
  * The state for the progress bar View Model.
  */

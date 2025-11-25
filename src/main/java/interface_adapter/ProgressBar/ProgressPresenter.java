@@ -1,4 +1,4 @@
-﻿package interface_adapter.ProgressBar;
+package interface_adapter.ProgressBar;
 
 import use_case.progress.ProgressOutputBoundary;
 import use_case.progress.ProgressOutputData;
@@ -16,28 +16,31 @@ public class ProgressPresenter implements ProgressOutputBoundary {
     }
 
     @Override
-    public void updateProgress(double percent, String message) {
+    public void updateProgress(ProgressOutputData outputData) {
         ProgressState state = viewModel.getState();
-        state.setPercent(percent);
-        state.setMessage(message);
+        state.setPercent(outputData.getPercent());
+        state.setMessage(outputData.getMessage());
+        state.setComplete(outputData.isDone());
+        state.setError(false);  // update progress bar
 
         viewModel.firePropertyChanged();
     }
 
     @Override
-    public void complete(String message) {
+    public void complete(ProgressOutputData outputData) {
         ProgressState state = viewModel.getState();
         state.setPercent(100.0);
-        state.setMessage(message);
+        state.setMessage(outputData.getMessage());
         state.setComplete(true);
+        state.setError(false);
 
         viewModel.firePropertyChanged();
     }
 
     @Override
-    public void error(String message) {
+    public void error(ProgressOutputData outputData) {
         ProgressState state = viewModel.getState();
-        state.setMessage(message);
+        state.setMessage(outputData.getMessage());
         state.setError(true);
 
         viewModel.firePropertyChanged();
