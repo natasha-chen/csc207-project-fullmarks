@@ -41,7 +41,7 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
         System.out.println("FailView triggered.");
         final SelectForConversionState selectForConversionState = selectForConversionViewModel.getState();
         selectForConversionState.setConversionError(error);
-        selectForConversionViewModel.firePropertyChange();
+        selectForConversionViewModel.firePropertyChanged();
     }
 
     @Override

@@ -1,4 +1,4 @@
-﻿package interface_adapter.url;
+package interface_adapter.url;
 
 public class URLState {
     private String username = "";
