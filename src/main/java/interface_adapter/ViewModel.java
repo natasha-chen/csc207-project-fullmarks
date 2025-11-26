@@ -1,61 +1,27 @@
 package interface_adapter;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-/**
- * The ViewModel for our CA implementation.
- * This class delegates work to a PropertyChangeSupport object for
- * managing the property change events.
- *
- * @param <T> The type of state object contained in the model.
- */
-public class ViewModel<T> {
+public abstract class ViewModel {
 
-    private final String viewName;
+    protected final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    // every view model must specify its own name
+    public abstract String getViewName();
 
-    private T state;
+    // every view model must expose its state
+    public abstract Object getState();
 
-    public ViewModel(String viewName) {
-        this.viewName = viewName;
-    }
-
-    public String getViewName() {
-        return this.viewName;
-    }
-
-    public T getState() {
-        return this.state;
-    }
-
-    public void setState(T state) {
-        this.state = state;
-    }
-
-    /**
-     * Fires a property changed event for the state of this ViewModel.
-     */
-    public void firePropertyChange() {
-        this.support.firePropertyChange("state", null, this.state);
-    }
-
-    /**
-     * Fires a property changed event for the state of this ViewModel, which
-     * allows the user to specify a different propertyName. This can be useful
-     * when a class is listening for multiple kinds of property changes.
-     * @param propertyName the label for the property that was changed
-     */
-    public void firePropertyChange(String propertyName) {
-        this.support.firePropertyChange(propertyName, null, this.state);
-    }
-
-    /**
-     * Adds a PropertyChangeListener to this ViewModel.
-     * @param listener The PropertyChangeListener to be added
-     */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        this.support.addPropertyChangeListener(listener);
+        support.addPropertyChangeListener(listener);
+    }
+
+    public void firePropertyChanged() {
+        // notify ViewManager and the corresponding ViewModel listeners
+        support.firePropertyChange(getViewName(), null, getState());
     }
 }
+
