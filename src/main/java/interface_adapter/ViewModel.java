@@ -22,7 +22,7 @@ public class ViewModel<T> {
         return this.state;
     }
 
-    public void setState(T state) {
+    public void setActiveView(T state) {
         this.state = state;
     }
 

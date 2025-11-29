@@ -1,6 +1,7 @@
-package main.java.use_case.select_for_conversion.url;
+package use_case.select_for_conversion.url;
 
 /**
+ *
  * Output Boundary for the URL validation use case.
  */
 public interface URLOutputBoundary {

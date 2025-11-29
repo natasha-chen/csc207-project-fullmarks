@@ -1,10 +1,10 @@
-package main.java.interface_adapter.url;
+package interface_adapter.url;
 
-import main.java.interface_adapter.ViewManagerModel;
-import main.java.interface_adapter.failed_url.FailedURLState;
-import main.java.interface_adapter.failed_url.FailedURLViewModel;
-import main.java.use_case.select_for_conversion.url.URLOutputBoundary;
-import main.java.use_case.select_for_conversion.url.URLOutputData;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.failed_url.FailedURLState;
+import interface_adapter.failed_url.FailedURLViewModel;
+import use_case.select_for_conversion.url.URLOutputBoundary;
+import use_case.select_for_conversion.url.URLOutputData;
 /**
  * The presenter for the URL use case.
  */
@@ -32,7 +32,7 @@ public class URLPresenter implements URLOutputBoundary {
 
         // switch to the next view, placeholder to go to failed  view
 
-        this.viewManagerModel.setState(failedURLViewModel.getViewName());
+        this.viewManagerModel.setActiveView(failedURLViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
@@ -44,7 +44,7 @@ public class URLPresenter implements URLOutputBoundary {
         this.failedURLViewModel.firePropertyChanged();
 
         // Switch to the Failed URL view
-        this.viewManagerModel.setState(failedURLViewModel.getViewName());
+        this.viewManagerModel.setActiveView(failedURLViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 }

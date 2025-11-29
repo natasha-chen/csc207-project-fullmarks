@@ -1,7 +1,7 @@
-package main.java.interface_adapter.url;
+package interface_adapter.url;
 
-import main.java.use_case.select_for_conversion.url.URLInputBoundary;
-import main.java.use_case.select_for_conversion.url.URLInputData;
+import use_case.select_for_conversion.url.URLInputBoundary;
+import use_case.select_for_conversion.url.URLInputData;
 
 /**
  * The controller for the URL use case.

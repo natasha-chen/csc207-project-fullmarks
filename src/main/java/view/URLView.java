@@ -1,8 +1,8 @@
-package main.java.view;
+package view;
 
-import main.java.interface_adapter.url.URLController;
-import main.java.interface_adapter.url.URLState;
-import main.java.interface_adapter.url.URLViewModel;
+import interface_adapter.url.URLController;
+import interface_adapter.url.URLState;
+import interface_adapter.url.URLViewModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -13,8 +13,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 /**
- * The View for when the user pastes the URL of choice.
+ * The View for when the user pastes the URL of choice (They are logged in currently).
  */
+
 
 public class URLView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "url";

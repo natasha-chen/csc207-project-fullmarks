@@ -1,4 +1,4 @@
-package main.java.interface_adapter.url;
+package interface_adapter.url;
 
 import interface_adapter.ViewModel;
 
@@ -12,6 +12,6 @@ public class URLViewModel extends ViewModel<URLState> {
 
     public URLViewModel() {
         super("url");
-        setState(new URLState());
+        setActiveView(new URLState());
     }
 }

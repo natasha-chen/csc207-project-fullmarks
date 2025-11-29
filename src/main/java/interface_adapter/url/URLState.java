@@ -1,4 +1,4 @@
-﻿package main.java.interface_adapter.url;
+﻿package interface_adapter.url;
 
 /**
  * State for the URL view.

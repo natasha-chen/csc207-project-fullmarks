@@ -1,16 +1,16 @@
-package main.java.app;
+package app;
 
-import main.java.interface_adapter.ViewManager;
-import main.java.interface_adapter.ViewManagerModel;
-import main.java.interface_adapter.failed_url.FailedURLViewModel;
-import main.java.interface_adapter.url.URLController;
-import main.java.interface_adapter.url.URLPresenter;
-import main.java.interface_adapter.url.URLViewModel;
-import main.java.use_case.select_for_conversion.url.URLInputBoundary;
-import main.java.use_case.select_for_conversion.url.URLInteractor;
-import main.java.use_case.select_for_conversion.url.URLOutputBoundary;
-import main.java.view.FailedURLView;
-import main.java.view.URLView;
+import interface_adapter.ViewManager;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.failed_url.FailedURLViewModel;
+import interface_adapter.url.URLController;
+import interface_adapter.url.URLPresenter;
+import interface_adapter.url.URLViewModel;
+import use_case.select_for_conversion.url.URLInputBoundary;
+import use_case.select_for_conversion.url.URLInteractor;
+import use_case.select_for_conversion.url.URLOutputBoundary;
+import view.FailedURLView;
+import view.URLView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +61,7 @@ public class Main {
         urlView.setURLController(urlController);
 
         // Set the initial view
-        viewManagerModel.setState(urlView.getViewName());
+        viewManagerModel.setActiveView(urlView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         // Display the application
