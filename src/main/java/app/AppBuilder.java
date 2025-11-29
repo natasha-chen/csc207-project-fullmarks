@@ -116,8 +116,6 @@ public class AppBuilder {
         cardPanel.add(loginView, "login");
         cardPanel.add(urlView, "url");
         cardPanel.add(downloadView, "download");
-
-        // ❗ Missing before — must add progressView
         cardPanel.add(progressView, "progress");
 
         // VIEW MANAGER REGISTRATION
@@ -126,8 +124,6 @@ public class AppBuilder {
         viewManager.addView(loginView, "login");
         viewManager.addView(urlView, "url");
         viewManager.addView(downloadView, "download");
-
-        // ❗ Missing before — must register progressView
         viewManager.addView(progressView, "progress");
 
         return cardPanel;
