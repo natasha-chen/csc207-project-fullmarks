@@ -1,7 +1,6 @@
 package view;
 import interface_adapter.url.URLViewModel;
 
-import interface_adapter.url.URLViewModel;
 import interface_adapter.url.URLState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;

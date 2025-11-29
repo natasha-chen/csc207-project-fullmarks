@@ -1,6 +1,6 @@
-package entity;
+package data_access;
 
-public class Main {
+public class Demo {
 
     public static void main(String[] args) {
         String url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
