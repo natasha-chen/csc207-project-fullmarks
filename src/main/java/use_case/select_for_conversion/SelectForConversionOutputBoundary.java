@@ -6,16 +6,9 @@ package use_case.select_for_conversion;
 public interface SelectForConversionOutputBoundary {
 
     /**
-     * Prepares the success view for the Change Password Use Case.
-     * @param outputData the output data
+     * Execute the Select for Conversion Use Case.
+     * @param outputData the output data for this use case
      */
-    void prepareSuccessView(SelectForConversionOutputData outputData);
+    void execute(SelectForConversionOutputData outputData);
 
-    /**
-     * Prepares the failure view for the Change Password Use Case.
-     * @param errorMessage the explanation of the failure
-     */
-    void prepareFailView(String errorMessage);
-
-    void switchToUrlView();
 }
