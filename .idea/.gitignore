@@ -13,3 +13,5 @@ out/
 *.mp3
 *.mp4
 target/
+out/
+.idea/
