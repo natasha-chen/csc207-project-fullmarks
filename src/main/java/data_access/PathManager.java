@@ -1,26 +1,27 @@
 package data_access;
+import javax.swing.*;
+import java.io.File;
+
 
 public class PathManager {
 
     public static String getOutputFolder() {
         String outputFolder;
 
-        try {
-            String os = System.getProperty("os.name").toLowerCase();
-
-            if (os.contains("win")) {
-                outputFolder = System.getenv("USERPROFILE") + "\\Desktop\\mp4_video\\";
-            } else if (os.contains("mac")) {
-                outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/";
-            } else {
-                outputFolder = System.getProperty("user.home") + "/Desktop/mp4_video/";
-            }
-
-        } catch (Exception e) {
-            outputFolder = System.getProperty("user.dir") + "/mp4_video/";
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Select a Folder");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        int result = chooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = chooser.getSelectedFile();
+            System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
+            outputFolder = selectedFolder.getAbsolutePath() + File.separator;
+        }
+        else {
+            outputFolder = chooser.getCurrentDirectory().getAbsolutePath()  + File.separator;
         }
 
-        new java.io.File(outputFolder).mkdirs();
-        return outputFolder;
+        return outputFolder ;
     }
 }
