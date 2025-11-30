@@ -1,22 +1,20 @@
-package entity;
+package data_access;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class AudioConverter {
+public class Downloader {
 
-    public void convertToMp3(String folder, String title) {
-        System.out.println("Converting to MP3...");
-        String inputPath = folder + title + ".mp4";
-        String outputPath = folder + title + ".mp3";
+    public void downloadVideo(String url, String outputFolder) {
+        System.out.println("Starting download...");
 
         ProcessBuilder pb = new ProcessBuilder(
-                "ffmpeg",
-                "-i", inputPath,
-                "-q:a", "0",
-                "-map", "a",
-                outputPath
+                "yt-dlp",
+                "-f", "mp4",
+                "-o", outputFolder + "%(title)s.%(ext)s",
+                url
         );
         pb.redirectErrorStream(true);
 
@@ -27,11 +25,13 @@ public class AudioConverter {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                if (line.contains("%")) {
+                    System.out.println(line);
+                }
             }
 
             process.waitFor();
-            System.out.println("✅ Conversion completed: " + outputPath);
+            System.out.println("✅ Video downloaded successfully!");
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

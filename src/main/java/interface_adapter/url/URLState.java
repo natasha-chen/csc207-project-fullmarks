@@ -1,21 +1,16 @@
-﻿package interface_adapter.url;
+package interface_adapter.url;
 
 public class URLState {
-    private String url;
+    private String username = "";
+    private String url = "";
+    private String error = null;
 
-    public URLState(String url) {
-        this.url = url;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public URLState(URLState urlState) {
-        url = urlState.getUrl();
+    public String getUrl() { return url; }
+    public void setUrl(String url) { this.url = url; }
 
-    }
-
-    public String getUrl() {
-        return url;
-    }
-    public void setUrl(String url) {
-        this.url = url;
-    }
+    public String getError() { return error; }
+    public void setError(String error) { this.error = error; }
 }

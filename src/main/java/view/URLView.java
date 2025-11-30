@@ -1,35 +1,83 @@
 package view;
 import interface_adapter.url.URLViewModel;
 
+import interface_adapter.url.URLState;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupViewModel;
+import interface_adapter.login.LoginState;
+import interface_adapter.signup.SignupState;
+
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-/**
- * The View for when the user pastes the URL of choice.
- */
-public class URLView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private final URLViewModel urlViewModel;
+public class URLView extends JPanel implements PropertyChangeListener {
 
-    JTextField textField = new JTextField(30); // 30 columns wide
+    private final URLViewModel viewModel;
+    private final ViewManagerModel viewManagerModel;
 
-    public URLView(URLViewModel urlViewModel) {
-        this.urlViewModel = urlViewModel;
-    }
+    // added these:
+    private final LoginViewModel loginViewModel;
+    private final SignupViewModel signupViewModel;
 
+    private JLabel usernameLabel = new JLabel("");
+    private JButton logoutButton = new JButton("Logout");
+    private JButton downloadButton = new JButton("Go to Download");
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public URLView(URLViewModel viewModel,
+                   ViewManagerModel viewManagerModel,
+                   LoginViewModel loginViewModel,
+                   SignupViewModel signupViewModel) {
 
+        this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
+        this.loginViewModel = loginViewModel;
+        this.signupViewModel = signupViewModel;
+
+        viewModel.addPropertyChangeListener(this);
+
+        this.setLayout(new BorderLayout());
+
+        // Display username
+        JPanel header = new JPanel();
+        header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        header.add(usernameLabel);
+
+        // ---- Download Button ----
+        downloadButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("download");
+            viewManagerModel.firePropertyChanged();
+        });
+        header.add(downloadButton);
+
+        // ---- Logout button ----
+        logoutButton.addActionListener(e -> {
+
+            // 1. Reset LOGIN state
+            loginViewModel.setState(new LoginState());
+            loginViewModel.firePropertyChanged();
+
+            // 2. Reset SIGNUP state
+            signupViewModel.setState(new SignupState());
+            signupViewModel.firePropertyChanged();
+
+            // 3. Switch back to menu
+            viewManagerModel.setActiveView("signup_login_menu");
+            viewManagerModel.firePropertyChanged();
+        });
+
+        header.add(logoutButton);
+        this.add(header, BorderLayout.NORTH);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        URLState state = viewModel.getState();
 
+        if (state.getUsername() != null) {
+            usernameLabel.setText("Logged in as: " + state.getUsername());
+        }
     }
 }
