@@ -15,12 +15,12 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
     private final ViewManagerModel viewManagerModel;
 
     public SelectForConversionPresenter(SelectForConversionViewModel selectForConversionViewModel,
-                                        // UrlViewModel urlViewModel
-                                        // ProgressViewModel progressViewModel,
+//                                        UrlViewModel urlViewModel
+//                                        ProgressViewModel progressViewModel,
                                         ViewManagerModel viewManagerModel) {
         this.selectForConversionViewModel = selectForConversionViewModel;
-        // this.urlViewModel = urlViewModel;
-        // this.progressViewModel = progressViewModel;
+//        this.urlViewModel = urlViewModel;
+//        this.progressViewModel = progressViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 

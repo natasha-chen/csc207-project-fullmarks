@@ -1,8 +1,8 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.url.URLState;
-import interface_adapter.url.URLViewModel;
+import interface_adapter.menu.MenuState;
+import interface_adapter.menu.MenuViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 
@@ -10,27 +10,27 @@ public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final URLViewModel urlViewModel;   // NEW
+    private final MenuViewModel menuViewModel;   // NEW
 
     public LoginPresenter(LoginViewModel loginViewModel,
                           ViewManagerModel viewManagerModel,
-                          URLViewModel urlViewModel) {   // UPDATED
+                          MenuViewModel menuViewModel) {   // UPDATED
         this.loginViewModel = loginViewModel;
         this.viewManagerModel = viewManagerModel;
-        this.urlViewModel = urlViewModel;
+        this.menuViewModel = menuViewModel;
     }
 
     @Override
     public void prepareSuccessView(LoginOutputData outputData) {
 
-        // Update URLViewModel with logged-in user's username
-        URLState state = urlViewModel.getState();
+        // Update MenuViewModel with logged-in user's username
+        MenuState state = menuViewModel.getState();
         state.setUsername(outputData.getUsername());
-        urlViewModel.setState(state);
-        urlViewModel.firePropertyChanged();
+        menuViewModel.setState(state);
+        menuViewModel.firePropertyChanged();
 
         // Now switch the view
-        viewManagerModel.setActiveView("url");
+        viewManagerModel.setActiveView("menu");
         viewManagerModel.firePropertyChanged();
     }
 
