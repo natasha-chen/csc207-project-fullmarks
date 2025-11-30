@@ -72,6 +72,10 @@ public class AppBuilder {
         SignupView signupView =
                 new SignupView(signupController, signupViewModel, viewManagerModel);
 
+        // MENU
+        SignupLoginMenuView signupLoginMenuView =
+                new SignupLoginMenuView(viewManagerModel);
+
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
         ProgressPresenter progressPresenter = new ProgressPresenter(progressViewModel);
@@ -100,26 +104,29 @@ public class AppBuilder {
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
 
+        DownloadView downloadView =
+                new DownloadView(downloadController, downloadViewModel, viewManagerModel);
 
-        //TODO: URL VIEW
+
+        //URL View
         URLViewModel urlViewModel = new URLViewModel();
         FailedURLViewModel failedURLViewModel = new FailedURLViewModel();
         URLPresenter urlPresenter =
                 new URLPresenter(urlViewModel, failedURLViewModel, viewManagerModel);
         URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
         URLController urlController = new URLController(urlInteractor);
-        URLView urlView =
-                new URLView(urlViewModel, viewManagerModel, menuViewModel);
+        URLView urlView = new URLView(urlViewModel);
+        urlView.setURLController(urlController);
 
 
         //TODO: CREATE PLAYLIST SETUP
-        CreatePlaylistViewModel createPlaylistViewModel = new CreatePlaylistViewModel();
-        CreatePlaylistPresenter createPlaylistPresenter =
-                new CreatePlaylistPresenter();
-        CreatePlaylistInputBoundary createPlaylistInteractor = new CreatePlaylistInteractor(CreatePlaylistPresenter);
-        CreatePlaylistController createPlaylistController = new CreatePlaylistController(createPlaylistInteractor);
-        CreatePlaylistView createPlaylistView =
-                new CreatePlaylistView();
+//        CreatePlaylistViewModel createPlaylistViewModel = new CreatePlaylistViewModel();
+//        CreatePlaylistPresenter createPlaylistPresenter =
+//                new CreatePlaylistPresenter();
+//        CreatePlaylistInputBoundary createPlaylistInteractor = new CreatePlaylistInteractor(CreatePlaylistPresenter);
+//        CreatePlaylistController createPlaylistController = new CreatePlaylistController(createPlaylistInteractor);
+//        CreatePlaylistView createPlaylistView =
+//                new CreatePlaylistView();
 
         // SELECT FOR CONVERSION
         SelectForConversionViewModel selectForConversionViewModel = new SelectForConversionViewModel();
@@ -138,26 +145,31 @@ public class AppBuilder {
                 loginViewModel,
                 signupViewModel,
                 urlViewModel,
-                createPlaylistViewModel,
+                // createPlaylistViewModel,
                 menuViewModel
         );
 
         // CARD LAYOUT
         cardPanel.setLayout(cardLayout);
 
-        cardPanel.add(menuView, "signup_login_menu");
+        cardPanel.add(signupLoginMenuView, "signup_login_menu");
         cardPanel.add(signupView, "signup");
         cardPanel.add(loginView, "login");
+        cardPanel.add(menuView, "menu");
         cardPanel.add(urlView, "url");
+        cardPanel.add(downloadView, "download");
+        // cardPanel.add(createPlaylistView, "create_playlist");
         cardPanel.add(progressView, "progress");
         cardPanel.add(selectForConversionView, "select_for_conversion");
 
         // VIEW MANAGER REGISTRATION
-        viewManager.addView(menuView, "signup_login_menu");
+        viewManager.addView(signupLoginMenuView, "signup_login_menu");
         viewManager.addView(signupView, "signup");
         viewManager.addView(loginView, "login");
+        viewManager.addView(menuView, "menu");
         viewManager.addView(urlView, "url");
-        viewManager.addView(createPlaylistView, "create playlist");
+        viewManager.addView(downloadView, "download");
+        // viewManager.addView(createPlaylistView, "create playlist");
         viewManager.addView(progressView, "progress");
         viewManager.addView(selectForConversionView, "select for conversion");
 

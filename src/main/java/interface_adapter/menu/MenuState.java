@@ -1,7 +1,7 @@
 package interface_adapter.menu;
 
 public class MenuState {
-    private String username = "";
+    private String username;
 
     public String getUsername() {
         return username;

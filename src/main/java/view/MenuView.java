@@ -4,6 +4,7 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.menu.MenuState;
 import interface_adapter.menu.MenuViewModel;
+import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.url.URLViewModel;
@@ -22,38 +23,43 @@ public class MenuView extends JPanel implements PropertyChangeListener {
     private final LoginViewModel loginViewModel;
     private final SignupViewModel signupViewModel;
     private final URLViewModel urlViewModel;
-    private final CreatePlaylistViewModel createPlaylistViewModel;
+    // private final CreatePlaylistViewModel createPlaylistViewModel;
     private final MenuViewModel viewModel;
 
     private JLabel usernameLabel = new JLabel("");
 
 
-    private JButton logoutButton = new JButton("Logout");
     private JButton urlButton = new JButton("Download from URL");
     private JButton playlistButton = new JButton("Create Playlist");
+    private JButton logoutButton = new JButton("Logout");
 
     public MenuView(ViewManagerModel viewManagerModel,
                     LoginViewModel loginViewModel,
                     SignupViewModel signupViewModel,
                     URLViewModel urlViewModel,
-                    CreatePlaylistViewModel createPlaylistViewModel,
+                    // CreatePlaylistViewModel createPlaylistViewModel,
                     MenuViewModel menuViewModel) {
 
         this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
         this.urlViewModel = urlViewModel;
-        this.createPlaylistViewModel = createPlaylistViewModel;
+        // this.createPlaylistViewModel = createPlaylistViewModel;
         this.viewModel = menuViewModel;
 
         this.addPropertyChangeListener(this);
 
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Display username
         JPanel header = new JPanel();
-        header.setLayout(new FlowLayout(FlowLayout.LEFT));
         header.add(usernameLabel);
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(usernameLabel);
+        this.add(urlButton);
+        this.add(playlistButton);
+        this.add(logoutButton);
 
         // ---- Logout button ----
         logoutButton.addActionListener(e -> {
@@ -82,19 +88,14 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         playlistButton.addActionListener(e -> {
 
             // TODO: playlistViewModel is updated with files corresponding to username
-             createPlaylistViewModel.getState().setFilePath();
-             createPlaylistViewModel.firePropertyChanged();
+            //  would this be done by having the same prefix and changing the last part of the filepath?
+//             createPlaylistViewModel.getState().setFilePath();
+//             createPlaylistViewModel.firePropertyChanged();
 
             // 3. Switch to create playlist view
-            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
-            viewManagerModel.firePropertyChanged();
+//            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
+//            viewManagerModel.firePropertyChanged();
         });
-
-
-
-
-        header.add(logoutButton);
-        this.add(header, BorderLayout.NORTH);
     }
 
 

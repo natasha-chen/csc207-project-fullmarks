@@ -30,7 +30,8 @@ public class LoginPresenter implements LoginOutputBoundary {
         menuViewModel.firePropertyChanged();
 
         // Now switch the view
-        viewManagerModel.setActiveView("url");
+        System.out.println(state.getUsername());
+        viewManagerModel.setActiveView("menu");
         viewManagerModel.firePropertyChanged();
     }
 
