@@ -1,6 +1,8 @@
 package view;
+import interface_adapter.download.DownloadViewModel;
 import interface_adapter.url.URLViewModel;
 
+import interface_adapter.url.URLViewModel;
 import interface_adapter.url.URLState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginViewModel;
@@ -28,7 +30,8 @@ public class URLView extends JPanel implements PropertyChangeListener {
     public URLView(URLViewModel viewModel,
                    ViewManagerModel viewManagerModel,
                    LoginViewModel loginViewModel,
-                   SignupViewModel signupViewModel) {
+                   SignupViewModel signupViewModel,
+                   DownloadViewModel downloadViewModel) {
 
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
@@ -61,6 +64,15 @@ public class URLView extends JPanel implements PropertyChangeListener {
 
         header.add(logoutButton);
         this.add(header, BorderLayout.NORTH);
+
+        JButton downloadButton = new JButton("Download Video");
+        downloadButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("download");
+            viewManagerModel.firePropertyChanged();
+        });
+
+        header.add(downloadButton);
+
     }
 
     @Override
