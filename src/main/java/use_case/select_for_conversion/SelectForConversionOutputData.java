@@ -1,4 +1,4 @@
-package use_case.select_for_conversion;
+package select_for_conversion_input_boundary;
 
 import custom_datatype.VideoData;
 
