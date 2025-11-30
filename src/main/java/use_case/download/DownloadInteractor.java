@@ -36,7 +36,7 @@ public class DownloadInteractor implements DownloadInputBoundary {
         }
 
         try {
-            downloader.download(url, outputFolder);
+            downloader.downloadVideo(url, outputFolder);
 
             DownloadOutputData outputData =
                     new DownloadOutputData("Download completed successfully.");

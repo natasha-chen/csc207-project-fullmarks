@@ -27,7 +27,7 @@ public class SelectForConversionController {
     }
 
     /**
-     * Executes the "switch to URLView" Use Case.
+     * Executes the "switch to MenuView" Use Case.
      */
     public void switchToUrlView() {
         selectForConversionUseCaseInteractor.switchToUrlView();

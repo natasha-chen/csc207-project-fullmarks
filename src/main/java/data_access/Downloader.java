@@ -1,11 +1,13 @@
 package data_access;
 
+import use_case.download.DownloadDataAccessInterface;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Downloader {
+public class Downloader implements DownloadDataAccessInterface {
 
     public void downloadVideo(String url, String outputFolder) {
         System.out.println("Starting download...");

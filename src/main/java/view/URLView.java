@@ -1,83 +1,123 @@
 package view;
+
+import interface_adapter.select_for_conversion.SelectForConversionState;
+import interface_adapter.url.URLController;
+import interface_adapter.url.URLState;
 import interface_adapter.url.URLViewModel;
 
-import interface_adapter.url.URLState;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.signup.SignupViewModel;
-import interface_adapter.login.LoginState;
-import interface_adapter.signup.SignupState;
-
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+/**
+ * The View for when the user pastes the URL of choice (They are logged in currently).
+ */
 
-public class URLView extends JPanel implements PropertyChangeListener {
 
-    private final URLViewModel viewModel;
-    private final ViewManagerModel viewManagerModel;
+public class URLView extends JPanel implements ActionListener, PropertyChangeListener {
+    private final String viewName = "url";
+    private final URLViewModel urlViewModel;
+    private URLController urlController;
 
-    // added these:
-    private final LoginViewModel loginViewModel;
-    private final SignupViewModel signupViewModel;
+    private final JTextField urlInputField = new JTextField(20);
+    private final JButton enterButton;
 
-    private JLabel usernameLabel = new JLabel("");
-    private JButton logoutButton = new JButton("Logout");
-    private JButton downloadButton = new JButton("Go to Download");
+    public URLView(URLViewModel urlViewModel) {
+        this.urlViewModel = urlViewModel;
+        this.urlViewModel.addPropertyChangeListener(this);
 
-    public URLView(URLViewModel viewModel,
-                   ViewManagerModel viewManagerModel,
-                   LoginViewModel loginViewModel,
-                   SignupViewModel signupViewModel) {
+        // Set up the title
+        final JLabel title = new JLabel(URLViewModel.TITLE_LABEL);
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        this.viewModel = viewModel;
-        this.viewManagerModel = viewManagerModel;
-        this.loginViewModel = loginViewModel;
-        this.signupViewModel = signupViewModel;
+        // Set up the URL input field
+        final LabelTextPanel urlInfo = new LabelTextPanel(
+                new JLabel(URLViewModel.URL_LABEL), urlInputField);
 
-        viewModel.addPropertyChangeListener(this);
+        // Set up the Enter button
+        final JPanel buttons = new JPanel();
+        enterButton = new JButton(URLViewModel.ENTER_BUTTON_LABEL);
+        buttons.add(enterButton);
 
-        this.setLayout(new BorderLayout());
+        // Add action listener to button
+        enterButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        if (evt.getSource().equals(enterButton)) {
+                            final URLState currentState = urlViewModel.getState();
+                            urlController.execute(currentState.getUrl());
+                        }
+                    }
+                }
+        );
 
-        // Display username
-        JPanel header = new JPanel();
-        header.setLayout(new FlowLayout(FlowLayout.LEFT));
-        header.add(usernameLabel);
+        // Add key listener for Enter key
+        urlInputField.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        final URLState currentState = urlViewModel.getState();
+                        urlController.execute(currentState.getUrl());
+                    }
+                }
+        );
 
-        // ---- Download Button ----
-        downloadButton.addActionListener(e -> {
-            viewManagerModel.setActiveView("download");
-            viewManagerModel.firePropertyChanged();
+        // Layout
+        // Add document listener to update state when text changes
+        urlInputField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            private void documentListenerHelper() {
+                final URLState currentState = urlViewModel.getState();
+                currentState.setUrl(urlInputField.getText());
+            }
+
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                documentListenerHelper();
+            }
         });
-        header.add(downloadButton);
 
-        // ---- Logout button ----
-        logoutButton.addActionListener(e -> {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-            // 1. Reset LOGIN state
-            loginViewModel.setState(new LoginState());
-            loginViewModel.firePropertyChanged();
+        this.add(title);
+        this.add(urlInfo);
+        this.add(buttons);
+    }
 
-            // 2. Reset SIGNUP state
-            signupViewModel.setState(new SignupState());
-            signupViewModel.firePropertyChanged();
-
-            // 3. Switch back to menu
-            viewManagerModel.setActiveView("signup_login_menu");
-            viewManagerModel.firePropertyChanged();
-        });
-
-        header.add(logoutButton);
-        this.add(header, BorderLayout.NORTH);
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        System.out.println("Click " + evt.getActionCommand());
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        URLState state = viewModel.getState();
-
-        if (state.getUsername() != null) {
-            usernameLabel.setText("Logged in as: " + state.getUsername());
+        final URLState state = (URLState) evt.getNewValue();
+        if (state.getError() != null) {
+            JOptionPane.showMessageDialog(this, state.getError());
         }
+    }
+
+    private void setFields(URLState state) {
+        urlInputField.setText(state.getUrl());
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setURLController(URLController urlController) {
+        this.urlController = urlController;
     }
 }
