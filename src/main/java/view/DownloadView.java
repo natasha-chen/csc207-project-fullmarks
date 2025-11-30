@@ -2,9 +2,12 @@ package view;
 
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.url.URLState;
+import interface_adapter.url.URLViewModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -14,7 +17,6 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final DownloadViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
 
-    private final JTextField urlField = new JTextField(30);
     private final JTextField outputFolderField = new JTextField(20);
     private final JLabel statusLabel = new JLabel("");
 
@@ -41,14 +43,6 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         this.add(title, gbc);
 
-        // URL
-        gbc.gridy++;
-        gbc.gridwidth = 1;
-        this.add(new JLabel("Video URL:"), gbc);
-
-        gbc.gridx = 1;
-        this.add(urlField, gbc);
-
         // Output folder
         gbc.gridx = 0; gbc.gridy++;
         this.add(new JLabel("Save To Folder:"), gbc);
@@ -74,7 +68,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         // Button actions
         chooseFolderButton.addActionListener(e -> chooseFolder());
         downloadButton.addActionListener(e ->
-                controller.execute(urlField.getText(), outputFolderField.getText())
+                controller.execute(viewModel.getState().getUrl(), outputFolderField.getText())
         );
 
         backButton.addActionListener(e -> {
@@ -96,7 +90,6 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         DownloadState state = viewModel.getState();
 
-        urlField.setText(state.getUrl());
         outputFolderField.setText(state.getOutputFolder());
         statusLabel.setText(state.getStatusMessage());
     }

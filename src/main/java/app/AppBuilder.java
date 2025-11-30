@@ -6,7 +6,6 @@ import interface_adapter.ProgressBar.ProgressPresenter;
 import interface_adapter.ProgressBar.ProgressViewModel;
 import interface_adapter.ViewManagerModel;
 
-import interface_adapter.failed_url.FailedURLViewModel;
 import interface_adapter.signup.*;
 import interface_adapter.login.*;
 import interface_adapter.menu.*;
@@ -103,21 +102,18 @@ public class AppBuilder {
 
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
-
         DownloadView downloadView =
                 new DownloadView(downloadController, downloadViewModel, viewManagerModel);
 
 
         //URL View
         URLViewModel urlViewModel = new URLViewModel();
-        FailedURLViewModel failedURLViewModel = new FailedURLViewModel();
         URLPresenter urlPresenter =
-                new URLPresenter(urlViewModel, failedURLViewModel, viewManagerModel);
+                new URLPresenter(urlViewModel, downloadViewModel, viewManagerModel);
         URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
         URLController urlController = new URLController(urlInteractor);
         URLView urlView = new URLView(urlViewModel);
         urlView.setURLController(urlController);
-
 
         //TODO: CREATE PLAYLIST SETUP
 //        CreatePlaylistViewModel createPlaylistViewModel = new CreatePlaylistViewModel();
