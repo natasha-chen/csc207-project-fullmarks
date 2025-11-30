@@ -1,4 +1,4 @@
-package test;
+package use_case.ProgressBarTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

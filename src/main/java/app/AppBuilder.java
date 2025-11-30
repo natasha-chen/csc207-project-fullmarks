@@ -1,6 +1,6 @@
 package app;
 
-import data_access.YtDlpDownloader;
+import data_access.Downloader;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressPresenter;
 import interface_adapter.ProgressBar.ProgressViewModel;
@@ -82,7 +82,7 @@ public class AppBuilder {
         DownloadPresenter downloadPresenter =
                 new DownloadPresenter(downloadViewModel, viewManagerModel);
 
-        DownloadDataAccessInterface downloadDAO = new YtDlpDownloader();
+        DownloadDataAccessInterface downloadDAO = new Downloader();
 
         DownloadInteractor downloadInteractor =
                 new DownloadInteractor(downloadDAO, downloadPresenter, progressInteractor);
@@ -104,8 +104,7 @@ public class AppBuilder {
                 urlViewModel,
                 viewManagerModel,
                 loginViewModel,
-                signupViewModel,
-                downloadViewModel
+                signupViewModel
         );
 
         // CARD LAYOUT
