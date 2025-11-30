@@ -28,7 +28,7 @@ public class URLPresenter implements URLOutputBoundary {
         // Clear the URL input field
         final URLState urlState = urlViewModel.getState();
         urlState.setUrl("");
-        urlState.setError("");
+        urlState.setError("valid URL, you may continue!");
         this.urlViewModel.firePropertyChanged();
 
         // switch to the next view, which is download
