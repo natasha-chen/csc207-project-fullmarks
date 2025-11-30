@@ -18,17 +18,14 @@ import javax.swing.*;
 public class SelectForConversionView extends JPanel implements PropertyChangeListener {
     private static final String VIEW_NAME = "Select for Conversion";
 
-    private transient SelectForConversionViewModel selectForConversionViewModel;
-    private transient SelectForConversionController selectForConversionController = null;
-    private transient SelectForConversionState currentState;
 
     private final JButton skip;
     private final JButton begin;
 
-    public SelectForConversionView(SelectForConversionViewModel selectForConversionViewModel) {
-        this.selectForConversionViewModel = selectForConversionViewModel;
-        this.selectForConversionViewModel.addPropertyChangeListener(this);
-        this.currentState = selectForConversionViewModel.getState();
+    public SelectForConversionView(SelectForConversionController selectForConversionController,
+                                   SelectForConversionViewModel selectForConversionViewModel) {
+        selectForConversionViewModel.addPropertyChangeListener(this);
+        SelectForConversionState currentState = selectForConversionViewModel.getState();
 
         final JLabel title = new JLabel(SelectForConversionViewModel.TITLE_LABEL);
         title.setAlignmentX(CENTER_ALIGNMENT);
@@ -78,16 +75,12 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
     public void propertyChange(PropertyChangeEvent evt) {
         final SelectForConversionState state = (SelectForConversionState) evt.getNewValue();
         if (state.getSelectForConversionError() != null) {
-            System.out.println("Help");
+            System.out.println("Select For Conversion Error Detected");
             JOptionPane.showMessageDialog(this, state.getSelectForConversionError());
         }
     }
 
     public String getViewName() {
         return VIEW_NAME;
-    }
-
-    public void setSelectForConversionController(SelectForConversionController controller) {
-        this.selectForConversionController = controller;
     }
 }

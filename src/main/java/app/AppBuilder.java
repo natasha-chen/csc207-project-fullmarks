@@ -6,16 +6,24 @@ import interface_adapter.ProgressBar.ProgressPresenter;
 import interface_adapter.ProgressBar.ProgressViewModel;
 import interface_adapter.ViewManagerModel;
 
+import interface_adapter.failed_url.FailedURLViewModel;
 import interface_adapter.signup.*;
 import interface_adapter.login.*;
-import interface_adapter.url.*;
+import interface_adapter.menu.*;
 import interface_adapter.download.*;
+import interface_adapter.create_playlist.*;
+import interface_adapter.url.*;
+import interface_adapter.select_for_conversion.*;
 import interface_adapter.user.FileUserDataAccessObject;
 
 import use_case.progress.ProgressInteractor;
+import use_case.select_for_conversion.SelectForConversionInputBoundary;
+import use_case.select_for_conversion.SelectForConversionInteractor;
 import use_case.signup.*;
 import use_case.login.*;
 import use_case.download.*;
+import use_case.url.*;
+import use_case.create_playlist.*;
 
 import view.*;
 
@@ -41,13 +49,13 @@ public class AppBuilder {
         FileUserDataAccessObject userDataAccessObject =
                 new FileUserDataAccessObject("users.csv");
 
-        // URL VIEWMODEL (home page)
-        URLViewModel urlViewModel = new URLViewModel();
+        // MENU VIEWMODEL (home page)
+        MenuViewModel menuViewModel = new MenuViewModel();
 
         // LOGIN SETUP
         loginViewModel = new LoginViewModel();
         LoginPresenter loginPresenter =
-                new LoginPresenter(loginViewModel, viewManagerModel, urlViewModel);
+                new LoginPresenter(loginViewModel, viewManagerModel, menuViewModel);
         LoginInteractor loginInteractor =
                 new LoginInteractor(userDataAccessObject, loginPresenter);
         LoginController loginController = new LoginController(loginInteractor);
@@ -92,19 +100,46 @@ public class AppBuilder {
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
 
-        DownloadView downloadView =
-                new DownloadView(downloadController, downloadViewModel, viewManagerModel);
 
-        // MENU
-        SignupLoginMenuView menuView =
-                new SignupLoginMenuView(viewManagerModel);
+        //TODO: URL VIEW
+        URLViewModel urlViewModel = new URLViewModel();
+        FailedURLViewModel failedURLViewModel = new FailedURLViewModel();
+        URLPresenter urlPresenter =
+                new URLPresenter(urlViewModel, failedURLViewModel, viewManagerModel);
+        URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
+        URLController urlController = new URLController(urlInteractor);
+        URLView urlView =
+                new URLView(urlViewModel, viewManagerModel, menuViewModel);
 
-        // URL VIEW (AFTER LOGIN)
-        URLView urlView = new URLView(
-                urlViewModel,
+
+        //TODO: CREATE PLAYLIST SETUP
+        CreatePlaylistViewModel createPlaylistViewModel = new CreatePlaylistViewModel();
+        CreatePlaylistPresenter createPlaylistPresenter =
+                new CreatePlaylistPresenter();
+        CreatePlaylistInputBoundary createPlaylistInteractor = new CreatePlaylistInteractor(CreatePlaylistPresenter);
+        CreatePlaylistController createPlaylistController = new CreatePlaylistController(createPlaylistInteractor);
+        CreatePlaylistView createPlaylistView =
+                new CreatePlaylistView();
+
+        // SELECT FOR CONVERSION
+        SelectForConversionViewModel selectForConversionViewModel = new SelectForConversionViewModel();
+        SelectForConversionPresenter selectForConversionPresenter =
+                new SelectForConversionPresenter(selectForConversionViewModel, viewManagerModel);
+        SelectForConversionInputBoundary selectForConversionInteractor =
+                new SelectForConversionInteractor(selectForConversionPresenter);
+        SelectForConversionController selectForConversionController =
+                new SelectForConversionController(selectForConversionInteractor);
+        SelectForConversionView selectForConversionView =
+                new SelectForConversionView(selectForConversionController, selectForConversionViewModel);
+
+        // MENU VIEW (AFTER LOGIN)
+        MenuView menuView = new MenuView(
                 viewManagerModel,
                 loginViewModel,
-                signupViewModel
+                signupViewModel,
+                urlViewModel,
+                createPlaylistViewModel,
+                menuViewModel
         );
 
         // CARD LAYOUT
@@ -114,16 +149,17 @@ public class AppBuilder {
         cardPanel.add(signupView, "signup");
         cardPanel.add(loginView, "login");
         cardPanel.add(urlView, "url");
-        cardPanel.add(downloadView, "download");
         cardPanel.add(progressView, "progress");
+        cardPanel.add(selectForConversionView, "select_for_conversion");
 
         // VIEW MANAGER REGISTRATION
         viewManager.addView(menuView, "signup_login_menu");
         viewManager.addView(signupView, "signup");
         viewManager.addView(loginView, "login");
         viewManager.addView(urlView, "url");
-        viewManager.addView(downloadView, "download");
+        viewManager.addView(createPlaylistView, "create playlist");
         viewManager.addView(progressView, "progress");
+        viewManager.addView(selectForConversionView, "select for conversion");
 
         return cardPanel;
     }

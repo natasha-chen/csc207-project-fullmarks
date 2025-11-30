@@ -1,0 +1,109 @@
+package view;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.login.LoginState;
+import interface_adapter.menu.MenuState;
+import interface_adapter.menu.MenuViewModel;
+import interface_adapter.signup.SignupViewModel;
+import interface_adapter.signup.SignupState;
+import interface_adapter.url.URLViewModel;
+import interface_adapter.url.URLState;
+import interface_adapter.create_playlist.CreatePlaylistViewModel;
+import interface_adapter.create_playlist.CreatePlaylistState;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class MenuView extends JPanel implements PropertyChangeListener {
+
+    private final ViewManagerModel viewManagerModel;
+    private final LoginViewModel loginViewModel;
+    private final SignupViewModel signupViewModel;
+    private final URLViewModel urlViewModel;
+    private final CreatePlaylistViewModel createPlaylistViewModel;
+    private final MenuViewModel viewModel;
+
+    private JLabel usernameLabel = new JLabel("");
+
+
+    private JButton logoutButton = new JButton("Logout");
+    private JButton urlButton = new JButton("Download from URL");
+    private JButton playlistButton = new JButton("Create Playlist");
+
+    public MenuView(ViewManagerModel viewManagerModel,
+                    LoginViewModel loginViewModel,
+                    SignupViewModel signupViewModel,
+                    URLViewModel urlViewModel,
+                    CreatePlaylistViewModel createPlaylistViewModel,
+                    MenuViewModel menuViewModel) {
+
+        this.viewManagerModel = viewManagerModel;
+        this.loginViewModel = loginViewModel;
+        this.signupViewModel = signupViewModel;
+        this.urlViewModel = urlViewModel;
+        this.createPlaylistViewModel = createPlaylistViewModel;
+        this.viewModel = menuViewModel;
+
+        this.addPropertyChangeListener(this);
+
+        this.setLayout(new BorderLayout());
+
+        // Display username
+        JPanel header = new JPanel();
+        header.setLayout(new FlowLayout(FlowLayout.LEFT));
+        header.add(usernameLabel);
+
+        // ---- Logout button ----
+        logoutButton.addActionListener(e -> {
+
+            // 1. Reset LOGIN state
+            loginViewModel.setState(new LoginState());
+            loginViewModel.firePropertyChanged();
+
+            // 2. Reset SIGNUP state
+            signupViewModel.setState(new SignupState());
+            signupViewModel.firePropertyChanged();
+
+            // 3. Switch back to menu
+            viewManagerModel.setActiveView("signup_login_menu");
+            viewManagerModel.firePropertyChanged();
+        });
+
+        // ---- URL button ----
+        urlButton.addActionListener(e -> {
+            // Switch to url view
+            viewManagerModel.setActiveView(urlViewModel.getViewName());
+            viewManagerModel.firePropertyChanged();
+        });
+
+        // ---- Playlist button ----
+        playlistButton.addActionListener(e -> {
+
+            // TODO: playlistViewModel is updated with files corresponding to username
+             createPlaylistViewModel.getState().setFilePath();
+             createPlaylistViewModel.firePropertyChanged();
+
+            // 3. Switch to create playlist view
+            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
+            viewManagerModel.firePropertyChanged();
+        });
+
+
+
+
+        header.add(logoutButton);
+        this.add(header, BorderLayout.NORTH);
+    }
+
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        MenuState state = viewModel.getState();
+
+        if (state.getUsername() != null) {
+            usernameLabel.setText("Logged in as: " + state.getUsername());
+        }
+    }
+}
