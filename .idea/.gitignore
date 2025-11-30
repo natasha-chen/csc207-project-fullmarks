@@ -6,6 +6,8 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+<<<<<<< HEAD
+=======
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
@@ -15,3 +17,4 @@ out/
 target/
 out/
 .idea/
+>>>>>>> 262bd59af1dd338256666eed4270e9af69c859b6
