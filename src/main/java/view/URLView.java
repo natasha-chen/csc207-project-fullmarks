@@ -24,6 +24,7 @@ public class URLView extends JPanel implements PropertyChangeListener {
 
     private JLabel usernameLabel = new JLabel("");
     private JButton logoutButton = new JButton("Logout");
+    private JButton downloadButton = new JButton("Go to Download");
 
     public URLView(URLViewModel viewModel,
                    ViewManagerModel viewManagerModel,
@@ -41,7 +42,15 @@ public class URLView extends JPanel implements PropertyChangeListener {
 
         // Display username
         JPanel header = new JPanel();
+        header.setLayout(new FlowLayout(FlowLayout.LEFT));
         header.add(usernameLabel);
+
+        // ---- Download Button ----
+        downloadButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("download");
+            viewManagerModel.firePropertyChanged();
+        });
+        header.add(downloadButton);
 
         // ---- Logout button ----
         logoutButton.addActionListener(e -> {
