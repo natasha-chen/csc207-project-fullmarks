@@ -1,4 +1,4 @@
-package use_case;
+package select_for_conversion_input_boundary;
 
 import java.util.ArrayList;
 
