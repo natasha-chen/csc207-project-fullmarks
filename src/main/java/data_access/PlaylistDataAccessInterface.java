@@ -7,7 +7,7 @@ import java.util.List;
 
 // *** come back to edit later
 
-public interface PlaylistDataAcessInterface {
+public interface PlaylistDataAccessInterface {
 
     // playlist operations
     List<Playlist> getAllPlaylists();

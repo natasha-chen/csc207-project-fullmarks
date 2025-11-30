@@ -1,13 +1,14 @@
-package use_case.create_playlist;// *** come back to edit later
+package use_case.create_playlist;
 
-import data_access.PlaylistDataAcessInterface;
+import data_access.PlaylistDataAccessInterface;
+import entity.Playlist;
 
 public class CreatePlaylistInteractor implements CreatePlaylistInputBoundary {
 
-    private final PlaylistDataAcessInterface playlistGateway;
+    private final PlaylistDataAccessInterface playlistGateway;
     private final CreatePlaylistOutputBoundary presenter;
 
-    public CreatePlaylistInteractor(PlaylistDataAcessInterface gateway,
+    public CreatePlaylistInteractor(PlaylistDataAccessInterface gateway,
                                     CreatePlaylistOutputBoundary presenter) {
         this.playlistGateway = gateway;
         this.presenter = presenter;
