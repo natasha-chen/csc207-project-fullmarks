@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.select_for_conversion.SelectForConversionState;
 import interface_adapter.url.URLController;
 import interface_adapter.url.URLState;
 import interface_adapter.url.URLViewModel;
@@ -103,7 +104,9 @@ public class URLView extends JPanel implements ActionListener, PropertyChangeLis
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final URLState state = (URLState) evt.getNewValue();
-        setFields(state);
+        if (state.getError() != null) {
+            JOptionPane.showMessageDialog(this, state.getError());
+        }
     }
 
     private void setFields(URLState state) {

@@ -47,19 +47,18 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         // this.createPlaylistViewModel = createPlaylistViewModel;
         this.viewModel = menuViewModel;
 
-        this.addPropertyChangeListener(this);
-
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        viewModel.addPropertyChangeListener(this);
 
         // Display username
-        JPanel header = new JPanel();
-        header.add(usernameLabel);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(usernameLabel);
+        panel.add(urlButton);
+        panel.add(playlistButton);
+        panel.add(logoutButton);
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(usernameLabel);
-        this.add(urlButton);
-        this.add(playlistButton);
-        this.add(logoutButton);
+        this.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.add(panel);
 
         // ---- Logout button ----
         logoutButton.addActionListener(e -> {
@@ -101,7 +100,7 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        MenuState state = viewModel.getState();
+        MenuState state = this.viewModel.getState();
 
         if (state.getUsername() != null) {
             usernameLabel.setText("Logged in as: " + state.getUsername());

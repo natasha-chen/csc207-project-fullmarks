@@ -38,13 +38,9 @@ public class URLPresenter implements URLOutputBoundary {
 
     @Override
     public void prepareFailView(String errorMessage) {
-        // Update the Failed URL view model with the error message
-        final FailedURLState failedURLState = failedURLViewModel.getState();
-        failedURLState.setErrorMessage(errorMessage);
-        this.failedURLViewModel.firePropertyChanged();
-
-        // Switch to the Failed URL view
-        this.viewManagerModel.setActiveView(failedURLViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
+        // Update its own state
+        final URLState urlState = urlViewModel.getState();
+        urlState.setError(errorMessage);
+        this.urlViewModel.firePropertyChanged();
     }
 }
