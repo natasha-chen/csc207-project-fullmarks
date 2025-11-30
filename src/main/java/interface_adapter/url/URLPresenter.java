@@ -1,8 +1,7 @@
 package interface_adapter.url;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.failed_url.FailedURLState;
-import interface_adapter.failed_url.FailedURLViewModel;
+import interface_adapter.download.DownloadViewModel;
 import use_case.url.URLOutputBoundary;
 import use_case.url.URLOutputData;
 
@@ -11,28 +10,25 @@ import use_case.url.URLOutputData;
  */
 public class URLPresenter implements URLOutputBoundary {
     private final URLViewModel urlViewModel;
-    private final FailedURLViewModel failedURLViewModel;
+    private final DownloadViewModel downloadViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public URLPresenter(URLViewModel urlViewModel,
-                        FailedURLViewModel failedURLViewModel,
+                        DownloadViewModel downloadViewModel,
                         ViewManagerModel viewManagerModel) {
         this.urlViewModel = urlViewModel;
-        this.failedURLViewModel = failedURLViewModel;
+        this.downloadViewModel = downloadViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
     @Override
     public void prepareSuccessView(URLOutputData outputData) {
-        // Clear the URL input field
         final URLState urlState = urlViewModel.getState();
-        urlState.setUrl("");
-        urlState.setError("");
         this.urlViewModel.firePropertyChanged();
 
-        // switch to the next view, placeholder to go to failed  view
-
-        this.viewManagerModel.setActiveView(failedURLViewModel.getViewName());
+        // switch to the download view
+        downloadViewModel.getState().setUrl(urlState.getUrl());
+        this.viewManagerModel.setActiveView(downloadViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
