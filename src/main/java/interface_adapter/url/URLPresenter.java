@@ -3,6 +3,7 @@ package interface_adapter.url;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.failed_url.FailedURLState;
 import interface_adapter.failed_url.FailedURLViewModel;
+import interface_adapter.menu.MenuState;
 import use_case.url.URLOutputBoundary;
 import use_case.url.URLOutputData;
 
@@ -30,10 +31,9 @@ public class URLPresenter implements URLOutputBoundary {
         urlState.setError("");
         this.urlViewModel.firePropertyChanged();
 
-        // switch to the next view, placeholder to go to failed  view
-
-        this.viewManagerModel.setActiveView(failedURLViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
+        // switch to the next view, which is download
+        viewManagerModel.setActiveView("download");
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override
