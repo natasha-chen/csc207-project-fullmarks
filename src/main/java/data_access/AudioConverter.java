@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 public class AudioConverter {
 
+    //TODO; change; input: cache, output: cache
     public void convertToMp3(String folder, String title) {
         System.out.println("Converting to MP3...");
         String inputPath = folder + title + ".mp4";

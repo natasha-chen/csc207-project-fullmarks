@@ -5,6 +5,7 @@ public class DownloadState {
     private String url = "";
     private String outputFolder = "";
     private String statusMessage = "";
+    private boolean success = false;
     private boolean inProgress = false;
 
     public String getUrl() {
@@ -38,4 +39,8 @@ public class DownloadState {
     public void setInProgress(boolean inProgress) {
         this.inProgress = inProgress;
     }
+
+    public boolean isSuccess() {return this.success;}
+
+    public void setSuccess(boolean success) {this.success = success;}
 }

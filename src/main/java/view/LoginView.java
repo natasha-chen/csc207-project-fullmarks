@@ -56,6 +56,18 @@ public class LoginView extends JPanel implements PropertyChangeListener {
                     new String(passwordField.getPassword())
             );
         });
+        usernameField.addActionListener(e -> {
+            controller.execute(
+                    usernameField.getText(),
+                    new String(passwordField.getPassword())
+            );
+        });
+        passwordField.addActionListener(e -> {
+            controller.execute(
+                    usernameField.getText(),
+                    new String(passwordField.getPassword())
+            );
+        });
 
         gbc.gridy = 4;
         this.add(loginButton, gbc);
