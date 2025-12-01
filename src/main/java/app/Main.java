@@ -9,7 +9,7 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {}
 
-        AppBuilder builder = new AppBuilder();
+        app.AppBuilder builder = new app.AppBuilder();
         JPanel mainPanel = builder.build();
 
         JFrame frame = new JFrame("Youtube to MP3/4");

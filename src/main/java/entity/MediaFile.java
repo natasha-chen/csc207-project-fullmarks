@@ -4,7 +4,7 @@ public class MediaFile {
     private String title;     // human title that can be edited
     private final String fileID;  // UUID, = actual file name under media/, is a unique key
 
-    public MediaFile(String title, String fileID, String format) {
+    public MediaFile(String title, String fileID) {
         this.title = title;
         this.fileID = fileID;
     }
