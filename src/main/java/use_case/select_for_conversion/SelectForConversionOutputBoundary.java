@@ -1,4 +1,4 @@
-package select_for_conversion;
+package use_case.select_for_conversion;
 
 /**
  * The input boundary for the Select for Conversion Use Case.
