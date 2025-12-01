@@ -1,15 +1,14 @@
-package data_access;
+package main.java.data_access;
 
 import entity.MediaFile;
 import entity.Playlist;
 import entity.MediaPathManager;
-import data_access.PlaylistDataAccessInterface;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-public class PlaylistDataAccess implements PlaylistDataAccessInterface {
+public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
 
     // Paths
     private final Path appDataRoot;
@@ -19,9 +18,10 @@ public class PlaylistDataAccess implements PlaylistDataAccessInterface {
     // Local storage: duplicate of JSON and media folder, updates simultaneously
     // based on savePlaylist and (tbd:) also saveMedia
     private final Map<String, Playlist> playlists = new HashMap<>();
+    // has to update each time after conversion
     private final Map<String, MediaFile> media = new HashMap<>();
 
-    public PlaylistDataAccess() {
+    public PlaylistDataAccessObject() {
         // the media folder
         this.mediaFolder = MediaPathManager.getMediaFolderPath();
          // the appdata folder
