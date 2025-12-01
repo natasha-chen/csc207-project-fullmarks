@@ -11,12 +11,17 @@ public interface PlaylistDataAccessInterface {
 
     // playlist operations
     List<Playlist> getAllPlaylists();
+    // gets the name of the playlist, no two playlist has the same name
     Playlist getPlaylist(String name);
+    // saves any edits made to a playlist, such as deleting or adding a song
     void savePlaylist(Playlist playlist);
+    // deletes the playlist
     void deletePlaylist(String name);
 
     // media operations
     MediaFile getMedia(String id);
-    void saveMedia(MediaFile media);
+    // fetches all the songs in main\appdata\media\
     List<MediaFile> getAllMedia();
 }
+
+
