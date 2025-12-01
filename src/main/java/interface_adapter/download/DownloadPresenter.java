@@ -1,8 +1,12 @@
 package interface_adapter.download;
 
+import interface_adapter.ProgressBar.ProgressState;
 import interface_adapter.ViewManagerModel;
 import use_case.download.DownloadOutputBoundary;
 import use_case.download.DownloadOutputData;
+import interface_adapter.ProgressBar.ProgressViewModel;
+
+import javax.swing.*;
 
 public class DownloadPresenter implements DownloadOutputBoundary {
 
@@ -39,5 +43,14 @@ public class DownloadPresenter implements DownloadOutputBoundary {
 
         viewModel.setState(state);
         viewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void prepareProgressBar() {
+        System.out.println("Preparing ProgressBar");
+        SwingUtilities.invokeLater(() -> {
+            ProgressViewModel progressViewModel = new ProgressViewModel();
+            viewManagerModel.setActiveView(progressViewModel.getViewName());
+        });
     }
 }

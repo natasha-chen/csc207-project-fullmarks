@@ -1,15 +1,18 @@
 package data_access;
 
 import use_case.download.DownloadDataAccessInterface;
+import use_case.progress.ProgressCallback;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Downloader implements DownloadDataAccessInterface {
 
-    public void downloadVideo(String url, String outputFolder) {
+    public void downloadVideo(String url, String outputFolder, ProgressCallback progressCallback) {
         System.out.println("Starting download...");
 
         ProcessBuilder pb = new ProcessBuilder(
@@ -27,10 +30,18 @@ public class Downloader implements DownloadDataAccessInterface {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.contains("%")) {
-                    System.out.println(line);
+                // Look for progress lines
+                if (line.contains("[download]")) {
+
+                    // Find percentage using regex
+                    Matcher m = Pattern.compile("(\\d+\\.\\d+)%").matcher(line);
+                    if (m.find()) {
+                        double percent = Double.parseDouble(m.group(1));
+                        progressCallback.reportProgress((int) percent, "Downloading");
+                    }
                 }
             }
+            progressCallback.reportProgress(100, "Finished");
 
             process.waitFor();
             System.out.println("✅ Video downloaded successfully!");

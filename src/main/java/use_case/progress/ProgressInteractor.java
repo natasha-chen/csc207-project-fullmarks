@@ -1,11 +1,13 @@
 package use_case.progress;
 
+import javax.swing.*;
+
 /**
  * Interactor for the progress use case.
  * Handles cancellation requests and provides a mechanism
  * for reporting progress updates to the Presenter.
  */
-public class ProgressInteractor implements ProgressInputBoundary {
+public class ProgressInteractor implements ProgressInputBoundary, ProgressCallback {
 
     private final ProgressOutputBoundary progressOutputBoundary;
 
@@ -49,6 +51,7 @@ public class ProgressInteractor implements ProgressInputBoundary {
      */
     @Override
     public void reportProgress(int percent, String message) {
+        SwingUtilities.invokeLater(() -> {
         if (!cancelled) {
             ProgressOutputData data = new ProgressOutputData(
                     percent,
@@ -57,7 +60,9 @@ public class ProgressInteractor implements ProgressInputBoundary {
                     false
             );
             progressOutputBoundary.updateProgress(data);
+            System.out.println(percent);
         }
+        });
     }
 
     /**

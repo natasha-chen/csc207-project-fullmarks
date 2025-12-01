@@ -1,6 +1,7 @@
 package data_access;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -9,8 +10,8 @@ public class AudioConverter {
     //TODO; change; input: cache, output: cache
     public void convertToMp3(String folder, String title) {
         System.out.println("Converting to MP3...");
-        String inputPath = folder + title + ".mp4";
-        String outputPath = folder + title + ".mp3";
+        String inputPath = folder + File.separator + title + ".mp4";
+        String outputPath = folder + File.separator + title + ".mp3";
 
         ProcessBuilder pb = new ProcessBuilder(
                 "ffmpeg",
