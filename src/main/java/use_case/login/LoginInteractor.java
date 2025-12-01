@@ -4,6 +4,12 @@ import entity.User;
 import entity.PasswordHasher;
 import use_case.user.UserDataAccessInterface;
 
+/**
+ * Interactor for the login use case.
+ *
+ * <p>Validates the user's credentials, retrieves user data,
+ * and produces either a success or failure response.
+ */
 public class LoginInteractor implements LoginInputBoundary {
 
     private final UserDataAccessInterface userDataAccess;

@@ -4,7 +4,12 @@ import entity.PasswordHasher;
 import entity.User;
 import use_case.user.UserDataAccessInterface;
 
-
+/**
+ * Interactor for the Signup use case.
+ *
+ * <p>Responsible for validating input, checking if the username already exists,
+ * creating the new user, and informing the presenter of success or failure.
+ */
 public class SignupInteractor implements SignupInputBoundary {
 
     private final UserDataAccessInterface userDataAccess;
