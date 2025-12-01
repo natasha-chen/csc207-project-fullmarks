@@ -19,7 +19,11 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        builder.viewManagerModel.setActiveView("signup_login_menu");
+//        builder.viewManagerModel.setActiveView("signup_login_menu");
+//        builder.viewManagerModel.firePropertyChanged();
+        // to test the playlist library view
+        builder.viewManagerModel.setActiveView("playlist_library");
         builder.viewManagerModel.firePropertyChanged();
+
     }
 }

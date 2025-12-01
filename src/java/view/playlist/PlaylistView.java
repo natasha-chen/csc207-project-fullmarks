@@ -1,8 +1,8 @@
 package view.playlist;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.modify_playlist.ModifyPlaylistController;
 import interface_adapter.playlist_view.PlaylistViewModel;
-import interface_adapter.playlist_view.PlaylistController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +14,8 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
 
     public static final String VIEW_NAME = "playlist";
 
-    private final PlaylistViewModel viewModel;
-    private final PlaylistController playlistController;
+    private final PlaylistViewModel playlistViewModel;
+    private final ModifyPlaylistController modifyPlaylistController;
     private final ViewManagerModel viewManagerModel;
 
     private final JLabel playlistNameLabel = new JLabel();
@@ -27,15 +27,15 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
     private final JButton playButton = new JButton("Play");
     private final JButton libraryButton = new JButton("Library");
 
-    public PlaylistView(PlaylistViewModel viewModel,
-                        PlaylistController playlistController,
+    public PlaylistView(PlaylistViewModel playlistViewModel,
+                        ModifyPlaylistController modifyPlaylistController,
                         ViewManagerModel viewManagerModel) {
 
-        this.viewModel = viewModel;
-        this.playlistController = playlistController;
+        this.playlistViewModel = playlistViewModel;
+        this.modifyPlaylistController = modifyPlaylistController;
         this.viewManagerModel = viewManagerModel;
 
-        this.viewModel.addPropertyChangeListener(this);
+        this.playlistViewModel.addPropertyChangeListener(this);
 
         setLayout(new BorderLayout(10, 10));
 
@@ -57,53 +57,54 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
         bottom.add(libraryButton);
         add(bottom, BorderLayout.SOUTH);
 
-        // listeners
         wireListeners();
     }
 
     private void wireListeners() {
-
-        // Add Song(s) → dialog (uses ModifyPlaylist for ADD)
+        // Add Song(s) – simplified: type a song ID/name
         addSongButton.addActionListener(e -> {
-            String playlistName = viewModel.getPlaylistName();
-            new SongSelectionView(
-                    playlistName,
-                    modifyPlaylistController,
-                    viewModel
-            ).setVisible(true);
+            String playlistName = playlistViewModel.getPlaylistName();
+            String songId = JOptionPane.showInputDialog(
+                    this,
+                    "Enter song ID / filename to add:",
+                    "Add song to " + playlistName,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (songId == null || songId.isBlank()) {
+                return; // cancelled or empty
+            }
+
+            modifyPlaylistController.addSong(playlistName, songId.trim());
         });
 
-        // Delete song → confirm (uses ModifyPlaylist for REMOVE)
+        // Delete song → confirm → ModifyPlaylistController
         deleteButton.addActionListener(e -> {
             int idx = songList.getSelectedIndex();
             if (idx == -1) {
-                viewModel.setErrorMessage("please select song");
+                playlistViewModel.setErrorMessage("please select song");
                 return;
             }
 
-            String playlistName = viewModel.getPlaylistName();
-            String songId = viewModel.getSongIdAt(idx);   // from VM → underlying entity
+            String playlistName = playlistViewModel.getPlaylistName();
+            String songId = songList.getSelectedValue(); // each entry is a unique ID/name
 
-            Runnable onConfirm = () ->
-                    modifyPlaylistController.removeSong(playlistName, songId);
-
-            new ConfirmationView(
+            int result = JOptionPane.showConfirmDialog(
+                    this,
                     "Are you sure you want to delete?\nThis can't be undone",
-                    onConfirm
-            ).setVisible(true);
-        });
+                    "Confirm delete",
+                    JOptionPane.YES_NO_OPTION
+            );
 
-        // Play whole playlist OR start from highlighted song
-        playButton.addActionListener(e -> {
-            String playlistName = viewModel.getPlaylistName();
-            int idx = songList.getSelectedIndex();
-
-            if (idx == -1) {
-                playPlaylistController.play(playlistName);             // whole playlist
-            } else {
-                playPlaylistController.playFromIndex(playlistName, idx);  // optional; depends on your friend
+            if (result == JOptionPane.YES_OPTION) {
+                modifyPlaylistController.removeSong(playlistName, songId);
             }
         });
+
+        // Play button – stub for now
+        playButton.addActionListener(e ->
+                playlistViewModel.setErrorMessage("Play playlist is not implemented yet.")
+        );
 
         // Back to library
         libraryButton.addActionListener(e -> {
@@ -112,20 +113,18 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
         });
     }
 
-
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case PlaylistViewModel.PLAYLIST_NAME_PROPERTY -> {
-                playlistNameLabel.setText(viewModel.getPlaylistName());
+                playlistNameLabel.setText(playlistViewModel.getPlaylistName());
             }
             case PlaylistViewModel.SONG_NAMES_PROPERTY -> {
-                List<String> songs = viewModel.getSongNames();
+                List<String> songs = playlistViewModel.getSongNames();
                 songList.setListData(songs.toArray(new String[0]));
             }
             case PlaylistViewModel.ERROR_MESSAGE_PROPERTY -> {
-                errorLabel.setText(viewModel.getErrorMessage());
+                errorLabel.setText(playlistViewModel.getErrorMessage());
             }
         }
     }

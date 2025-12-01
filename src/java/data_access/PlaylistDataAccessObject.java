@@ -67,6 +67,11 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
     }
 
     @Override
+    public void updateMedia() {
+
+    }
+
+    @Override
     public MediaFile getMedia(String id) {
         return media.get(id);
     }

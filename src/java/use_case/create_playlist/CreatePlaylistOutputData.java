@@ -1,13 +1,27 @@
 package use_case.create_playlist;
 
-public class CreatePlaylistOutputData {
-    private final String playlistName;
+import java.util.List;
 
-    public CreatePlaylistOutputData(String playlistName) {
-        this.playlistName = playlistName;
+/**
+ * Output data for creating a playlist.
+ * Contains the new playlist name and the full updated list of playlist names.
+ */
+public class CreatePlaylistOutputData {
+
+    private final String createdPlaylistName;
+    private final List<String> allPlaylistNames;
+
+    public CreatePlaylistOutputData(String createdPlaylistName,
+                                    List<String> allPlaylistNames) {
+        this.createdPlaylistName = createdPlaylistName;
+        this.allPlaylistNames = List.copyOf(allPlaylistNames);
     }
 
-    public String getPlaylistName() {
-        return playlistName;
+    public String getCreatedPlaylistName() {
+        return createdPlaylistName;
+    }
+
+    public List<String> getAllPlaylistNames() {
+        return allPlaylistNames;
     }
 }
