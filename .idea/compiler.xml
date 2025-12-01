@@ -6,8 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="full-marks-project" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="full-marks-project" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

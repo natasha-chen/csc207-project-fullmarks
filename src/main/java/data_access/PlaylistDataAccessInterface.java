@@ -1,4 +1,4 @@
-package data_access;
+package main.java.data_access;
 
 import entity.Playlist;
 import entity.MediaFile;
@@ -18,7 +18,8 @@ public interface PlaylistDataAccessInterface {
     // deletes the playlist
     void deletePlaylist(String name);
 
-    // media operations
+    // updates the local mp3 info after conversion -- not sure if i need this anymore
+    void updateMedia();
     MediaFile getMedia(String id);
     // fetches all the songs in main\appdata\media\
     List<MediaFile> getAllMedia();

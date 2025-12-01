@@ -1,4 +1,4 @@
-package select_for_conversion_input_boundary;
+package main.java.use_case.select_for_conversion;
 
 import custom_datatype.VideoData;
 

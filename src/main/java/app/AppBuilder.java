@@ -1,30 +1,69 @@
 package app;
 
+//** imports **//
+
+// data access
+import main.java.data_access.PlaylistDataAccessInterface;
+import main.java.data_access.PlaylistDataAccessObject;
+
+// 1: library
+
+// load playlist library
+import main.java.use_case.load_playlist_library.LoadPlaylistLibraryInputBoundary;
+import main.java.use_case.load_playlist_library.LoadPlaylistLibraryOutputBoundary;
+import main.java.use_case.load_playlist_library.LoadPlaylistLibraryOutputData;
+import main.java.use_case.load_playlist_library.LoadPlaylistLibraryInteractor;
+
+// library view interface adapters
+import main.java.interface_adapter.library.LibraryViewModel;
+import main.java.interface_adapter.library.LibraryPresenter;
+import main.java.interface_adapter.library.LibraryController;
+
+// library view
+import main.java.view.playlist.LibraryView;
+
+// 2: playlist
+
+// load playlist
+import main.java.use_case.load_playlist.LoadPlaylistInputBoundary;
+import main.java.use_case.load_playlist.LoadPlaylistOutputBoundary;
+import main.java.use_case.load_playlist.LoadPlaylistOutputData;
+import main.java.use_case.load_playlist.LoadPlaylistInteractor;
+
+// playlist view interface adapters
+import main.java.interface_adapter.playlist_view.PlaylistViewModel;
+import main.java.interface_adapter.playlist_view.PlaylistPresenter;
+import main.java.interface_adapter.playlist_view.PlaylistController;
+
+// library view
+import main.java.view.playlist.PlaylistView;
+
+//
 import data_access.Downloader;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressPresenter;
 import interface_adapter.ProgressBar.ProgressViewModel;
-import interface_adapter.ViewManagerModel;
+import main.java.interface_adapter.ViewManagerModel;
 
-import interface_adapter.signup.*;
-import interface_adapter.login.*;
-import interface_adapter.menu.*;
-import interface_adapter.download.*;
-import interface_adapter.create_playlist.*;
-import interface_adapter.url.*;
-import interface_adapter.select_for_conversion.*;
+import main.java.interface_adapter.signup.*;
+import main.java.interface_adapter.login.*;
+import main.java.interface_adapter.menu.*;
+import main.java.interface_adapter.download.*;
+import main.java.interface_adapter.create_playlist.*;
+import main.java.interface_adapter.url.*;
+import main.java.interface_adapter.select_for_conversion.*;
 import interface_adapter.user.FileUserDataAccessObject;
 
 import use_case.progress.ProgressInteractor;
-import use_case.select_for_conversion.SelectForConversionInputBoundary;
+import main.java.use_case.select_for_conversion.SelectForConversionInputBoundary;
 import use_case.select_for_conversion.SelectForConversionInteractor;
-import use_case.signup.*;
-import use_case.login.*;
-import use_case.download.*;
-import use_case.url.*;
-import use_case.create_playlist.*;
+import main.java.use_case.signup.*;
+import main.java.use_case.login.*;
+import main.java.use_case.download.*;
+import main.java.use_case.url.*;
+import main.java.use_case.create_playlist.*;
 
-import view.*;
+import main.java.view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,6 +86,9 @@ public class AppBuilder {
         // DATA ACCESS
         FileUserDataAccessObject userDataAccessObject =
                 new FileUserDataAccessObject("users.csv");
+        // Playlist data access, note: path initialized in DAO file
+        PlaylistDataAccessInterface playlistDAO =
+                new PlaylistDataAccessObject();
 
         // MENU VIEWMODEL (home page)
         MenuViewModel menuViewModel = new MenuViewModel();
@@ -74,6 +116,40 @@ public class AppBuilder {
         // MENU
         SignupLoginMenuView signupLoginMenuView =
                 new SignupLoginMenuView(viewManagerModel);
+
+        // ** LIBRARY setup
+        LibraryViewModel libraryViewModel = new LibraryViewModel();
+
+        LoadPlaylistLibraryOutputBoundary loadLibraryPresenter =
+                new LibraryPresenter(libraryViewModel, viewManagerModel);
+
+        LoadPlaylistLibraryInputBoundary loadLibraryInteractor =
+                new LoadPlaylistLibraryInteractor(playlistDAO, loadLibraryPresenter);
+
+        LibraryController libraryController =
+                new LibraryController(loadLibraryInteractor);
+
+        LibraryView libraryView =
+                new LibraryView(libraryController, libraryViewModel, viewManagerModel);
+
+
+        // ** PLAYLIST setup
+        PlaylistViewModel playlistViewModel = new PlaylistViewModel();
+
+        LoadPlaylistOutputBoundary loadPlaylistPresenter =
+                new PlaylistPresenter(playlistViewModel, viewManagerModel);
+
+        LoadPlaylistInputBoundary loadPlaylistInteractor =
+                new LoadPlaylistInteractor(playlistDAO, loadPlaylistPresenter);
+
+        PlaylistController playlistController =
+                new PlaylistController(loadPlaylistInteractor);
+
+        PlaylistView playlistView =
+                new PlaylistView(playlistController, playlistViewModel, viewManagerModel);
+
+
+
 
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
@@ -157,6 +233,9 @@ public class AppBuilder {
         // cardPanel.add(createPlaylistView, "create_playlist");
         cardPanel.add(progressView, "progress");
         cardPanel.add(selectForConversionView, "select_for_conversion");
+        // Library + Playlist
+        cardPanel.add(libraryView, "playlist_library");
+        cardPanel.add(playlistView, "playlist_view");
 
         // VIEW MANAGER REGISTRATION
         viewManager.addView(signupLoginMenuView, "signup_login_menu");
@@ -168,6 +247,9 @@ public class AppBuilder {
         // viewManager.addView(createPlaylistView, "create playlist");
         viewManager.addView(progressView, "progress");
         viewManager.addView(selectForConversionView, "select for conversion");
+        // Library + Playlist
+        viewManager.addView(libraryView, "playlist_library");
+        viewManager.addView(playlistView, "playlist_view");
 
         return cardPanel;
     }

@@ -4,13 +4,9 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.menu.MenuState;
 import interface_adapter.menu.MenuViewModel;
-import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.url.URLViewModel;
-import interface_adapter.url.URLState;
-import interface_adapter.create_playlist.CreatePlaylistViewModel;
-import interface_adapter.create_playlist.CreatePlaylistState;
 
 import javax.swing.*;
 import java.awt.*;
