@@ -66,6 +66,21 @@ public class SignupView extends JPanel implements PropertyChangeListener {
                 new String(passwordField.getPassword()),
                 new String(repeatField.getPassword())
         ));
+        passwordField.addActionListener(e -> controller.execute(
+                usernameField.getText(),
+                new String(passwordField.getPassword()),
+                new String(repeatField.getPassword())
+        ));
+        repeatField.addActionListener(e -> controller.execute(
+                usernameField.getText(),
+                new String(passwordField.getPassword()),
+                new String(repeatField.getPassword())
+        ));
+        usernameField.addActionListener(e -> controller.execute(
+                usernameField.getText(),
+                new String(passwordField.getPassword()),
+                new String(repeatField.getPassword())
+        ));
 
         gbc.gridy = 5;
         this.add(signupButton, gbc);
@@ -99,5 +114,6 @@ public class SignupView extends JPanel implements PropertyChangeListener {
         // ALWAYS clear both password fields
         passwordField.setText("");
         repeatField.setText("");
+
     }
 }

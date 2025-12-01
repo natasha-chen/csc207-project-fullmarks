@@ -49,16 +49,21 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
         viewModel.addPropertyChangeListener(this);
 
-        // Display username
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(usernameLabel);
-        panel.add(urlButton);
-        panel.add(playlistButton);
-        panel.add(logoutButton);
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
 
-        this.setLayout(new FlowLayout(FlowLayout.CENTER));
-        this.add(panel);
+        gbc.gridx = 0; gbc.gridy = 0;
+        this.add(usernameLabel, gbc);
+        gbc.gridy++;
+        this.add(usernameLabel, gbc);
+        gbc.gridy++;
+        this.add(urlButton, gbc);
+        gbc.gridy++;
+        this.add(playlistButton, gbc);
+        gbc.gridy++;
+        this.add(logoutButton, gbc);
+
 
         // ---- Logout button ----
         logoutButton.addActionListener(e -> {
