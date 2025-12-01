@@ -64,22 +64,25 @@ class ProgressInteractorTest {
 
     @Test
     void testReportProgressWhenCancelledDoesNothing() {
-        interactor.cancel();  // Mark cancelled
+        interactor.cancel();
+
+        ProgressOutputData cancelledData = presenter.lastData;
+
         presenter.updateCalled = false;
+        presenter.errorCalled = false;
 
-        interactor.reportProgress(80, "Should not show");
-
-        // update should NOT be called
+        interactor.reportProgress(80, "Should not appear");
         assertFalse(presenter.updateCalled);
-        // error should have happened due to cancel()
-        assertTrue(presenter.errorCalled);
+        assertFalse(presenter.errorCalled);
 
-        // ensure lastData is from cancel(), not from reportProgress
+        assertSame(cancelledData, presenter.lastData);
         assertEquals("Download has been cancelled.", presenter.lastData.getMessage());
+        assertTrue(presenter.lastData.isCancelled());
     }
 
+
     @Test
-    void testCancelTriggersErrorPresenter() {
+    void testCancelTriggersErrorPresenterImmediately() {
         interactor.cancel();
 
         assertTrue(presenter.errorCalled);
@@ -88,18 +91,21 @@ class ProgressInteractorTest {
     }
 
     @Test
-    void testIsCancelled() {
+    void testIsCancelledFlag() {
         assertFalse(interactor.isCancelled());
+
         interactor.cancel();
         assertTrue(interactor.isCancelled());
     }
 
     @Test
-    void testCompleteProgressPath() {
-        // Manually call presenter through interactor
+    void testCompleteProgressDoesNotTriggerCompleteCallback() {
         interactor.reportProgress(100, "Done");
 
         assertTrue(presenter.updateCalled);
+        assertFalse(presenter.completeCalled);
         assertEquals(100, presenter.lastData.getPercent());
+        assertEquals("Done", presenter.lastData.getMessage());
+        assertTrue(presenter.lastData.isDone());
     }
 }

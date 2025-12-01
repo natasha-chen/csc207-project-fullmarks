@@ -3,6 +3,7 @@ package view;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressState;
 import interface_adapter.ProgressBar.ProgressViewModel;
+import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,13 +18,16 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
     private final JProgressBar progressBar = new JProgressBar(0, 100);
     private final JLabel statusLabel = new JLabel("Ready");
     private final JButton cancelButton = new JButton("Cancel");
-    private final JButton closeButton = new JButton("Close");
+    private final JButton backButton = new JButton("Back");
 
     private ProgressController progressController;
+    private ViewManagerModel viewManagerModel;
 
-    public ProgressView(ProgressViewModel progressViewModel) {
+    public ProgressView(ProgressViewModel progressViewModel, ViewManagerModel viewManagerModel) {
         this.progressViewModel = progressViewModel;
-        this.progressViewModel.addPropertyChangeListener(this);
+        this.viewManagerModel = viewManagerModel;
+
+        progressViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Download Progress");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -36,10 +40,11 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        closeButton.setVisible(false);  // initially hidden
-        closeButton.addActionListener(e -> {
-            // close the window
-            SwingUtilities.getWindowAncestor(this).dispose();
+        backButton.setVisible(false);  // initially hidden
+        backButton.addActionListener(e -> {
+            // back to Download Page
+            viewManagerModel.setActiveView("download");
+            viewManagerModel.firePropertyChanged();
         });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -47,7 +52,7 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
         this.add(progressBar);
         this.add(statusLabel);
         this.add(cancelButton);
-        this.add(closeButton);
+        this.add(backButton);
     }
 
     /** Updating progress bar */
@@ -66,19 +71,20 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
         // If completed (percent == 100), disable Cancel and show Close
         if (state.isComplete()) {
             cancelButton.setEnabled(false);
-            closeButton.setVisible(true);
+            backButton.setVisible(true);
         }
 
         // If cancelled or error, disable Cancel and show Close
         if (state.isError() && state.getMessage().contains("cancel")) {
             cancelButton.setEnabled(false);
-            closeButton.setVisible(true);   //
+            backButton.setVisible(true);   //
         }
 
 
         // If error or cancel, disable Cancel
         if (state.isError()) {
             cancelButton.setEnabled(false);
+            backButton.setVisible(true);
         }
     }
 
