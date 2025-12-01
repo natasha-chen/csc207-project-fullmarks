@@ -9,6 +9,17 @@ import data_access.PlaylistDataAccessObject;
 // 1: library
 
 // load playlist library
+import interface_adapter.create_playlist.CreatePlaylistController;
+import interface_adapter.create_playlist.CreatePlaylistPresenter;
+import interface_adapter.modify_playlist.ModifyPlaylistController;
+import interface_adapter.modify_playlist.ModifyPlaylistPresenter;
+import use_case.create_playlist.CreatePlaylistInputBoundary;
+import use_case.create_playlist.CreatePlaylistInteractor;
+import use_case.create_playlist.CreatePlaylistOutputBoundary;
+import use_case.modify_playlist.ModifyPlaylistInputBoundary;
+import use_case.modify_playlist.ModifyPlaylistInputData;
+import use_case.modify_playlist.ModifyPlaylistInteractor;
+import use_case.modify_playlist.ModifyPlaylistOutputBoundary;
 import use_case.playlist_library.PlaylistLibraryInputBoundary;
 import use_case.playlist_library.PlaylistLibraryOutputBoundary;
 import use_case.playlist_library.PlaylistLibraryInteractor;
@@ -63,6 +74,9 @@ import view.*;
 
 import javax.swing.*;
 import java.awt.*;
+
+
+
 
 public class AppBuilder {
 
@@ -123,15 +137,19 @@ public class AppBuilder {
         PlaylistOutputBoundary PlaylistPresenter =
                 new PlaylistPresenter(playlistViewModel, viewManagerModel);
 
-        PlaylistInputBoundary PlaylistInteractor =
-                new PlaylistInteractor(playlistDAO, PlaylistPresenter);
+        ModifyPlaylistOutputBoundary modifyPlaylistPresenter =
+                new ModifyPlaylistPresenter(playlistViewModel);
 
-        PlaylistController playlistController =
-                new PlaylistController(PlaylistInteractor);
-
+        ModifyPlaylistInputBoundary modifyPlaylistInputBoundary =
+                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistPresenter);
+        ModifyPlaylistController modifyPlaylistController =
+                new ModifyPlaylistController(modifyPlaylistInputBoundary);
         PlaylistView playlistView =
-                new PlaylistView(playlistViewModel, playlistController, viewManagerModel);
+                new PlaylistView(playlistViewModel, modifyPlaylistController, viewManagerModel);
 
+// Menu view
+//        MenuView menuView =
+//                new MenuView(viewManagerModel, createPlaylistController);
 
 
 
@@ -238,19 +256,39 @@ public class AppBuilder {
     }
 
     private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO) {
+        // Shared view model for the library screen
         LibraryViewModel libraryViewModel = new LibraryViewModel();
 
-        PlaylistLibraryOutputBoundary LibraryPresenter =
+        // LIBRARY use case wiring
+        PlaylistLibraryOutputBoundary libraryPresenter =
                 new LibraryPresenter(libraryViewModel);
 
         PlaylistLibraryInputBoundary loadLibraryInteractor =
-                new PlaylistLibraryInteractor(playlistDAO, LibraryPresenter);
+                new PlaylistLibraryInteractor(playlistDAO, libraryPresenter);
 
         LibraryController libraryController =
                 new LibraryController(loadLibraryInteractor);
 
-        LibraryView libraryView =
-                new LibraryView(libraryViewModel, libraryController, viewManagerModel);
-        return libraryView;
+        // CREATE PLAYLIST use case wiring (reuses same libraryViewModel)
+        CreatePlaylistOutputBoundary createPlaylistPresenter =
+                new CreatePlaylistPresenter(libraryViewModel, viewManagerModel);
+
+        CreatePlaylistInputBoundary createPlaylistInteractor =
+                new CreatePlaylistInteractor(playlistDAO, createPlaylistPresenter);
+
+        CreatePlaylistController createPlaylistController =
+                new CreatePlaylistController(createPlaylistInteractor);
+
+        PlaylistViewModel playlistViewModel =
+                new PlaylistViewModel();
+        // View
+        return new LibraryView(
+                libraryViewModel,
+                libraryController,
+                createPlaylistController,
+                playlistViewModel,          // ← ADD THIS
+                viewManagerModel
+        );
     }
+
 }
