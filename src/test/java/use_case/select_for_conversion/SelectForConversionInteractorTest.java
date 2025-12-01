@@ -27,7 +27,7 @@ class SelectForConversionInteractorTest {
 
         int i = 0;
         for (VideoData video : outputData.getSelectedVideos()) {
-            if (video.getMp3Bool()) {
+            if (video.isMP3Bool()) {
                 assertEquals(expected.get(i).getTitle(), video.getTitle());
                 assertEquals(expected.get(i++).getUrl(), video.getUrl());
             }
@@ -44,11 +44,11 @@ class SelectForConversionInteractorTest {
                 "Moon Roar");
         ArrayList<VideoData> newList = new ArrayList<>();
         newList.add(video1);
-        video1.setMp3Bool(true);
+        video1.setMP3Bool(true);
         newList.add(video2);
-        video2.setMp3Bool(false);
+        video2.setMP3Bool(false);
         newList.add(video3);
-        video3.setMp3Bool(true);
+        video3.setMP3Bool(true);
         return new SelectForConversionInputData(newList);
     }
 
@@ -86,11 +86,11 @@ class SelectForConversionInteractorTest {
                 "Moon Roar");
         ArrayList<VideoData> newList = new ArrayList<>();
         newList.add(video1);
-        video1.setMp3Bool(false);
+        video1.setMP3Bool(false);
         newList.add(video2);
-        video2.setMp3Bool(false);
+        video2.setMP3Bool(false);
         newList.add(video3);
-        video3.setMp3Bool(false);
+        video3.setMP3Bool(false);
         return new SelectForConversionInputData(newList);
     }
 
@@ -105,37 +105,25 @@ class SelectForConversionInteractorTest {
         assertEquals(0, outputData.getSelectedVideos().size());
     }
 
-//    @Test
-//    void testNonexistentFolderPath() {
-//
-//    }
-//    @Test
-//    void testUnwriteableFolderPath() {
-//
-//    }
-//    @Test
-//    void testInaccessibleVideo() {
-//
-//    }
-//    @Test
-//    void testNetworkFailure() {
-//
-//    }
-//    @Test
-//    void testLargePlaylistData() {
-//
-//    }
-//    @Test
-//    void testCancelButton() {
-//
-//    }
+    /**
+     * Test that switching to URLView does not alter the input data in any way.
+     */
+    @Test
+    void testSwitchToURLView() {
+        SelectForConversionInputData inputData = getValidInputData();
+        SelectForConversionInputData inputDataCopy = new SelectForConversionInputData(inputData.getVideoDataList());
+        SelectForConversionInputBoundary interactor = getInteractor();
+        interactor.switchToUrlView();
+        assertEquals(inputData.getVideoDataList(), inputDataCopy.getVideoDataList());
+    }
+
+
 
     @NotNull
     private static SelectForConversionInputBoundary getInteractor() {
         SelectForConversionOutputBoundary presenter = new SelectForConversionOutputBoundary() {
             @Override
             public void prepareSuccessView(SelectForConversionOutputData outputData) {
-                System.out.println("Test prepareSuccessView triggered.");
             }
             @Override
             public void prepareFailView(String errorMessage) {

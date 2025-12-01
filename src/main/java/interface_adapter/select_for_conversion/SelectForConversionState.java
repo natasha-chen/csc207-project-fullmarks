@@ -17,7 +17,6 @@ public class SelectForConversionState {
 
     public String getSelectForConversionError() {return this.errorMessage;}
 
-    //TODO: either someone else converts playlist url into List<VideoData> or i do
     public void setPlaylistData(List<VideoData> playlistData) {this.playlistVideoData = playlistData;}
 
     public void setConversionError(String errorMessage) {this.errorMessage = errorMessage;}

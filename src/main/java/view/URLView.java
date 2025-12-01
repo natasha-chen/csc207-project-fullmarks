@@ -50,6 +50,7 @@ public class URLView extends JPanel implements PropertyChangeListener {
                         if (evt.getSource().equals(enterButton)) {
                             final URLState currentState = urlViewModel.getState();
                             urlController.execute(currentState.getUrl());
+                            urlInputField.setText("");
                         }
                     }
                 }
@@ -61,6 +62,7 @@ public class URLView extends JPanel implements PropertyChangeListener {
                     public void actionPerformed(ActionEvent evt) {
                         final URLState currentState = urlViewModel.getState();
                         urlController.execute(currentState.getUrl());
+                        urlInputField.setText("");
                     }
                 }
         );

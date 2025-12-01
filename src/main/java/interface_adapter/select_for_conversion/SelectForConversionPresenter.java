@@ -1,6 +1,7 @@
 package interface_adapter.select_for_conversion;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.url.URLViewModel;
 import use_case.select_for_conversion.SelectForConversionOutputBoundary;
 import use_case.select_for_conversion.SelectForConversionOutputData;
 
@@ -10,16 +11,16 @@ import use_case.select_for_conversion.SelectForConversionOutputData;
 public class SelectForConversionPresenter implements SelectForConversionOutputBoundary {
 
     private final SelectForConversionViewModel selectForConversionViewModel;
-//    private final UrlViewModel urlViewModel;
+    private final URLViewModel urlViewModel;
 //    private final ProgressViewModel progressViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public SelectForConversionPresenter(SelectForConversionViewModel selectForConversionViewModel,
-//                                        UrlViewModel urlViewModel
+                                        URLViewModel urlViewModel,
 //                                        ProgressViewModel progressViewModel,
                                         ViewManagerModel viewManagerModel) {
         this.selectForConversionViewModel = selectForConversionViewModel;
-//        this.urlViewModel = urlViewModel;
+        this.urlViewModel = urlViewModel;
 //        this.progressViewModel = progressViewModel;
         this.viewManagerModel = viewManagerModel;
     }
@@ -38,7 +39,6 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
 
     @Override
     public void prepareFailView(String error) {
-        System.out.println("FailView triggered.");
         final SelectForConversionState selectForConversionState = selectForConversionViewModel.getState();
         selectForConversionState.setConversionError(error);
         selectForConversionViewModel.firePropertyChanged();
@@ -46,9 +46,7 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
 
     @Override
     public void switchToUrlView() {
-        System.out.println("SwitchToUrlView triggered.");
-        System.out.println("viewManagerModel.setState(urlViewModel.getViewName());");
-        System.out.println("viewManagerModel.firePropertyChange();");
-
+        this.viewManagerModel.setActiveView(this.urlViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
     }
 }
