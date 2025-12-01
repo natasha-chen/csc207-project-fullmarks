@@ -6,10 +6,12 @@ public class ModifyPlaylistOutputData {
 
     private final String playlistName;
     private final List<String> songIds;
+    private final List<String> songNames;
 
-    public ModifyPlaylistOutputData(String playlistName, List<String> songIds) {
+    public ModifyPlaylistOutputData(String playlistName, List<String> songIds, List<String> songNames) {
         this.playlistName = playlistName;
         this.songIds = songIds;
+        this.songNames = songNames;
     }
 
     public String getPlaylistName() {
@@ -19,4 +21,6 @@ public class ModifyPlaylistOutputData {
     public List<String> getSongIds() {
         return songIds;
     }
+
+    public List<String> getSongNames() { return songNames; }
 }

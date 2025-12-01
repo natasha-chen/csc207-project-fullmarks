@@ -42,15 +42,8 @@ public class PlaylistPresenter implements
 
     @Override
     public void prepareSuccessView(ModifyPlaylistOutputData outputData) {
-        // After modification, we usually want to show updated song list.
+        // After modification, we get the song names again.
         viewModel.setErrorMessage("");
-        viewModel.setSongNames(outputData.getUpdatedSongNames());
-    }
-
-    @Override
-    public void prepareFailViewModify(String errorMessage) {
-        // You can name this method differently depending on your interface;
-        // the important point is: on failure we only update the error.
-        viewModel.setErrorMessage(errorMessage);
+        viewModel.setSongNames(outputData.getSongNames());
     }
 }

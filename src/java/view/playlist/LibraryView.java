@@ -1,9 +1,11 @@
-package view.playlist;   // adjust to your real package
+package view.playlist;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.create_playlist.CreatePlaylistController;
 import interface_adapter.library.LibraryController;
 import interface_adapter.library.LibraryState;
 import interface_adapter.library.LibraryViewModel;
+import interface_adapter.playlist_view.PlaylistViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,21 +22,28 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
     private final LibraryViewModel viewModel;
     private final LibraryController controller;
     private final ViewManagerModel viewManagerModel;
+    private final PlaylistViewModel playlistViewModel;
+    private final CreatePlaylistController createPlaylistController;
 
     private final JList<String> playlistList = new JList<>();
     private final JButton menuButton = new JButton("Menu");
     private final JButton newPlaylistButton = new JButton("New Playlist");
     private final JButton deleteButton = new JButton("Delete");
     private final JButton playButton = new JButton("Play");
+    private final JButton enterButton = new JButton("Enter Playlist");
     private final JLabel errorLabel = new JLabel();
 
     public LibraryView(LibraryViewModel viewModel,
                        LibraryController controller,
+                       CreatePlaylistController createPlaylistController,
+                       PlaylistViewModel playlistViewModel,
                        ViewManagerModel viewManagerModel) {
+
         this.viewModel = viewModel;
         this.controller = controller;
+        this.createPlaylistController = createPlaylistController;
         this.viewManagerModel = viewManagerModel;
-
+        this.playlistViewModel = playlistViewModel;
         this.viewModel.addPropertyChangeListener(this);
 
         setLayout(new BorderLayout());
@@ -54,6 +63,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
         buttonPanel.add(newPlaylistButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(playButton);
+        buttonPanel.add(enterButton);
 
         JPanel bottom = new JPanel(new BorderLayout());
         bottom.add(buttonPanel, BorderLayout.CENTER);
@@ -68,7 +78,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
     }
 
     private void wireListeners() {
-        // double-click on playlist – TODO: later wire to LoadPlaylist + switch view
+        // double-click on playlist – later wire to LoadPlaylist + switch view
         playlistList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -86,10 +96,19 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
             viewManagerModel.firePropertyChanged();
         });
 
-        newPlaylistButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this,
-                        "TODO: open NewPlaylist dialog", "Not implemented",
-                        JOptionPane.INFORMATION_MESSAGE));
+        // NEW: create playlist popup using CreatePlaylistController
+        newPlaylistButton.addActionListener(e -> {
+            String name = JOptionPane.showInputDialog(
+                    this,
+                    "Enter playlist name:",
+                    "Create Playlist",
+                    JOptionPane.PLAIN_MESSAGE
+            );
+            if (name == null || name.isBlank()) {
+                return; // user cancelled or empty
+            }
+            createPlaylistController.createPlaylist(name.trim());
+        });
 
         deleteButton.addActionListener(e -> {
             if (playlistList.isSelectionEmpty()) {
@@ -112,6 +131,22 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
                 System.out.println("Play playlist: " + playlistName);
             }
         });
+
+        enterButton.addActionListener(e -> {
+            if (playlistList.isSelectionEmpty()) {
+                errorLabel.setText("Please select a playlist to enter.");
+                return;
+            }
+
+            String playlistName = playlistList.getSelectedValue();
+
+            playlistViewModel.setPlaylistName(playlistName);
+            playlistViewModel.firePropertyChanged();
+
+            viewManagerModel.setActiveView("playlist_view");
+            viewManagerModel.firePropertyChanged();
+        });
+
     }
 
     @Override

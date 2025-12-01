@@ -19,7 +19,7 @@ public class PlaylistInteractor implements PlaylistInputBoundary {
         Playlist p = playlistDAO.getPlaylist(inputData.getPlaylistName());
 
         PlaylistOutputData output =
-                new PlaylistOutputData(p.getName(), p.getSongs());
+                new PlaylistOutputData(p.getName(), p.getAllSongId(), p.getAllSongNames());
 
         presenter.prepareSuccessView(output);
     }
