@@ -1,27 +1,24 @@
 package data_access;
-import javax.swing.*;
-import java.io.File;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class PathManager {
 
-    public static String getOutputFolder() {
-        String outputFolder;
+    private static final String DEFAULT_FOLDER_NAME = "FullMarksDownloads";
 
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Select a Folder");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        int result = chooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = chooser.getSelectedFile();
-            System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
-            outputFolder = selectedFolder.getAbsolutePath() + File.separator;
-        }
-        else {
-            outputFolder = chooser.getCurrentDirectory().getAbsolutePath()  + File.separator;
-        }
+    public static String getDefaultDownloadFolder() {
+        String home = System.getProperty("user.home");
+        String fullPath = home + "/" + DEFAULT_FOLDER_NAME + "/";
 
-        return outputFolder ;
+        try {
+            Path path = Paths.get(fullPath);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (Exception ignored) {}
+
+        return fullPath;
     }
 }
