@@ -1,7 +1,6 @@
 package interface_adapter.select_for_conversion;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.url.URLViewModel;
 import use_case.select_for_conversion.SelectForConversionOutputBoundary;
 import use_case.select_for_conversion.SelectForConversionOutputData;
 
@@ -11,16 +10,16 @@ import use_case.select_for_conversion.SelectForConversionOutputData;
 public class SelectForConversionPresenter implements SelectForConversionOutputBoundary {
 
     private final SelectForConversionViewModel selectForConversionViewModel;
-    private final URLViewModel urlViewModel;
+//    private final UrlViewModel urlViewModel;
 //    private final ProgressViewModel progressViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public SelectForConversionPresenter(SelectForConversionViewModel selectForConversionViewModel,
-                                        URLViewModel urlViewModel,
+//                                        UrlViewModel urlViewModel
 //                                        ProgressViewModel progressViewModel,
                                         ViewManagerModel viewManagerModel) {
         this.selectForConversionViewModel = selectForConversionViewModel;
-        this.urlViewModel = urlViewModel;
+//        this.urlViewModel = urlViewModel;
 //        this.progressViewModel = progressViewModel;
         this.viewManagerModel = viewManagerModel;
     }
@@ -29,10 +28,17 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
     public void prepareSuccessView(SelectForConversionOutputData outputData) {
         // Switch to Progress
         System.out.println("SuccessView triggered.");
+        System.out.println("final ProgressState progressState = progressViewModel.getState();");
+        System.out.println("progressState.setSelectedVideos(selectForConversionOutputData.getSelectedVideos());)");
+        System.out.println("progressViewModel.firePropertyChange();");
+        System.out.println("viewManagerModel.setState(ProgressViewModel.getViewName());");
+        System.out.println("viewManagerModel.firePropertyChange();");
+        System.out.println("Note to self: create similar texts for test drivers.");
     }
 
     @Override
     public void prepareFailView(String error) {
+        System.out.println("FailView triggered.");
         final SelectForConversionState selectForConversionState = selectForConversionViewModel.getState();
         selectForConversionState.setConversionError(error);
         selectForConversionViewModel.firePropertyChanged();
@@ -40,7 +46,9 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
 
     @Override
     public void switchToUrlView() {
-        this.viewManagerModel.setActiveView(this.urlViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
+        System.out.println("SwitchToUrlView triggered.");
+        System.out.println("viewManagerModel.setState(urlViewModel.getViewName());");
+        System.out.println("viewManagerModel.firePropertyChange();");
+
     }
 }

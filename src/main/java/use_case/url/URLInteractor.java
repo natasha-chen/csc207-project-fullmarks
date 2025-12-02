@@ -1,12 +1,5 @@
 package use_case.url;
 
-import data_access.Fetcher;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import custom_datatype.VideoData;
-import java.util.ArrayList;
-
 import java.util.regex.Pattern;
 
 /**
@@ -41,31 +34,9 @@ public class URLInteractor implements URLInputBoundary {
             return;
         }
 
-        // Fetch media info
-        Fetcher fetcher = new Fetcher();
-        try {
-            // Success case
-            JSONObject info = fetcher.fetchInfo(url);
-            ArrayList<VideoData> playlistData = new ArrayList<>();
-            if (info.has("entries")) {
-                JSONArray videos = info.getJSONArray("entries");
-                for (int i = 0; i < videos.length(); i++) {
-                    JSONObject video = videos.getJSONObject(i);
-                    Integer id = i;
-                    playlistData.add(new VideoData(id,
-                            video.getString("webpage_url"),
-                            video.getString("title")));
-                }
-            } else {
-                playlistData.add(new VideoData(0, url, info.getString("title")));
-            }
-            final URLOutputData outputData = new URLOutputData(url, playlistData);
-            urlPresenter.prepareSuccessView(outputData);
-        }
-        catch (Exception e) {
-            // Fails to fetch info after url is validated
-            urlPresenter.prepareFailView(e.getMessage());
-        }
+        // Success case
+        final URLOutputData outputData = new URLOutputData(url, true);
+        urlPresenter.prepareSuccessView(outputData);
     }
 
     /**

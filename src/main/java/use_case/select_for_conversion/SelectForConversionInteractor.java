@@ -1,12 +1,7 @@
 package use_case.select_for_conversion;
 
 import custom_datatype.VideoData;
-import data_access.AudioConverter;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -30,23 +25,20 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
      */
     @Override
     public SelectForConversionOutputData execute(SelectForConversionInputData selectForConversionInputData) {
-
         if (selectForConversionInputData.getVideoDataList() == null ||
                 selectForConversionInputData.getVideoDataList().isEmpty()) {
             selectForConversionPresenter.prepareFailView("Empty playlist.");
-            selectForConversionPresenter.switchToUrlView();
+//            selectForConversionPresenter.switchToUrlView();
             return new SelectForConversionOutputData(new ArrayList<>());
         }
         List<VideoData> playlist = selectForConversionInputData.getVideoDataList();
-        String inputFolder = selectForConversionInputData.getInputFolder();
-        boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::isMP3Bool);
+        boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::getMp3Bool);
         List<VideoData> newList = new ArrayList<>();
         if (anyMp3Bool) {
             for (VideoData videoData : playlist) {
-                if  (videoData.isMP3Bool())
+                if  (videoData.getMp3Bool())
                 {
-                    AudioConverter converter = new AudioConverter();
-                    converter.convertToMp3(inputFolder, videoData.getTitle());
+                    System.out.println("This is the part where I convert " + videoData.getTitle());
                     newList.add(videoData);
                 }
             }

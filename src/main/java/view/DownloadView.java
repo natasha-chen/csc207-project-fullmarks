@@ -4,13 +4,11 @@ import data_access.PathManager;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 
 public class DownloadView extends JPanel implements PropertyChangeListener {
 
@@ -25,7 +23,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final JLabel statusLabel = new JLabel("");
 
     private final JButton chooseFolderButton = new JButton("Choose Folder");
-    private final JButton downloadButton = new JButton("Download as MP4");
+    private final JButton downloadButton = new JButton("Download");
     private final JButton backButton = new JButton("Back");
     private final JButton nextButton = new JButton("Next");
 
@@ -47,18 +45,18 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel title = new JLabel("Download Video as MP4");
+        // Title
+        JLabel title = new JLabel("Download Video");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         this.add(title, gbc);
 
-        // Output folder
-        gbc.gridx = 0; gbc.gridy++;
-        this.add(new JLabel("Save To Folder:"), gbc);
-
-        gbc.gridy++;
+        // Text field for folder
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         this.add(outputFolderField, gbc);
 
         // Default path
@@ -96,9 +94,13 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         chooseFolderButton.addActionListener(e -> chooseFolder());
 
         downloadButton.addActionListener(e -> {
-            selectForConversionViewModel.getState().setLatestFilePath(outputFolderField.getText());
-            System.out.println(selectForConversionViewModel.getState().getLatestFilePath());
-            controller.execute(viewModel.getState().getUrl(), outputFolderField.getText());
+            viewManagerModel.setActiveView("progress");
+            viewManagerModel.firePropertyChanged();
+
+            progressController.startDownload(
+                    viewModel.getState().getUrl(),
+                    outputFolderField.getText()
+            );
         });
 
         backButton.addActionListener(e -> {
@@ -119,7 +121,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            outputFolderField.setText(chooser.getSelectedFile().getAbsolutePath() + File.separator);
+            outputFolderField.setText(chooser.getSelectedFile().getAbsolutePath() + "/");
         }
     }
 
@@ -139,9 +141,5 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
             nextButton.setVisible(false);
             nextButton.setEnabled(false);
         }
-    }
-
-    public void setSelectForConversionViewModel(SelectForConversionViewModel selectForConversionViewModel) {
-        this.selectForConversionViewModel = selectForConversionViewModel;
     }
 }

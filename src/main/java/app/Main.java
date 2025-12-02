@@ -1,27 +1,13 @@
 package app;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
 
-        // Determine OS
-        String os = System.getProperty("os.name").toLowerCase();
-        boolean isWindows = os.contains("win");
-
-        // Build paths to binaries
-        String ytDlpPath = "bin/" + (isWindows ? "yt-dlp.exe" : "yt-dlp");
-        String ffmpegPath = "bin/" + (isWindows ? "ffmpeg.exe" : "ffmpeg");
-
-        // Ensure executables are accessible
-        File ytDlpFile = new File(ytDlpPath);
-        File ffmpegFile = new File(ffmpegPath);
-
-        if (!ytDlpFile.exists() || !ffmpegFile.exists()) {
-            throw new RuntimeException("yt-dlp or ffmpeg binary not found in bin folder.");
-        }
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
 
         AppBuilder builder = new AppBuilder();
         JPanel mainPanel = builder.build();
