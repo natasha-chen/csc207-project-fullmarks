@@ -8,8 +8,14 @@ import java.io.InputStreamReader;
 public class Fetcher {
 
     public JSONObject fetchInfo(String url) throws Exception {
+
+        String os =  System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+
+        String ytDlpPath = "bin/" + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+
         ProcessBuilder pb = new ProcessBuilder(
-                "yt-dlp",
+                ytDlpPath,
                 "-J",               // dump JSON
                 "--dump-single-json",
                 url

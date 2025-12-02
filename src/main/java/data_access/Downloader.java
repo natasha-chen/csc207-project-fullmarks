@@ -15,8 +15,12 @@ public class Downloader implements DownloadDataAccessInterface {
     public void downloadVideo(String url, String outputFolder, ProgressCallback progressCallback) {
         System.out.println("Starting download...");
 
+        String os =  System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+        String ytDlpPath = "bin/" + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+
         ProcessBuilder pb = new ProcessBuilder(
-                "yt-dlp",
+                ytDlpPath,
                 "-f", "mp4",
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url

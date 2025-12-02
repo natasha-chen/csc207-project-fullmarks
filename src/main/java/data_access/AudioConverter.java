@@ -13,8 +13,13 @@ public class AudioConverter {
         String inputPath = folder + File.separator + title + ".mp4";
         String outputPath = folder + File.separator + title + ".mp3";
 
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+
+        String ffmpegPath = "bin/" + (isWindows ? "ffmpeg.exe" : "ffmpeg");
+
         ProcessBuilder pb = new ProcessBuilder(
-                "ffmpeg",
+                ffmpegPath,
                 "-i", inputPath,
                 "-q:a", "0",
                 "-map", "a",
