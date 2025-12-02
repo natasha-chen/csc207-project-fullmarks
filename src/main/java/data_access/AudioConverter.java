@@ -13,24 +13,34 @@ public class AudioConverter implements ConverterInterface {
 
     @Override
     public void convertToMP3(String folder, String title, String username) {
-        String destination = "appdata" + File.separator + username + File.separator + "media" + File.separator;
-        ensureOutputDirectory(destination);
-        System.out.println("Converting to MP3...");
+        // Ensure folder ends with separator
+        if (!folder.endsWith(File.separator)) {
+            folder = folder + File.separator;
+        }
+
+        // Where to save MP3
+        String destinationDir =
+                "appdata" + File.separator + username + File.separator + "media" + File.separator;
+        ensureOutputDirectory(destinationDir);
+
         String inputPath = folder + title + ".mp4";
-        String outputPath = destination + title + ".mp3";
+        String outputPath = destinationDir + title + ".mp3";
         outputPath = outputPath.replace("|", "");
+
+        System.out.println("[AudioConverter] input  = " + inputPath);
+        System.out.println("[AudioConverter] output = " + outputPath);
 
         String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
 
-        // Decide command: prefer local bin/ copy on Windows, otherwise use system command
+        // Prefer local bin\ffmpeg.exe on Windows, otherwise system ffmpeg
         String ffmpegName = isWindows ? "ffmpeg.exe" : "ffmpeg";
         File localFfmpeg = new File("bin" + File.separator + ffmpegName);
-        String ffmpegPath = localFfmpeg.exists() ? localFfmpeg.getAbsolutePath() : ffmpegName;
-//        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
+        String ffmpegCmd = localFfmpeg.exists() ? localFfmpeg.getAbsolutePath() : ffmpegName;
 
         ProcessBuilder pb = new ProcessBuilder(
-                ffmpegPath,
+                ffmpegCmd,
+                "-y",          // overwrite if file exists
                 "-i", inputPath,
                 outputPath
         );
@@ -43,17 +53,23 @@ public class AudioConverter implements ConverterInterface {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                System.out.println("[ffmpeg] " + line);
             }
 
-            process.waitFor();
-            System.out.println("✅ Conversion completed: " + outputPath);
+            int exit = process.waitFor();
+            if (exit == 0) {
+                System.out.println("✅ Conversion completed: " + outputPath);
+            } else {
+                System.out.println("❌ ffmpeg exited with code " + exit);
+            }
+
         } catch (IOException | InterruptedException e) {
+            System.out.println("❌ Error running ffmpeg");
             e.printStackTrace();
         }
     }
 
-    public void ensureOutputDirectory(String outputPath) {
+    private void ensureOutputDirectory(String outputPath) {
         Path path = Path.of(outputPath);
         try {
             Files.createDirectories(path);
