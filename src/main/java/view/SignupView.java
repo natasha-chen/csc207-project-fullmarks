@@ -8,6 +8,11 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * View model for the Signup view.
+ *
+ * <p>Stores the current state and error messages visible to the user.
+ */
 public class SignupView extends JPanel implements PropertyChangeListener {
 
     private final SignupViewModel viewModel;

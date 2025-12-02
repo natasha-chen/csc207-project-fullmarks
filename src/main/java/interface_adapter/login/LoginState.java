@@ -1,5 +1,11 @@
 package interface_adapter.login;
 
+/**
+ * Represents the state of the LoginView.
+ *
+ * <p>This includes the username, password, and error messages
+ * entered or generated during the login process.
+ */
 public class LoginState {
     private String username = "";
     private String password = "";
