@@ -1,27 +1,25 @@
 package data_access;
-import javax.swing.*;
-import java.io.File;
 
-
+/**
+ * A utility class responsible for managing file system paths used by the application.
+ *
+ * <p>This class stores the username of the currently logged-in user and generates
+ * user-specific default download directories. These paths are constructed relative
+ * to the user's operating system home directory, ensuring that downloaded files
+ * are saved to a consistent and accessible location (e.g., Desktop/<username>/).
+ *
+ * <p>The download directory is created automatically if it does not already exist.
+ */
 public class PathManager {
 
-    public static String getOutputFolder() {
-        String outputFolder;
+    private static String loggedInUsername = "default";
 
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Select a Folder");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        int result = chooser.showOpenDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = chooser.getSelectedFile();
-            System.out.println("Selected folder: " + selectedFolder.getAbsolutePath());
-            outputFolder = selectedFolder.getAbsolutePath() + File.separator;
-        }
-        else {
-            outputFolder = chooser.getCurrentDirectory().getAbsolutePath()  + File.separator;
-        }
+    public static void setLoggedInUsername(String username) {
+        loggedInUsername = username;
+    }
 
-        return outputFolder ;
+    public static String getDefaultDownloadFolder() {
+        String home = System.getProperty("user.home");
+        return home + "/Desktop/" + loggedInUsername + "/";
     }
 }
