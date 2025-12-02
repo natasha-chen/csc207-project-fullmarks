@@ -15,6 +15,7 @@ import java.io.File;
 public class PathManager {
 
     private static String loggedInUsername = "default";
+    private static String currentUsername = null;
 
     public static void setLoggedInUsername(String username) {
         loggedInUsername = username;
@@ -23,5 +24,44 @@ public class PathManager {
     public static String getDefaultDownloadFolder() {
         String home = System.getProperty("user.home");
         return home + File.separator + "Desktop" + File.separator + loggedInUsername + File.separator;
+    }
+
+    public static void setCurrentUsername(String username) {
+        currentUsername = username;
+    }
+
+    public static String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    // ---- appdata helpers ----
+
+    public static Path getUserAppDataRoot() {
+        return Paths.get("appdata", loggedInUsername);
+    }
+
+    public static Path getUserMediaFolder() {
+        return getUserAppDataRoot().resolve("media");
+    }
+
+    public static Path getUserPlaylistsJsonPath() {
+        return getUserAppDataRoot().resolve("playlists.json");
+    }
+
+    public static void initUserAppData() {
+        Path userRoot = getUserAppDataRoot();
+        Path media = getUserMediaFolder();
+        Path playlistsJson = getUserPlaylistsJsonPath();
+
+        try {
+            Files.createDirectories(media);
+            Files.createDirectories(userRoot);
+
+            if (!Files.exists(playlistsJson)) {
+                Files.writeString(playlistsJson, "{}");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize user appdata", e);
+        }
     }
 }

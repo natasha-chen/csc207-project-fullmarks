@@ -4,13 +4,9 @@ import interface_adapter.login.LoginViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.menu.MenuState;
 import interface_adapter.menu.MenuViewModel;
-import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.url.URLViewModel;
-import interface_adapter.url.URLState;
-import interface_adapter.create_playlist.CreatePlaylistViewModel;
-import interface_adapter.create_playlist.CreatePlaylistState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +26,8 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
 
     private JButton urlButton = new JButton("Download from URL");
-    private JButton playlistButton = new JButton("Create Playlist");
+//    private JButton playlistButton = new JButton("Create Playlist");
+    private JButton playlistLibraryButton = new JButton("Playlist Library");
     private JButton logoutButton = new JButton("Logout");
 
     public MenuView(ViewManagerModel viewManagerModel,
@@ -49,6 +46,14 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
         viewModel.addPropertyChangeListener(this);
 
+        // Display username
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(usernameLabel);
+        panel.add(urlButton);
+//        panel.add(playlistButton);
+        panel.add(playlistLibraryButton);
+        panel.add(logoutButton);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -60,7 +65,7 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         gbc.gridy++;
         this.add(urlButton, gbc);
         gbc.gridy++;
-        this.add(playlistButton, gbc);
+        this.add(playlistLibraryButton, gbc);
         gbc.gridy++;
         this.add(logoutButton, gbc);
 
@@ -89,19 +94,23 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         });
 
         // ---- Playlist button ----
-        playlistButton.addActionListener(e -> {
-
-            // TODO: playlistViewModel is updated with files corresponding to username
-            //  would this be done by having the same prefix and changing the last part of the filepath?
-//             createPlaylistViewModel.getState().setFilePath();
-//             createPlaylistViewModel.firePropertyChanged();
-
-            // 3. Switch to create playlist view
-//            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
-//            viewManagerModel.firePropertyChanged();
+//        playlistButton.addActionListener(e -> {
+//
+//            // TODO: playlistViewModel is updated with files corresponding to username
+//            //  would this be done by having the same prefix and changing the last part of the filepath?
+////             createPlaylistViewModel.getState().setFilePath();
+////             createPlaylistViewModel.firePropertyChanged();
+//
+//            // 3. Switch to create playlist view
+////            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
+////            viewManagerModel.firePropertyChanged();
+//        });
+        // ---- Playlist Library button ----
+        playlistLibraryButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("playlist_library");
+            viewManagerModel.firePropertyChanged();
         });
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

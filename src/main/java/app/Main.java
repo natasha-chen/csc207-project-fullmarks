@@ -27,7 +27,7 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {}
 
-        AppBuilder builder = new AppBuilder();
+        app.AppBuilder builder = new app.AppBuilder();
         JPanel mainPanel = builder.build();
 
         JFrame frame = new JFrame("Youtube to MP3/4");
@@ -39,5 +39,9 @@ public class Main {
 
         builder.viewManagerModel.setActiveView("signup_login_menu");
         builder.viewManagerModel.firePropertyChanged();
+        // to test the playlist library view
+//        builder.viewManagerModel.setActiveView("playlist_library");
+//        builder.viewManagerModel.firePropertyChanged();
+
     }
 }
