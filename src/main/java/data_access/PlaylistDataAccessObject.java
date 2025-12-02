@@ -2,44 +2,43 @@ package data_access;
 
 import entity.MediaFile;
 import entity.Playlist;
-import entity.MediaPathManager;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
 
-    // Paths
-    private final Path appDataRoot;
-    private final Path mediaFolder;
-    private final Path playlistsJsonPath;
-
-    // Local storage: duplicate of JSON and media folder, updates simultaneously
-    // based on savePlaylist and (tbd:) also saveMedia
+    // Local storage: duplicate of JSON and media folder, per current user
     private final Map<String, Playlist> playlists = new HashMap<>();
-    // has to update each time after conversion
     private final Map<String, MediaFile> media = new HashMap<>();
 
     public PlaylistDataAccessObject() {
-        // the media folder
-        this.mediaFolder = MediaPathManager.getMediaFolderPath();
-         // the appdata folder
-         this.appDataRoot = mediaFolder.getParent();
-         // the playlist file under appdata folder
-         this.playlistsJsonPath = appDataRoot.resolve("playlists.json");
+        // No username here; paths come from PathManager.
+        // LoginPresenter will call reloadForCurrentUser() after login.
+    }
+
+    // ===== Per-user reinitialization =====
+
+    public void reloadForCurrentUser() {
+        playlists.clear();
+        media.clear();
+
+        Path appDataRoot = getAppDataRoot();
+        Path mediaFolder = getMediaFolder();
 
         try {
-            // create folders just in case they don't exist -- won't create if
-            // they do exist
-            Files.createDirectories(mediaFolder);
             Files.createDirectories(appDataRoot);
+            Files.createDirectories(mediaFolder);
         } catch (IOException e) {
             throw new RuntimeException("Could not create appdata folders", e);
         }
 
-        loadMediaFromFolder();   // stub for now
-        loadPlaylistsFromJson(); // stub for now
+        loadMediaFromFolder();
+        loadPlaylistsFromJson();
     }
 
     // ===== PlaylistDataAccessInterface methods =====
@@ -57,7 +56,7 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
     @Override
     public void savePlaylist(Playlist playlist) {
         playlists.put(playlist.getName(), playlist);
-        savePlaylistsToJson(); // write playlists map to playlists.json
+        savePlaylistsToJson();
     }
 
     @Override
@@ -73,7 +72,8 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
 
     @Override
     public void updateMedia() {
-
+        media.clear();
+        loadMediaFromFolder();
     }
 
     @Override
@@ -88,32 +88,84 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
 
     // ===== Internal helper methods =====
 
+    private Path getAppDataRoot() {
+        return PathManager.getUserAppDataRoot();
+    }
+
+    private Path getMediaFolder() {
+        return PathManager.getUserMediaFolder();
+    }
+
+    private Path getPlaylistsJsonPath() {
+        return PathManager.getUserPlaylistsJsonPath();
+    }
+
     private void loadMediaFromFolder() {
-        // Example stub:
-        // For each .mp3 file in mediaFolder, create a MediaFile and put in map.
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mediaFolder, "*.mp3")) {
+        Path mediaFolder = getMediaFolder();
+        if (!Files.exists(mediaFolder)) {
+            return;
+        }
+
+        try (DirectoryStream<Path> stream =
+                     Files.newDirectoryStream(mediaFolder, "*.mp3")) {
             for (Path p : stream) {
                 String fileName = p.getFileName().toString();
-                MediaFile m = new MediaFile(fileName, fileName); // title = fileName for now
+                // For now, use filename as title; you can change this later
+                MediaFile m = new MediaFile(fileName, fileName);
                 media.put(m.getFileID(), m);
             }
         } catch (IOException e) {
-            // handle or log; do NOT crash the whole app if you can avoid it
+            // log or handle; don’t crash whole app
         }
     }
 
     private void loadPlaylistsFromJson() {
-        // TODO: read playlistsJsonPath if it exists,
-        // parse JSON into Playlist objects, and fill `playlists` map.
+        Path playlistsJsonPath = getPlaylistsJsonPath();
+
         if (!Files.exists(playlistsJsonPath)) {
             return; // nothing yet, start with empty map
         }
 
-        // read string, parse with org.json, etc. (you can add later)
+        try {
+            String raw = Files.readString(playlistsJsonPath);
+            if (raw == null || raw.isBlank()) {
+                return;
+            }
+
+            JSONObject root = new JSONObject(raw);
+
+            for (String playlistName : root.keySet()) {
+                JSONArray arr = root.getJSONArray(playlistName);
+
+                Playlist p = new Playlist(playlistName);
+                for (int i = 0; i < arr.length(); i++) {
+                    String songId = arr.getString(i);
+                    p.addSong(songId);
+                }
+
+                playlists.put(playlistName, p);
+            }
+        } catch (Exception e) {
+            // If parsing fails, keep playlists empty for this user
+            throw new RuntimeException("Failed to read playlists.json", e);
+        }
     }
 
     private void savePlaylistsToJson() {
-        // TODO: serialize `playlists` map to JSON and write to playlistsJsonPath.
-        // You’ll likely use org.json.JSONObject / JSONArray for this.
+        Path playlistsJsonPath = getPlaylistsJsonPath();
+
+        try {
+            Files.createDirectories(playlistsJsonPath.getParent());
+
+            JSONObject root = new JSONObject();
+            for (Playlist p : playlists.values()) {
+                JSONArray arr = new JSONArray(p.getAllSongId());
+                root.put(p.getName(), arr);
+            }
+
+            Files.writeString(playlistsJsonPath, root.toString(2));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write playlists.json", e);
+        }
     }
 }

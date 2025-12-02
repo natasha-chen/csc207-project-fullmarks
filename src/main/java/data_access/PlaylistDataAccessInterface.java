@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PlaylistDataAccessInterface {
 
+    void reloadForCurrentUser();
     // playlist operations
     List<Playlist> getAllPlaylists();
     // gets the name of the playlist, no two playlist has the same name

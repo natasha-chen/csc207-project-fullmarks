@@ -2,6 +2,13 @@ package app;
 
 //** imports **//
 
+// for file access
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 // data access
 import data_access.PlaylistDataAccessInterface;
 import data_access.PlaylistDataAccessObject;
@@ -101,9 +108,10 @@ public class AppBuilder {
         // DATA ACCESS
         FileUserDataAccessObject userDataAccessObject =
                 new FileUserDataAccessObject("users.csv");
-        // Playlist data access, note: path initialized in DAO file
-        PlaylistDataAccessInterface playlistDAO =
+        // Playlist data access (per-user via PathManager)
+        PlaylistDataAccessObject playlistDataAccessObject =
                 new PlaylistDataAccessObject();
+        PlaylistDataAccessInterface playlistDAO = playlistDataAccessObject;
 
         // MENU VIEWMODEL (home page)
         MenuViewModel menuViewModel = new MenuViewModel();
@@ -111,7 +119,8 @@ public class AppBuilder {
         // LOGIN SETUP
         loginViewModel = new LoginViewModel();
         LoginPresenter loginPresenter =
-                new LoginPresenter(loginViewModel, viewManagerModel, menuViewModel);
+                new LoginPresenter(loginViewModel, viewManagerModel,
+                        menuViewModel, playlistDataAccessObject);
         LoginInteractor loginInteractor =
                 new LoginInteractor(userDataAccessObject, loginPresenter);
         LoginController loginController = new LoginController(loginInteractor);
@@ -121,7 +130,8 @@ public class AppBuilder {
         // SIGNUP SETUP
         signupViewModel = new SignupViewModel();
         SignupPresenter signupPresenter =
-                new SignupPresenter(signupViewModel, viewManagerModel);
+                new SignupPresenter(signupViewModel, viewManagerModel,
+                        loginViewModel, playlistDAO);
         SignupInteractor signupInteractor =
                 new SignupInteractor(userDataAccessObject, signupPresenter);
         SignupController signupController = new SignupController(signupInteractor);
@@ -257,6 +267,22 @@ public class AppBuilder {
         viewManager.addView(playlistView, "playlist_view");
 
         return cardPanel;
+    }
+
+    // Initialize User Playlist and Song data (appdata)
+    private Path initUserAppData(String username) {
+        Path userRoot = Paths.get("appdata", username);
+        Path media = userRoot.resolve("media");
+        Path playlistsJson = userRoot.resolve("playlists.json");
+        try {
+            Files.createDirectories(media);
+            if (!Files.exists(playlistsJson)) {
+                Files.writeString(playlistsJson, "{}", StandardOpenOption.CREATE);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize user appdata", e);
+        }
+        return userRoot;  // AppBuilder will pass this into DAOs
     }
 
     private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO) {
