@@ -1,5 +1,7 @@
 package use_case.url;
 
+import data_access.Verifier;
+
 import java.util.regex.Pattern;
 
 /**
@@ -22,7 +24,14 @@ public class URLInteractor implements URLInputBoundary {
     public void execute(URLInputData urlInputData) {
         final String url = urlInputData.getUrl();
 
-        // check if enter is pressed
+        //check if valid url
+        try {
+            Verifier verifier = new Verifier();
+            verifier.fetchInfo(url);
+        } catch (Exception e) {
+            urlPresenter.prepareFailView("This YouTube video is deleted or unavailable.");
+            return;
+        }
 
         // Check if URL is empty
         if (url == null || url.trim().isEmpty()) {
