@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 public class PathManager {
 
     private static String loggedInUsername = "default";
+    private static String currentUsername = null;
 
     public static void setLoggedInUsername(String username) {
         loggedInUsername = username;
@@ -26,6 +27,14 @@ public class PathManager {
     public static String getDefaultDownloadFolder() {
         String home = System.getProperty("user.home");
         return home + "/Desktop/" + loggedInUsername + "/";
+    }
+
+    public static void setCurrentUsername(String username) {
+        currentUsername = username;
+    }
+
+    public static String getCurrentUsername() {
+        return currentUsername;
     }
 
     // ---- appdata helpers ----

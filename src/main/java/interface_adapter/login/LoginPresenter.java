@@ -11,7 +11,7 @@ import use_case.login.LoginOutputData;
 /**
  * Presenter for the login use case.
  *
- * <p>Formats login success and failure responses for the LoginViewModel.
+ * Formats login success and failure responses for the LoginViewModel.
  */
 public class LoginPresenter implements LoginOutputBoundary {
 
@@ -32,25 +32,50 @@ public class LoginPresenter implements LoginOutputBoundary {
 
     @Override
     public void prepareSuccessView(LoginOutputData outputData) {
-
         String username = outputData.getUsername();
 
-        // Update MenuViewModel with logged-in user's username
-        MenuState state = menuViewModel.getState();
-        state.setUsername(username);
-        menuViewModel.setState(state);
-        menuViewModel.firePropertyChanged();
-
-        // Save username globally and init appdata
-        PathManager.setLoggedInUsername(username);
+        // 1) User-scoped filesystem
+        PathManager.setCurrentUsername(username);
         PathManager.initUserAppData();
         playlistDAO.reloadForCurrentUser();
 
-        // Now switch the view
-        viewManagerModel.setActiveView("menu");
-        viewManagerModel.firePropertyChanged();
+        // 2) Update Login VM
+        LoginState state = loginViewModel.getState();
+        state.setError(null);
+        state.setUsername(username);
+        loginViewModel.setState(state);
         loginViewModel.setUsername(username);
+        loginViewModel.firePropertyChanged();
+
+        // 3) Update Menu VM
+        MenuState menuState = menuViewModel.getState();
+        menuState.setUsername(username);
+        menuViewModel.setState(menuState);
+        menuViewModel.firePropertyChanged();
+
+        // 4) Switch to menu view
+        viewManagerModel.setActiveView(menuViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
+//    public void prepareSuccessView(LoginOutputData outputData) {
+//        String username = outputData.getUsername();
+//
+//        // Update MenuViewModel with logged-in user's username
+//        MenuState state = menuViewModel.getState();
+//        state.setUsername(username);
+//        menuViewModel.setState(state);
+//        menuViewModel.firePropertyChanged();
+//
+//        // Save username globally and init appdata
+//        PathManager.setLoggedInUsername(username);
+//        PathManager.initUserAppData();
+//        playlistDAO.reloadForCurrentUser();
+//
+//        // Now switch the view
+//        viewManagerModel.setActiveView("menu");
+//        viewManagerModel.firePropertyChanged();
+//        loginViewModel.setUsername(username);
+//    }
 
     @Override
     public void prepareFailView(String errorMessage, String username) {

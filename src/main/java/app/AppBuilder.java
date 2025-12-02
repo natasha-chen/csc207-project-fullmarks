@@ -130,7 +130,8 @@ public class AppBuilder {
         // SIGNUP SETUP
         signupViewModel = new SignupViewModel();
         SignupPresenter signupPresenter =
-                new SignupPresenter(signupViewModel, viewManagerModel);
+                new SignupPresenter(signupViewModel, viewManagerModel,
+                        loginViewModel, playlistDAO);
         SignupInteractor signupInteractor =
                 new SignupInteractor(userDataAccessObject, signupPresenter);
         SignupController signupController = new SignupController(signupInteractor);
