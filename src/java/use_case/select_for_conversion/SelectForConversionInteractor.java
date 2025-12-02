@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class SelectForConversionInteractor implements SelectForConversionInputBoundary {
     private final SelectForConversionOutputBoundary selectForConversionPresenter;
 
+    //TODO: add DAI to constructor when ready
     public SelectForConversionInteractor(SelectForConversionOutputBoundary selectForConversionOutputBoundary) {
         this.selectForConversionPresenter = selectForConversionOutputBoundary;
     }
@@ -24,7 +25,8 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
      */
     @Override
     public SelectForConversionOutputData execute(SelectForConversionInputData selectForConversionInputData) {
-        if (selectForConversionInputData.getVideoDataList() == null || selectForConversionInputData.getVideoDataList().isEmpty()) {
+        if (selectForConversionInputData.getVideoDataList() == null ||
+                selectForConversionInputData.getVideoDataList().isEmpty()) {
             selectForConversionPresenter.prepareFailView("Empty playlist.");
 //            selectForConversionPresenter.switchToUrlView();
             return new SelectForConversionOutputData(new ArrayList<>());

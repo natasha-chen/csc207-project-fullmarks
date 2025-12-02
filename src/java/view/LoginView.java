@@ -9,7 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
+/**
+ * The view for the Login screen.
+ *
+ * <p>This class displays the login form, collects user input,
+ * and notifies the controller when the user attempts to log in.
+ */
 public class LoginView extends JPanel implements PropertyChangeListener {
 
     private final JTextField usernameField = new JTextField(15);
@@ -51,6 +56,18 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
         JButton loginButton = new JButton("Log In");
         loginButton.addActionListener(e -> {
+            controller.execute(
+                    usernameField.getText(),
+                    new String(passwordField.getPassword())
+            );
+        });
+        usernameField.addActionListener(e -> {
+            controller.execute(
+                    usernameField.getText(),
+                    new String(passwordField.getPassword())
+            );
+        });
+        passwordField.addActionListener(e -> {
             controller.execute(
                     usernameField.getText(),
                     new String(passwordField.getPassword())

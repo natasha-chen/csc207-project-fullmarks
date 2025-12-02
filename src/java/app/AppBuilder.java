@@ -1,57 +1,5 @@
 package app;
 
-//** imports **//
-
-// data access
-import data_access.PlaylistDataAccessInterface;
-import data_access.PlaylistDataAccessObject;
-
-// 1: library
-
-// load playlist library
-import interface_adapter.create_playlist.CreatePlaylistController;
-import interface_adapter.create_playlist.CreatePlaylistPresenter;
-import interface_adapter.modify_playlist.ModifyPlaylistController;
-import interface_adapter.modify_playlist.ModifyPlaylistPresenter;
-import use_case.create_playlist.CreatePlaylistInputBoundary;
-import use_case.create_playlist.CreatePlaylistInteractor;
-import use_case.create_playlist.CreatePlaylistOutputBoundary;
-import use_case.modify_playlist.ModifyPlaylistInputBoundary;
-import use_case.modify_playlist.ModifyPlaylistInputData;
-import use_case.modify_playlist.ModifyPlaylistInteractor;
-import use_case.modify_playlist.ModifyPlaylistOutputBoundary;
-import use_case.playlist_library.PlaylistLibraryInputBoundary;
-import use_case.playlist_library.PlaylistLibraryOutputBoundary;
-import use_case.playlist_library.PlaylistLibraryInteractor;
-
-// library view interface adapters
-import interface_adapter.library.LibraryViewModel;
-import interface_adapter.library.LibraryPresenter;
-import interface_adapter.library.LibraryController;
-
-// library view
-import view.playlist.LibraryView;
-
-// delete playlist usecase
-import use_case.delete_playlist.*;
-import interface_adapter.delete_playlist.*;
-
-// 2: playlist
-
-// load playlist
-import use_case.playlist.PlaylistInputBoundary;
-import use_case.playlist.PlaylistOutputBoundary;
-import use_case.playlist.PlaylistInteractor;
-
-// playlist view interface adapters
-import interface_adapter.playlist_view.PlaylistViewModel;
-import interface_adapter.playlist_view.PlaylistPresenter;
-import interface_adapter.playlist_view.PlaylistController;
-
-// library view
-import view.playlist.PlaylistView;
-
-//
 import data_access.Downloader;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressPresenter;
@@ -62,6 +10,7 @@ import interface_adapter.signup.*;
 import interface_adapter.login.*;
 import interface_adapter.menu.*;
 import interface_adapter.download.*;
+import interface_adapter.create_playlist.*;
 import interface_adapter.url.*;
 import interface_adapter.select_for_conversion.*;
 import interface_adapter.user.FileUserDataAccessObject;
@@ -73,14 +22,12 @@ import use_case.signup.*;
 import use_case.login.*;
 import use_case.download.*;
 import use_case.url.*;
+import use_case.create_playlist.*;
 
 import view.*;
 
 import javax.swing.*;
 import java.awt.*;
-
-
-
 
 public class AppBuilder {
 
@@ -165,7 +112,7 @@ public class AppBuilder {
         ProgressController progressController =
                 new ProgressController(null, progressInteractor);
 
-        ProgressView progressView = new ProgressView(progressViewModel);
+        ProgressView progressView = new ProgressView(progressViewModel, viewManagerModel);
         progressView.setProgressController(progressController);
 
 
@@ -184,7 +131,7 @@ public class AppBuilder {
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
         DownloadView downloadView =
-                new DownloadView(downloadController, downloadViewModel, viewManagerModel);
+                new DownloadView(downloadController, downloadViewModel, viewManagerModel, progressController);
 
         //URL View
         URLViewModel urlViewModel = new URLViewModel();

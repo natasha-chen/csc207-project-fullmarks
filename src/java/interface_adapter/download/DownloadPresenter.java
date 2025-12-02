@@ -20,6 +20,7 @@ public class DownloadPresenter implements DownloadOutputBoundary {
         DownloadState state = viewModel.getState();
         state.setStatusMessage(outputData.getMessage());
         state.setInProgress(false);
+        state.setSuccess(true);
 
         viewModel.setState(state);
         viewModel.firePropertyChanged();
@@ -34,6 +35,7 @@ public class DownloadPresenter implements DownloadOutputBoundary {
         DownloadState state = viewModel.getState();
         state.setStatusMessage(errorMessage);
         state.setInProgress(false);
+        state.setSuccess(false);
 
         viewModel.setState(state);
         viewModel.firePropertyChanged();

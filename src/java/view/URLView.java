@@ -18,7 +18,7 @@ import java.beans.PropertyChangeListener;
  */
 
 
-public class URLView extends JPanel implements ActionListener, PropertyChangeListener {
+public class URLView extends JPanel implements PropertyChangeListener {
     private final String viewName = "url";
     private final URLViewModel urlViewModel;
     private URLController urlController;
@@ -97,16 +97,12 @@ public class URLView extends JPanel implements ActionListener, PropertyChangeLis
     }
 
     @Override
-    public void actionPerformed(ActionEvent evt) {
-        System.out.println("Click " + evt.getActionCommand());
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
         final URLState state = (URLState) evt.getNewValue();
         if (state.getError() != null) {
             JOptionPane.showMessageDialog(this, state.getError());
+            this.urlViewModel.getState().setError(null);
         }
     }
 

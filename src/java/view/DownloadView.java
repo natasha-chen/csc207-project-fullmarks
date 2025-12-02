@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.url.URLState;
@@ -16,6 +17,8 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final DownloadController controller;
     private final DownloadViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
+    private final ProgressController progressController;
+
 
     private final JTextField outputFolderField = new JTextField(20);
     private final JLabel statusLabel = new JLabel("");
@@ -23,13 +26,17 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final JButton chooseFolderButton = new JButton("Choose Folder");
     private final JButton downloadButton = new JButton("Download");
     private final JButton backButton = new JButton("Back");
+    private final JButton nextButton = new JButton("Next");
 
     public DownloadView(DownloadController controller,
                         DownloadViewModel viewModel,
-                        ViewManagerModel viewManagerModel) {
+                        ViewManagerModel viewManagerModel,
+                        ProgressController progressController) {
+
         this.controller = controller;
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
+        this.progressController = progressController;
 
         viewModel.addPropertyChangeListener(this);
 
@@ -60,6 +67,11 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         gbc.gridy++;
         this.add(backButton, gbc);
 
+        gbc.gridy++;
+        nextButton.setVisible(false);
+        nextButton.setEnabled(false);
+        this.add(nextButton, gbc);
+
         // Status
         gbc.gridy++;
         statusLabel.setForeground(Color.BLUE);
@@ -67,12 +79,25 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
 
         // Button actions
         chooseFolderButton.addActionListener(e -> chooseFolder());
-        downloadButton.addActionListener(e ->
-                controller.execute(viewModel.getState().getUrl(), outputFolderField.getText())
-        );
+        downloadButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("progress");
+            viewManagerModel.firePropertyChanged();
+
+            progressController.startDownload(
+                    viewModel.getState().getUrl(),
+                    outputFolderField.getText()
+            );
+        });
 
         backButton.addActionListener(e -> {
+            nextButton.setVisible(false);
+            nextButton.setEnabled(false);
             viewManagerModel.setActiveView("url");
+            viewManagerModel.firePropertyChanged();
+        });
+
+        nextButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("select for conversion");
             viewManagerModel.firePropertyChanged();
         });
     }
@@ -92,5 +117,13 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
 
         outputFolderField.setText(state.getOutputFolder());
         statusLabel.setText(state.getStatusMessage());
+        if (viewModel.getState().isSuccess()) {
+            nextButton.setVisible(true);
+            nextButton.setEnabled(true);
+        }
+        else {
+            nextButton.setVisible(false);
+            nextButton.setEnabled(false);
+        }
     }
 }
