@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ViewManagerModel;
 import interface_adapter.select_for_conversion.SelectForConversionState;
 import interface_adapter.url.URLController;
 import interface_adapter.url.URLState;
@@ -25,8 +26,9 @@ public class URLView extends JPanel implements PropertyChangeListener {
 
     private final JTextField urlInputField = new JTextField(20);
     private final JButton enterButton;
+    private final JButton backButton;
 
-    public URLView(URLViewModel urlViewModel) {
+    public URLView(URLViewModel urlViewModel, ViewManagerModel viewManagerModel) {
         this.urlViewModel = urlViewModel;
         this.urlViewModel.addPropertyChangeListener(this);
 
@@ -43,6 +45,10 @@ public class URLView extends JPanel implements PropertyChangeListener {
         enterButton = new JButton(URLViewModel.ENTER_BUTTON_LABEL);
         buttons.add(enterButton);
 
+        // back button
+        backButton = new JButton(URLViewModel.BACK_BUTTON_LABEL);
+        buttons.add(backButton);
+
         // Add action listener to button
         enterButton.addActionListener(
                 new ActionListener() {
@@ -51,6 +57,15 @@ public class URLView extends JPanel implements PropertyChangeListener {
                             final URLState currentState = urlViewModel.getState();
                             urlController.execute(currentState.getUrl());
                         }
+                    }
+                }
+        );
+
+        backButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        viewManagerModel.setActiveView("menu");
+                        viewManagerModel.firePropertyChanged();
                     }
                 }
         );
@@ -64,6 +79,12 @@ public class URLView extends JPanel implements PropertyChangeListener {
                     }
                 }
         );
+
+        backButton.setVisible(true);
+        backButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("url"); //go back
+            viewManagerModel.firePropertyChanged();
+        });
 
         // Layout
         // Add document listener to update state when text changes

@@ -111,7 +111,7 @@ public class AppBuilder {
                 new URLPresenter(urlViewModel, downloadViewModel, viewManagerModel);
         URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
         URLController urlController = new URLController(urlInteractor);
-        URLView urlView = new URLView(urlViewModel);
+        URLView urlView = new URLView(urlViewModel, viewManagerModel);
         urlView.setURLController(urlController);
 
         //TODO: CREATE PLAYLIST SETUP
