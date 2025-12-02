@@ -56,6 +56,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         // 4) Switch to menu view
         viewManagerModel.setActiveView(menuViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+        loginViewModel.getState().setUsername(outputData.getUsername());
     }
 //    public void prepareSuccessView(LoginOutputData outputData) {
 //        String username = outputData.getUsername();

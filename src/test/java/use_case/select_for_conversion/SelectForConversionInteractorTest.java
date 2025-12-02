@@ -44,12 +44,12 @@ class SelectForConversionInteractorTest {
                 "Moon Roar");
         ArrayList<VideoData> newList = new ArrayList<>();
         newList.add(video1);
-        video1.setMp3Bool(true);
+        video1.setMP3Bool(true);
         newList.add(video2);
-        video2.setMp3Bool(false);
+        video2.setMP3Bool(false);
         newList.add(video3);
-        video3.setMp3Bool(true);
-        return new SelectForConversionInputData(newList);
+        video3.setMP3Bool(true);
+        return new SelectForConversionInputData(newList, "test/folder", "ro208");
     }
 
     @NotNull
@@ -86,12 +86,12 @@ class SelectForConversionInteractorTest {
                 "Moon Roar");
         ArrayList<VideoData> newList = new ArrayList<>();
         newList.add(video1);
-        video1.setMp3Bool(false);
+        video1.setMP3Bool(false);
         newList.add(video2);
-        video2.setMp3Bool(false);
+        video2.setMP3Bool(false);
         newList.add(video3);
-        video3.setMp3Bool(false);
-        return new SelectForConversionInputData(newList);
+        video3.setMP3Bool(false);
+        return new SelectForConversionInputData(newList, "test/folder", "ro208");
     }
 
     /**
@@ -142,7 +142,7 @@ class SelectForConversionInteractorTest {
                 System.out.println("Error: " + errorMessage);
             }
             @Override
-            public void switchToUrlView() {
+            public void switchToMenuView() {
                 System.out.println("Test switchToUrlView triggered.");
             }
         };

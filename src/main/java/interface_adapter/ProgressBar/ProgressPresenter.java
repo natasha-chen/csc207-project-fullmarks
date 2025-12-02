@@ -1,5 +1,6 @@
 package interface_adapter.ProgressBar;
 
+import interface_adapter.ViewManagerModel;
 import use_case.progress.ProgressOutputBoundary;
 import use_case.progress.ProgressOutputData;
 
@@ -10,9 +11,12 @@ import use_case.progress.ProgressOutputData;
 public class ProgressPresenter implements ProgressOutputBoundary {
 
     private final ProgressViewModel viewModel;
+    private final ViewManagerModel viewManagerModel;
 
-    public ProgressPresenter(ProgressViewModel viewModel) {
+    public ProgressPresenter(ProgressViewModel viewModel,
+                             ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     @Override

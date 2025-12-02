@@ -14,5 +14,5 @@ public interface SelectForConversionInputBoundary {
     /**
      * Execute the switch to url view use case.
      */
-    void switchToUrlView();
+    void switchToMenuView();
 }

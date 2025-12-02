@@ -1,6 +1,7 @@
 package use_case.select_for_conversion;
 
 import custom_datatype.VideoData;
+import data_access.AudioConverter;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 public class SelectForConversionInteractor implements SelectForConversionInputBoundary {
     private final SelectForConversionOutputBoundary selectForConversionPresenter;
 
-    //TODO: add DAI to constructor when ready
     public SelectForConversionInteractor(SelectForConversionOutputBoundary selectForConversionOutputBoundary) {
         this.selectForConversionPresenter = selectForConversionOutputBoundary;
     }
@@ -28,17 +28,20 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
         if (selectForConversionInputData.getVideoDataList() == null ||
                 selectForConversionInputData.getVideoDataList().isEmpty()) {
             selectForConversionPresenter.prepareFailView("Empty playlist.");
-//            selectForConversionPresenter.switchToUrlView();
+            selectForConversionPresenter.switchToMenuView();
             return new SelectForConversionOutputData(new ArrayList<>());
         }
         List<VideoData> playlist = selectForConversionInputData.getVideoDataList();
-        boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::getMp3Bool);
+        String inputFolder = selectForConversionInputData.getInputFolder();
+        String username = selectForConversionInputData.getUsername();
+        boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::isMP3Bool);
         List<VideoData> newList = new ArrayList<>();
         if (anyMp3Bool) {
             for (VideoData videoData : playlist) {
-                if  (videoData.getMp3Bool())
+                if  (videoData.isMP3Bool())
                 {
-                    System.out.println("This is the part where I convert " + videoData.getTitle());
+                    AudioConverter converter = new AudioConverter();
+                    converter.convertToMP3(inputFolder, videoData.getTitle(), username);
                     newList.add(videoData);
                 }
             }
@@ -53,7 +56,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
 
 
     @Override
-    public void switchToUrlView() {
-        selectForConversionPresenter.switchToUrlView();
+    public void switchToMenuView() {
+        selectForConversionPresenter.switchToMenuView();
     }
 }
