@@ -24,18 +24,18 @@ public class URLInteractor implements URLInputBoundary {
     public void execute(URLInputData urlInputData) {
         final String url = urlInputData.getUrl();
 
+
+        // Check if URL is empty
+        if (url == null || url.trim().isEmpty()) {
+            urlPresenter.prepareFailView("URL cannot be empty.");
+            return;
+        }
         //check if valid url
         try {
             Verifier verifier = new Verifier();
             verifier.fetchInfo(url);
         } catch (Exception e) {
             urlPresenter.prepareFailView("This YouTube video is deleted or unavailable.");
-            return;
-        }
-
-        // Check if URL is empty
-        if (url == null || url.trim().isEmpty()) {
-            urlPresenter.prepareFailView("URL cannot be empty.");
             return;
         }
 
