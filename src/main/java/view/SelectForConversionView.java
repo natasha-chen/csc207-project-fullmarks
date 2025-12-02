@@ -61,7 +61,9 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
 
         skip.addActionListener(evt -> selectForConversionController.switchToUrlView());
 
-        begin.addActionListener(evt -> selectForConversionController.execute(currentState.getPlaylistData()));
+        begin.addActionListener(evt -> selectForConversionController.execute(
+                currentState.getPlaylistData(),
+                currentState.getLatestFilePath()));
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -78,6 +80,8 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
         if (state.getSelectForConversionError() != null) {
             JOptionPane.showMessageDialog(this, state.getSelectForConversionError());
         }
+
+        System.out.println("Current input folder:" + state.getLatestFilePath());
 
         // Update video list
         List<VideoData> playlist = state.getPlaylistData();

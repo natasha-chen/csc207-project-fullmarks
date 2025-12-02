@@ -8,21 +8,22 @@ import java.io.InputStreamReader;
 public class AudioConverter {
 
     public void convertToMp3(String folder, String title) {
-        String destination = "cache/";
+        String destination = "src" + File.separator + "appdata" + File.separator + "media" + File.separator;
         System.out.println("Converting to MP3...");
         String inputPath = folder + title + ".mp4";
+        inputPath = inputPath.replace("|", "");
         String outputPath = destination + title + ".mp3";
+        outputPath = outputPath.replace("|","");
 
         String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
 
-        String ffmpegPath = "bin/" + (isWindows ? "ffmpeg.exe" : "ffmpeg");
+        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
 
         ProcessBuilder pb = new ProcessBuilder(
                 ffmpegPath,
                 "-i", inputPath,
-                "-q:a", "0",
-                "-map", "a",
+
                 outputPath
         );
         pb.redirectErrorStream(true);

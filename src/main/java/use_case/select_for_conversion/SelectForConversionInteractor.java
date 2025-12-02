@@ -38,6 +38,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
             return new SelectForConversionOutputData(new ArrayList<>());
         }
         List<VideoData> playlist = selectForConversionInputData.getVideoDataList();
+        String inputFolder = selectForConversionInputData.getInputFolder();
         boolean anyMp3Bool = playlist.stream().anyMatch(VideoData::isMP3Bool);
         List<VideoData> newList = new ArrayList<>();
         if (anyMp3Bool) {
@@ -45,7 +46,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
                 if  (videoData.isMP3Bool())
                 {
                     AudioConverter converter = new AudioConverter();
-                    converter.convertToMp3();
+                    converter.convertToMp3(inputFolder, videoData.getTitle());
                     newList.add(videoData);
                 }
             }

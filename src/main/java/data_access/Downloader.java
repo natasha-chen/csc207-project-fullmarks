@@ -17,7 +17,8 @@ public class Downloader implements DownloadDataAccessInterface {
 
         String os =  System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
-        String ytDlpPath = "bin/" + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+        String ytDlpPath = "bin" + File.separator + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+
 
         ProcessBuilder pb = new ProcessBuilder(
                 ytDlpPath,

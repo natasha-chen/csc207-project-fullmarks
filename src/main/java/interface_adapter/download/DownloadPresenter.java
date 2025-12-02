@@ -23,16 +23,15 @@ public class DownloadPresenter implements DownloadOutputBoundary {
 
     @Override
     public void prepareSuccessView(DownloadOutputData outputData) {
+
         DownloadState state = viewModel.getState();
         state.setStatusMessage(outputData.getMessage());
         state.setInProgress(false);
         state.setSuccess(true);
 
-        SelectForConversionViewModel selectForConversionViewModel = new SelectForConversionViewModel();
-        selectForConversionViewModel.getState().setLatestFilePath(viewModel.getState().getOutputFolder());
-
         viewModel.setState(state);
         viewModel.firePropertyChanged();
+
 
         // optional: stay on same view; or you could switch views here if you want
         // viewManagerModel.setActiveView("some_other_view");

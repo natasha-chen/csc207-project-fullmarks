@@ -2,27 +2,26 @@ package view;
 
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.url.URLState;
-import interface_adapter.url.URLViewModel;
+import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 
 public class DownloadView extends JPanel implements PropertyChangeListener {
 
     private final DownloadController controller;
     private final DownloadViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
+    private SelectForConversionViewModel selectForConversionViewModel;
 
     private final JTextField outputFolderField = new JTextField(20);
     private final JLabel statusLabel = new JLabel("");
 
     private final JButton chooseFolderButton = new JButton("Choose Folder");
     private final JButton downloadButton = new JButton("Download as MP4");
-    private final JButton convertButton = new JButton("Download as MP3");
     private final JButton backButton = new JButton("Back");
     private final JButton nextButton = new JButton("Next");
 
@@ -74,9 +73,11 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
 
         // Button actions
         chooseFolderButton.addActionListener(e -> chooseFolder());
-        downloadButton.addActionListener(e ->
-                controller.execute(viewModel.getState().getUrl(), outputFolderField.getText())
-        );
+        downloadButton.addActionListener(e -> {
+            selectForConversionViewModel.getState().setLatestFilePath(outputFolderField.getText());
+            System.out.println(selectForConversionViewModel.getState().getLatestFilePath());
+            controller.execute(viewModel.getState().getUrl(), outputFolderField.getText());
+        });
 
         backButton.addActionListener(e -> {
             nextButton.setVisible(false);
@@ -96,7 +97,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            outputFolderField.setText(chooser.getSelectedFile().getAbsolutePath() + "/");
+            outputFolderField.setText(chooser.getSelectedFile().getAbsolutePath() + File.separator);
         }
     }
 
@@ -114,5 +115,9 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
             nextButton.setVisible(false);
             nextButton.setEnabled(false);
         }
+    }
+
+    public void setSelectForConversionViewModel(SelectForConversionViewModel selectForConversionViewModel) {
+        this.selectForConversionViewModel = selectForConversionViewModel;
     }
 }

@@ -131,6 +131,8 @@ public class AppBuilder {
         SelectForConversionView selectForConversionView =
                 new SelectForConversionView(selectForConversionController, selectForConversionViewModel);
 
+        downloadView.setSelectForConversionViewModel(selectForConversionViewModel);
+
         //URL View
 
         URLPresenter urlPresenter =
