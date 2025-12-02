@@ -1,5 +1,58 @@
 package app;
 
+//** imports **//
+
+// data access
+import data_access.PlaylistDataAccessInterface;
+import data_access.PlaylistDataAccessObject;
+
+// 1: library
+
+// delete playlist
+import use_case.delete_playlist.DeletePlaylistInteractor;
+import interface_adapter.delete_playlist.DeletePlaylistController;
+import interface_adapter.delete_playlist.DeletePlaylistPresenter;
+
+// load playlist library
+import interface_adapter.create_playlist.CreatePlaylistController;
+import interface_adapter.create_playlist.CreatePlaylistPresenter;
+import interface_adapter.modify_playlist.ModifyPlaylistController;
+import interface_adapter.modify_playlist.ModifyPlaylistPresenter;
+import use_case.create_playlist.CreatePlaylistInputBoundary;
+import use_case.create_playlist.CreatePlaylistInteractor;
+import use_case.create_playlist.CreatePlaylistOutputBoundary;
+import use_case.modify_playlist.ModifyPlaylistInputBoundary;
+import use_case.modify_playlist.ModifyPlaylistInputData;
+import use_case.modify_playlist.ModifyPlaylistInteractor;
+import use_case.modify_playlist.ModifyPlaylistOutputBoundary;
+import use_case.playlist_library.PlaylistLibraryInputBoundary;
+import use_case.playlist_library.PlaylistLibraryOutputBoundary;
+import use_case.playlist_library.PlaylistLibraryInteractor;
+
+// library view interface adapters
+import interface_adapter.library.LibraryViewModel;
+import interface_adapter.library.LibraryPresenter;
+import interface_adapter.library.LibraryController;
+
+// library view
+import view.playlist.LibraryView;
+
+// 2: playlist
+
+// load playlist
+import use_case.playlist.PlaylistInputBoundary;
+import use_case.playlist.PlaylistOutputBoundary;
+import use_case.playlist.PlaylistInteractor;
+
+// playlist view interface adapters
+import interface_adapter.playlist_view.PlaylistViewModel;
+import interface_adapter.playlist_view.PlaylistPresenter;
+import interface_adapter.playlist_view.PlaylistController;
+
+// library view
+import view.playlist.PlaylistView;
+
+//
 import data_access.Downloader;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressPresenter;
@@ -10,7 +63,6 @@ import interface_adapter.signup.*;
 import interface_adapter.login.*;
 import interface_adapter.menu.*;
 import interface_adapter.download.*;
-import interface_adapter.create_playlist.*;
 import interface_adapter.url.*;
 import interface_adapter.select_for_conversion.*;
 import interface_adapter.user.FileUserDataAccessObject;
@@ -22,12 +74,14 @@ import use_case.signup.*;
 import use_case.login.*;
 import use_case.download.*;
 import use_case.url.*;
-import use_case.create_playlist.*;
 
 import view.*;
 
 import javax.swing.*;
 import java.awt.*;
+
+
+
 
 public class AppBuilder {
 
@@ -47,6 +101,9 @@ public class AppBuilder {
         // DATA ACCESS
         FileUserDataAccessObject userDataAccessObject =
                 new FileUserDataAccessObject("users.csv");
+        // Playlist data access, note: path initialized in DAO file
+        PlaylistDataAccessInterface playlistDAO =
+                new PlaylistDataAccessObject();
 
         // MENU VIEWMODEL (home page)
         MenuViewModel menuViewModel = new MenuViewModel();
@@ -74,6 +131,31 @@ public class AppBuilder {
         // MENU
         SignupLoginMenuView signupLoginMenuView =
                 new SignupLoginMenuView(viewManagerModel);
+
+        // ** LIBRARY setup
+        LibraryView libraryView = getLibraryView(playlistDAO);
+
+
+        // ** PLAYLIST setup
+        PlaylistViewModel playlistViewModel = new PlaylistViewModel();
+
+        PlaylistOutputBoundary PlaylistPresenter =
+                new PlaylistPresenter(playlistViewModel, viewManagerModel);
+
+        ModifyPlaylistOutputBoundary modifyPlaylistPresenter =
+                new ModifyPlaylistPresenter(playlistViewModel);
+
+        ModifyPlaylistInputBoundary modifyPlaylistInputBoundary =
+                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistPresenter);
+        ModifyPlaylistController modifyPlaylistController =
+                new ModifyPlaylistController(modifyPlaylistInputBoundary);
+        PlaylistView playlistView =
+                new PlaylistView(playlistViewModel, modifyPlaylistController,
+                        playlistDAO, viewManagerModel);
+
+// Menu view
+//        MenuView menuView =
+//                new MenuView(viewManagerModel, createPlaylistController);
 
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
@@ -156,6 +238,9 @@ public class AppBuilder {
         // cardPanel.add(createPlaylistView, "create_playlist");
         cardPanel.add(progressView, "progress");
         cardPanel.add(selectForConversionView, "select_for_conversion");
+        // Library + Playlist
+        cardPanel.add(libraryView, "playlist_library");
+        cardPanel.add(playlistView, "playlist_view");
 
         // VIEW MANAGER REGISTRATION
         viewManager.addView(signupLoginMenuView, "signup_login_menu");
@@ -167,7 +252,58 @@ public class AppBuilder {
         // viewManager.addView(createPlaylistView, "create playlist");
         viewManager.addView(progressView, "progress");
         viewManager.addView(selectForConversionView, "select for conversion");
+        // Library + Playlist
+        viewManager.addView(libraryView, "playlist_library");
+        viewManager.addView(playlistView, "playlist_view");
 
         return cardPanel;
     }
+
+    private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO) {
+        // Shared view model for the library screen
+        LibraryViewModel libraryViewModel = new LibraryViewModel();
+
+        // LIBRARY use case wiring
+        PlaylistLibraryOutputBoundary libraryPresenter =
+                new LibraryPresenter(libraryViewModel);
+
+        PlaylistLibraryInputBoundary loadLibraryInteractor =
+                new PlaylistLibraryInteractor(playlistDAO, libraryPresenter);
+
+        LibraryController libraryController =
+                new LibraryController(loadLibraryInteractor);
+
+        // CREATE PLAYLIST use case wiring (reuses same libraryViewModel)
+        CreatePlaylistOutputBoundary createPlaylistPresenter =
+                new CreatePlaylistPresenter(libraryViewModel, viewManagerModel);
+
+        CreatePlaylistInputBoundary createPlaylistInteractor =
+                new CreatePlaylistInteractor(playlistDAO, createPlaylistPresenter);
+
+        CreatePlaylistController createPlaylistController =
+                new CreatePlaylistController(createPlaylistInteractor);
+
+        // DELETE PLAYLIST use case wiring (uses the same libraryViewModel)
+        DeletePlaylistPresenter deletePresenter =
+                new DeletePlaylistPresenter(libraryViewModel);
+
+        DeletePlaylistInteractor deleteInteractor =
+                new DeletePlaylistInteractor(playlistDAO, deletePresenter);
+
+        DeletePlaylistController deletePlaylistController =
+                new DeletePlaylistController(deleteInteractor);
+
+        PlaylistViewModel playlistViewModel =
+                new PlaylistViewModel();
+        // View
+        return new LibraryView(
+                libraryViewModel,
+                libraryController,
+                deletePlaylistController,
+                createPlaylistController,
+                playlistViewModel,
+                viewManagerModel
+        );
+    }
+
 }

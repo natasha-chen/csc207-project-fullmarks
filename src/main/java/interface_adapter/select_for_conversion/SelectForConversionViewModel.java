@@ -1,7 +1,6 @@
 package interface_adapter.select_for_conversion;
 
 import interface_adapter.ViewModel;
-import interface_adapter.signup.SignupState;
 
 /**
  * The ViewModel for the Select for Conversion View.
