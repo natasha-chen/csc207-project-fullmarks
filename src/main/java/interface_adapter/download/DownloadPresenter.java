@@ -2,6 +2,8 @@ package interface_adapter.download;
 
 import interface_adapter.ProgressBar.ProgressState;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.select_for_conversion.SelectForConversionState;
+import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 import use_case.download.DownloadOutputBoundary;
 import use_case.download.DownloadOutputData;
 import interface_adapter.ProgressBar.ProgressViewModel;
@@ -25,6 +27,9 @@ public class DownloadPresenter implements DownloadOutputBoundary {
         state.setStatusMessage(outputData.getMessage());
         state.setInProgress(false);
         state.setSuccess(true);
+
+        SelectForConversionViewModel selectForConversionViewModel = new SelectForConversionViewModel();
+        selectForConversionViewModel.getState().setLatestFilePath(viewModel.getState().getOutputFolder());
 
         viewModel.setState(state);
         viewModel.firePropertyChanged();

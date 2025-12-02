@@ -29,12 +29,6 @@ public class SelectForConversionPresenter implements SelectForConversionOutputBo
     public void prepareSuccessView(SelectForConversionOutputData outputData) {
         // Switch to Progress
         System.out.println("SuccessView triggered.");
-        System.out.println("final ProgressState progressState = progressViewModel.getState();");
-        System.out.println("progressState.setSelectedVideos(selectForConversionOutputData.getSelectedVideos());)");
-        System.out.println("progressViewModel.firePropertyChange();");
-        System.out.println("viewManagerModel.setState(ProgressViewModel.getViewName());");
-        System.out.println("viewManagerModel.firePropertyChange();");
-        System.out.println("Note to self: create similar texts for test drivers.");
     }
 
     @Override

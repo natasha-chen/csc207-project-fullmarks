@@ -30,14 +30,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
      */
     @Override
     public SelectForConversionOutputData execute(SelectForConversionInputData selectForConversionInputData) {
-        String userHome = System.getProperty("user.home");
-        Path cacheDir = Paths.get(userHome, "AppData", "Local", "MyApp", "cache");
 
-        try {
-            Files.createDirectories(cacheDir);
-        } catch (IOException e) {
-            selectForConversionPresenter.prepareFailView(e.getMessage());
-        }
         if (selectForConversionInputData.getVideoDataList() == null ||
                 selectForConversionInputData.getVideoDataList().isEmpty()) {
             selectForConversionPresenter.prepareFailView("Empty playlist.");
@@ -52,7 +45,7 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
                 if  (videoData.isMP3Bool())
                 {
                     AudioConverter converter = new AudioConverter();
-                    converter.convertToMp3(cacheDir.toString(), videoData.getTitle());
+                    converter.convertToMp3();
                     newList.add(videoData);
                 }
             }

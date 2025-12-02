@@ -21,7 +21,8 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final JLabel statusLabel = new JLabel("");
 
     private final JButton chooseFolderButton = new JButton("Choose Folder");
-    private final JButton downloadButton = new JButton("Download");
+    private final JButton downloadButton = new JButton("Download as MP4");
+    private final JButton convertButton = new JButton("Download as MP3");
     private final JButton backButton = new JButton("Back");
     private final JButton nextButton = new JButton("Next");
 
@@ -38,7 +39,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
 
-        JLabel title = new JLabel("Download Video");
+        JLabel title = new JLabel("Download Video as MP4");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22));
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
