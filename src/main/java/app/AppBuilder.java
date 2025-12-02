@@ -84,7 +84,7 @@ public class AppBuilder {
         ProgressController progressController =
                 new ProgressController(null, progressInteractor);
 
-        ProgressView progressView = new ProgressView(progressViewModel);
+        ProgressView progressView = new ProgressView(progressViewModel, viewManagerModel);
         progressView.setProgressController(progressController);
 
 
@@ -103,8 +103,7 @@ public class AppBuilder {
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
         DownloadView downloadView =
-                new DownloadView(downloadController, downloadViewModel, viewManagerModel);
-
+                new DownloadView(downloadController, downloadViewModel, viewManagerModel, progressController);
 
         //URL View
         URLViewModel urlViewModel = new URLViewModel();

@@ -27,6 +27,11 @@ public class SignupLoginMenuView extends JPanel {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
+        JLabel title = new JLabel("Youtube to MP3/4");
+        title.setFont(new Font("Arial", Font.BOLD, 28));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Buttons
         JButton signupButton = new JButton("Sign Up");
         JButton loginButton = new JButton("Log In");
 
@@ -40,13 +45,20 @@ public class SignupLoginMenuView extends JPanel {
             viewManagerModel.firePropertyChanged();
         });
 
-        gbc.insets = new Insets(10, 10, 10, 10);
-
+        // Spacing
+        gbc.insets = new Insets(15, 10, 15, 10);
         gbc.gridx = 0;
+
+        // ---------- ADD TITLE ----------
         gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(title, gbc);
+
+        // ---------- ADD BUTTONS ----------
+        gbc.gridy = 1;
         this.add(signupButton, gbc);
 
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         this.add(loginButton, gbc);
     }
 }

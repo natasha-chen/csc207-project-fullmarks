@@ -34,7 +34,11 @@ public class ProgressController {
      */
     public void startDownload(String url, String outputFolder) {
         DownloadInputData inputData = new DownloadInputData(url, outputFolder);
-        downloadInteractor.execute(inputData);
+
+        Thread worker = new Thread(() -> {
+            downloadInteractor.execute(inputData);
+        });
+        worker.start();
     }
 
     /**
