@@ -21,8 +21,9 @@ public class SelectForConversionController {
      * Executes the Select for Conversion Use Case.
      * @param convertTasks the List of VideoData
      */
-    public void execute(List<VideoData> convertTasks) {
-        final SelectForConversionInputData selectForConversionInputData = new SelectForConversionInputData(convertTasks);
+    public void execute(List<VideoData> convertTasks, String inputFolder) {
+        final SelectForConversionInputData selectForConversionInputData =
+                new SelectForConversionInputData(convertTasks, inputFolder);
         selectForConversionUseCaseInteractor.execute(selectForConversionInputData);
     }
 

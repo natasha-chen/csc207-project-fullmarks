@@ -14,15 +14,19 @@ import java.util.List;
 public class SelectForConversionInputData {
 
     private final List<VideoData> videoDataList;
+    private final String inputFolder;
 
     /**
      * Build when given a filePath, and, for each video in the playlist:
      * url, mp3Bool
      */
-    public SelectForConversionInputData(List<VideoData> videoDataList) {
+    public SelectForConversionInputData(List<VideoData> videoDataList,
+                                        String inputFolder) {
         this.videoDataList = videoDataList;
+        this.inputFolder = inputFolder;
     }
 
     List<VideoData> getVideoDataList() {return videoDataList;}
 
+    String getInputFolder() {return inputFolder;}
 }

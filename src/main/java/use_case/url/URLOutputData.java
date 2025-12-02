@@ -1,22 +1,24 @@
 package use_case.url;
 
+import custom_datatype.VideoData;
+import java.util.List;
+
 /**
  * Output Data for the URL validation use case.
  */
 public class URLOutputData {
     private final String url;
-    private final boolean success;
+    private final List<VideoData> playlistData;
 
-    public URLOutputData(String url, boolean success) {
+
+    public URLOutputData(String url, List<VideoData> playlistData) {
         this.url = url;
-        this.success = success;
+        this.playlistData = playlistData;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
+    public List<VideoData> getPlaylistData() {return playlistData;}
 }

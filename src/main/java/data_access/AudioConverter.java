@@ -1,22 +1,29 @@
 package data_access;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AudioConverter {
 
-    //TODO; change; input: cache, output: cache
     public void convertToMp3(String folder, String title) {
+        String destination = "src" + File.separator + "appdata" + File.separator + "media" + File.separator;
         System.out.println("Converting to MP3...");
         String inputPath = folder + title + ".mp4";
-        String outputPath = folder + title + ".mp3";
+        inputPath = inputPath.replace("|", "");
+        String outputPath = destination + title + ".mp3";
+        outputPath = outputPath.replace("|","");
+
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+
+        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
 
         ProcessBuilder pb = new ProcessBuilder(
-                "ffmpeg",
+                ffmpegPath,
                 "-i", inputPath,
-                "-q:a", "0",
-                "-map", "a",
+
                 outputPath
         );
         pb.redirectErrorStream(true);
