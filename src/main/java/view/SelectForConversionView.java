@@ -106,12 +106,9 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
     /** Rebuild checkboxes visually to reflect header changes */
     private void updateCheckboxes(boolean value) {
         for (Component c : listPanel.getComponents()) {
-            if (c instanceof JPanel row) {
-                Component[] rowItems = row.getComponents();
-                if (rowItems.length > 0 && rowItems[0] instanceof JCheckBox box) {
-                    box.setSelected(value);
-                }
-            }
+            JPanel row = (JPanel) c;
+            JCheckBox box = (JCheckBox) row.getComponent(0);
+            box.setSelected(value);
         }
     }
 

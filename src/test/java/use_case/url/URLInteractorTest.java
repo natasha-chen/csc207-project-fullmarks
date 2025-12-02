@@ -1,5 +1,6 @@
 package use_case.url;
 
+import data_access.Fetcher;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
         // Act
@@ -36,7 +37,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_ShortForm() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://youtu.be/dQw4w9WgXcQ");
 
         // Act
@@ -55,7 +56,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_WithoutWWW() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://youtube.com/watch?v=dQw4w9WgXcQ");
 
         // Act
@@ -73,7 +74,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_HTTP() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("http://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
         // Act
@@ -91,7 +92,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_Playlist() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://www.youtube.com/playlist?list=PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf");
 
         // Act
@@ -109,7 +110,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_Channel() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://www.youtube.com/channel/UCX6OQ3DkcsbYNE6H8uQQuVA");
 
         // Act
@@ -127,7 +128,7 @@ class URLInteractorTest {
     void testValidYouTubeUrl_MixedCase() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://www.YouTube.COM/watch?v=dQw4w9WgXcQ");
 
         // Act
@@ -145,7 +146,7 @@ class URLInteractorTest {
     void testNullUrl() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData(null);
 
         // Act
@@ -164,7 +165,7 @@ class URLInteractorTest {
     void testEmptyUrl() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("");
 
         // Act
@@ -183,7 +184,7 @@ class URLInteractorTest {
     void testWhitespaceOnlyUrl() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("   ");
 
         // Act
@@ -202,7 +203,7 @@ class URLInteractorTest {
     void testInvalidUrl_Google() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("https://www.google.com");
 
         // Act
@@ -222,7 +223,7 @@ class URLInteractorTest {
     void testInvalidUrl_Malformed() {
         // Arrange
         TestURLPresenter presenter = new TestURLPresenter();
-        URLInteractor interactor = new URLInteractor(presenter);
+        URLInteractor interactor = new URLInteractor(presenter, new Fetcher());
         URLInputData inputData = new URLInputData("not a url at all");
 
         // Act

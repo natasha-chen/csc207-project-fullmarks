@@ -13,9 +13,12 @@ import java.util.ArrayList;
  */
 public class SelectForConversionInteractor implements SelectForConversionInputBoundary {
     private final SelectForConversionOutputBoundary selectForConversionPresenter;
+    private final ConverterInterface converter;
 
-    public SelectForConversionInteractor(SelectForConversionOutputBoundary selectForConversionOutputBoundary) {
+    public SelectForConversionInteractor(SelectForConversionOutputBoundary selectForConversionOutputBoundary,
+                                         ConverterInterface converter) {
         this.selectForConversionPresenter = selectForConversionOutputBoundary;
+        this.converter = converter;
     }
 
     /**
@@ -40,7 +43,6 @@ public class SelectForConversionInteractor implements SelectForConversionInputBo
             for (VideoData videoData : playlist) {
                 if  (videoData.isMP3Bool())
                 {
-                    AudioConverter converter = new AudioConverter();
                     converter.convertToMP3(inputFolder, videoData.getTitle(), username);
                     newList.add(videoData);
                 }

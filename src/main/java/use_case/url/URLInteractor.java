@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  */
 public class URLInteractor implements URLInputBoundary {
     private final URLOutputBoundary urlPresenter;
+    private final FetcherInterface fetcher;
 
     // YouTube URL patterns
     private static final Pattern YOUTUBE_PATTERN = Pattern.compile(
@@ -21,8 +22,10 @@ public class URLInteractor implements URLInputBoundary {
             Pattern.CASE_INSENSITIVE
     );
 
-    public URLInteractor(URLOutputBoundary urlPresenter) {
+    public URLInteractor(URLOutputBoundary urlPresenter,
+                         FetcherInterface fetcher) {
         this.urlPresenter = urlPresenter;
+        this.fetcher = fetcher;
     }
 
     @Override
@@ -44,7 +47,6 @@ public class URLInteractor implements URLInputBoundary {
         }
 
         // Success case
-        Fetcher fetcher = new Fetcher();
         try {
             // Success case
             JSONObject info = fetcher.fetchInfo(url);
@@ -61,6 +63,7 @@ public class URLInteractor implements URLInputBoundary {
                 playlistData.add(new VideoData(0, url, info.getString("title")));
             }
             final URLOutputData outputData = new URLOutputData(url, playlistData);
+            outputData.setSuccess(true);
             urlPresenter.prepareSuccessView(outputData);
         }
         catch (Exception e) {

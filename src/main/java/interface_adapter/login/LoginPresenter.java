@@ -44,7 +44,7 @@ public class LoginPresenter implements LoginOutputBoundary {
         state.setError(null);
         state.setUsername(username);
         loginViewModel.setState(state);
-        loginViewModel.setUsername(username);
+        loginViewModel.getState().setUsername(username);
         loginViewModel.firePropertyChanged();
 
         // 3) Update Menu VM
