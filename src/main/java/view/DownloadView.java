@@ -10,6 +10,18 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * A Swing-based view that allows the user to select a download directory and
+ * initiate a video download.
+ *
+ * <p>This view displays the currently configured output folder, allows the user
+ * to choose a directory manually, and connects to the ProgressController to start
+ * downloading content. It listens for property changes from the DownloadViewModel
+ * to update its UI and reveal the "Next" button upon successful download.
+ *
+ * <p>The view also refreshes its default folder each time it becomes active,
+ * ensuring that the displayed path reflects the latest logged-in username.
+ */
 public class DownloadView extends JPanel implements PropertyChangeListener {
 
     private final DownloadController controller;
