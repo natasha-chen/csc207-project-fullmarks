@@ -22,6 +22,8 @@ public class URLInteractor implements URLInputBoundary {
     public void execute(URLInputData urlInputData) {
         final String url = urlInputData.getUrl();
 
+        // check if enter is pressed
+
         // Check if URL is empty
         if (url == null || url.trim().isEmpty()) {
             urlPresenter.prepareFailView("URL cannot be empty.");
