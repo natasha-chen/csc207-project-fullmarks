@@ -1,5 +1,6 @@
 package interface_adapter.login;
 
+import data_access.PlaylistDataAccessObject;
 import data_access.PathManager;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.menu.MenuState;
@@ -16,30 +17,39 @@ public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
-    private final MenuViewModel menuViewModel;   // NEW
+    private final MenuViewModel menuViewModel;
+    private final PlaylistDataAccessObject playlistDAO;
 
     public LoginPresenter(LoginViewModel loginViewModel,
                           ViewManagerModel viewManagerModel,
-                          MenuViewModel menuViewModel) {   // UPDATED
+                          MenuViewModel menuViewModel,
+                          PlaylistDataAccessObject playlistDAO) {
         this.loginViewModel = loginViewModel;
         this.viewManagerModel = viewManagerModel;
         this.menuViewModel = menuViewModel;
+        this.playlistDAO = playlistDAO;
     }
 
     @Override
     public void prepareSuccessView(LoginOutputData outputData) {
 
+        String username = outputData.getUsername();
+
         // Update MenuViewModel with logged-in user's username
         MenuState state = menuViewModel.getState();
-        state.setUsername(outputData.getUsername());
-        PathManager.setLoggedInUsername(outputData.getUsername());
+        state.setUsername(username);
         menuViewModel.setState(state);
         menuViewModel.firePropertyChanged();
+
+        // Save username globally and init appdata
+        PathManager.setLoggedInUsername(username);
+        PathManager.initUserAppData();
+        playlistDAO.reloadForCurrentUser();
 
         // Now switch the view
         viewManagerModel.setActiveView("menu");
         viewManagerModel.firePropertyChanged();
-        loginViewModel.setUsername(outputData.getUsername());
+        loginViewModel.setUsername(username);
     }
 
     @Override
