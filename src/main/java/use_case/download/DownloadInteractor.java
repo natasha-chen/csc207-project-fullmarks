@@ -1,21 +1,20 @@
 package use_case.download;
 
-import use_case.progress.ProgressCallback;
 import use_case.progress.ProgressInputBoundary;
 
 public class DownloadInteractor implements DownloadInputBoundary {
 
     private final DownloadDataAccessInterface downloader;
     private final DownloadOutputBoundary presenter;
-    private final ProgressCallback progressCallback;
+    private final ProgressInputBoundary progressInteractor;
 
 
     public DownloadInteractor(DownloadDataAccessInterface downloader,
                               DownloadOutputBoundary presenter,
-                              ProgressCallback progressInteractor) {
+                              ProgressInputBoundary progressInteractor) {
         this.downloader = downloader;
         this.presenter = presenter;
-        this.progressCallback = progressInteractor;
+        this.progressInteractor = progressInteractor;
     }
 
 

@@ -16,6 +16,6 @@ public class DownloadController {
      */
     public void execute(String url, String outputFolder) {
         DownloadInputData inputData = new DownloadInputData(url, outputFolder);
-        new Thread (() -> interactor.execute(inputData)).start();
+        interactor.execute(inputData);
     }
 }

@@ -30,7 +30,7 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
 
     private JButton urlButton = new JButton("Download from URL");
-    private JButton playlistButton = new JButton("Playlist Library");
+    private JButton playlistButton = new JButton("Create Playlist");
     private JButton logoutButton = new JButton("Logout");
 
     public MenuView(ViewManagerModel viewManagerModel,
@@ -93,8 +93,8 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
             // TODO: playlistViewModel is updated with files corresponding to username
             //  would this be done by having the same prefix and changing the last part of the filepath?
-//             playlistViewModel.getState().setFilePath();
-//             playlistViewModel.firePropertyChanged();
+//             createPlaylistViewModel.getState().setFilePath();
+//             createPlaylistViewModel.firePropertyChanged();
 
             // 3. Switch to create playlist view
 //            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());

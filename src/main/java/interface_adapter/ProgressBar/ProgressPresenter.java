@@ -1,10 +1,7 @@
 package interface_adapter.ProgressBar;
 
-import interface_adapter.ViewManagerModel;
 import use_case.progress.ProgressOutputBoundary;
 import use_case.progress.ProgressOutputData;
-
-import javax.swing.*;
 
 /**
  * Presenter for progress updates.
@@ -13,24 +10,20 @@ import javax.swing.*;
 public class ProgressPresenter implements ProgressOutputBoundary {
 
     private final ProgressViewModel viewModel;
-    private final ViewManagerModel viewManagerModel;
 
-    public ProgressPresenter(ProgressViewModel viewModel, ViewManagerModel viewManagerModel) {
+    public ProgressPresenter(ProgressViewModel viewModel) {
         this.viewModel = viewModel;
-        this.viewManagerModel = viewManagerModel;
     }
 
     @Override
     public void updateProgress(ProgressOutputData outputData) {
-        SwingUtilities.invokeLater(() -> {
-            ProgressState state = viewModel.getState();
-            state.setPercent(outputData.getPercent());
-            state.setMessage(outputData.getMessage());
-            state.setComplete(outputData.isDone());
-            state.setError(false);  // update progress bar
+        ProgressState state = viewModel.getState();
+        state.setPercent(outputData.getPercent());
+        state.setMessage(outputData.getMessage());
+        state.setComplete(outputData.isDone());
+        state.setError(false);  // update progress bar
 
         viewModel.firePropertyChanged();
-        });
     }
 
     @Override
@@ -52,5 +45,4 @@ public class ProgressPresenter implements ProgressOutputBoundary {
 
         viewModel.firePropertyChanged();
     }
-
 }
