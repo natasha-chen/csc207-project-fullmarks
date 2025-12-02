@@ -23,6 +23,7 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
 
     // ===== Per-user reinitialization =====
 
+    @Override
     public void reloadForCurrentUser() {
         playlists.clear();
         media.clear();

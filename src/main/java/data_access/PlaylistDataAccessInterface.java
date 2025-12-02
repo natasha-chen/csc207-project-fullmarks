@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface PlaylistDataAccessInterface {
 
-    void reloadForCurrentUser();
     // playlist operations
     List<Playlist> getAllPlaylists();
     // gets the name of the playlist, no two playlist has the same name
@@ -26,6 +25,7 @@ public interface PlaylistDataAccessInterface {
     MediaFile getMedia(String id);
     // fetches all the songs in main\appdata\media\
     List<MediaFile> getAllMedia();
+    void reloadForCurrentUser();
 
 }
 

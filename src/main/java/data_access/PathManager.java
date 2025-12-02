@@ -31,11 +31,11 @@ public class PathManager {
     }
 
     public static void setCurrentUsername(String username) {
-        currentUsername = username;
+        setLoggedInUsername(username);
     }
 
     public static String getCurrentUsername() {
-        return currentUsername;
+        return loggedInUsername;
     }
 
     // ---- appdata helpers ----
