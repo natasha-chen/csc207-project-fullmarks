@@ -61,6 +61,11 @@ public class PlaylistDataAccessObject implements PlaylistDataAccessInterface {
     }
 
     @Override
+    public boolean exists(String playlistName) {
+        return playlists.containsKey(playlistName);
+    }
+
+    @Override
     public void deletePlaylist(String name) {
         playlists.remove(name);
         savePlaylistsToJson();
