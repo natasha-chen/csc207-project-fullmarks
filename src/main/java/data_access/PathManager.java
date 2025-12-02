@@ -1,5 +1,7 @@
 package data_access;
 
+import java.io.File;
+
 /**
  * A utility class responsible for managing file system paths used by the application.
  *
@@ -20,6 +22,6 @@ public class PathManager {
 
     public static String getDefaultDownloadFolder() {
         String home = System.getProperty("user.home");
-        return home + "/Desktop/" + loggedInUsername + "/";
+        return home + File.separator + "Desktop" + File.separator + loggedInUsername + File.separator;
     }
 }

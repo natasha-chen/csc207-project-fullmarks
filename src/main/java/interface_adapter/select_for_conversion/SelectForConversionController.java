@@ -21,15 +21,16 @@ public class SelectForConversionController {
      * Executes the Select for Conversion Use Case.
      * @param convertTasks the List of VideoData
      */
-    public void execute(List<VideoData> convertTasks) {
-        final SelectForConversionInputData selectForConversionInputData = new SelectForConversionInputData(convertTasks);
+    public void execute(List<VideoData> convertTasks, String inputFolder, String username) {
+        final SelectForConversionInputData selectForConversionInputData = new SelectForConversionInputData(
+                convertTasks, inputFolder,  username);
         selectForConversionUseCaseInteractor.execute(selectForConversionInputData);
     }
 
     /**
      * Executes the "switch to MenuView" Use Case.
      */
-    public void switchToUrlView() {
-        selectForConversionUseCaseInteractor.switchToUrlView();
+    public void switchToMenuView() {
+        selectForConversionUseCaseInteractor.switchToMenuView();
     }
 }

@@ -3,6 +3,7 @@ package interface_adapter.download;
 import interface_adapter.ViewManagerModel;
 import use_case.download.DownloadOutputBoundary;
 import use_case.download.DownloadOutputData;
+import interface_adapter.ProgressBar.ProgressViewModel;
 
 public class DownloadPresenter implements DownloadOutputBoundary {
 
@@ -39,5 +40,11 @@ public class DownloadPresenter implements DownloadOutputBoundary {
 
         viewModel.setState(state);
         viewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void prepareProgressBar() {
+        ProgressViewModel progressViewModel = new ProgressViewModel();
+        viewManagerModel.setActiveView(progressViewModel.getViewName());
     }
 }

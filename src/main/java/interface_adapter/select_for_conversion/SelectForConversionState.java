@@ -10,6 +10,8 @@ import java.util.List;
 
 public class SelectForConversionState {
     private List<VideoData> playlistVideoData;
+    private String latestFilePath;
+    private String username;
     private String errorMessage;
 
 
@@ -17,10 +19,19 @@ public class SelectForConversionState {
 
     public String getSelectForConversionError() {return this.errorMessage;}
 
-    //TODO: either someone else converts playlist url into List<VideoData> or i do
+    public String getLatestFilePath() {return this.latestFilePath;}
+
+    public String getUsername() {return this.username;}
+
     public void setPlaylistData(List<VideoData> playlistData) {this.playlistVideoData = playlistData;}
 
     public void setConversionError(String errorMessage) {this.errorMessage = errorMessage;}
+
+    public void setLatestFilePath(String latestFilePath) {this.latestFilePath = latestFilePath;}
+
+    public void setUsername(String username) {this.username = username;}
+
+
 
     @Override
     public String toString() {

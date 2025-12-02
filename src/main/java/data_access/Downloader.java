@@ -4,7 +4,11 @@ import use_case.download.DownloadDataAccessInterface;
 import use_case.progress.ProgressInputBoundary;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Downloader implements DownloadDataAccessInterface {
 
@@ -13,14 +17,16 @@ public class Downloader implements DownloadDataAccessInterface {
                               String outputFolder,
                               ProgressInputBoundary progressUpdater) throws Exception {
 
+        String os = System.getProperty("os.name");
+        boolean isWindows = os.contains("win");
+        String ytDlpPath = "bin" + File.separator + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+
         ProcessBuilder pb = new ProcessBuilder(
-                "yt-dlp",
-                "--newline",
+                ytDlpPath,
                 "-f", "mp4",
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url
         );
-
         pb.redirectErrorStream(true);
         Process process = pb.start();
 

@@ -13,9 +13,6 @@ public interface SelectForConversionDataAccessInterface {
      * Verifies the URL and classifies its destination.
      * // @param selectedVideos the String list of selected video urls.
      */
-    //TODO: move verifyURL to URL to create Video Entities?
-    //    Video verifyURL(List<String> selectedVideos);
-
     /**
      * Call the Fetcher DAO to obtain information about the url's media.
      */
@@ -26,5 +23,5 @@ public interface SelectForConversionDataAccessInterface {
      * @param inputPath the path of the MP4 file
      * @param outputPath the path of the MP3's destination
      */
-    void convert(String inputPath, String outputPath);
+    void convertToMP3(String inputPath, String outputPath, String username);
 }

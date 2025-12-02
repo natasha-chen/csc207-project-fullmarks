@@ -17,5 +17,5 @@ public interface SelectForConversionOutputBoundary {
      */
     void prepareFailView(String errorMessage);
 
-    void switchToUrlView();
+    void switchToMenuView();
 }

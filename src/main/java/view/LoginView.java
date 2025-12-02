@@ -4,6 +4,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
+import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,7 @@ public class LoginView extends JPanel implements PropertyChangeListener {
     private final JTextField usernameField = new JTextField(15);
     private final JPasswordField passwordField = new JPasswordField(15);
     private final JLabel errorLabel = new JLabel(" ");
+    private SelectForConversionViewModel selectForConversionViewModel;
 
     public LoginView(LoginController controller,
                      LoginViewModel viewModel,
@@ -56,18 +58,21 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
         JButton loginButton = new JButton("Log In");
         loginButton.addActionListener(e -> {
+            this.selectForConversionViewModel.getState().setUsername(usernameField.getText());
             controller.execute(
                     usernameField.getText(),
                     new String(passwordField.getPassword())
             );
         });
         usernameField.addActionListener(e -> {
+            this.selectForConversionViewModel.getState().setUsername(usernameField.getText());
             controller.execute(
                     usernameField.getText(),
                     new String(passwordField.getPassword())
             );
         });
         passwordField.addActionListener(e -> {
+            this.selectForConversionViewModel.getState().setUsername(usernameField.getText());
             controller.execute(
                     usernameField.getText(),
                     new String(passwordField.getPassword())
@@ -110,5 +115,9 @@ public class LoginView extends JPanel implements PropertyChangeListener {
 
         // always clear password on update
         passwordField.setText("");
+    }
+
+    public void setSelectForConversionViewModel(SelectForConversionViewModel selectForConversionViewModel) {
+        this.selectForConversionViewModel = selectForConversionViewModel;
     }
 }

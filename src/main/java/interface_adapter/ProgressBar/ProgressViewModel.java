@@ -14,6 +14,8 @@ public class ProgressViewModel {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private ProgressState state = new ProgressState();
 
+    private final String VIEW_NAME = "progress";
+
     public ProgressState getState() {
         return state;
     }
@@ -29,5 +31,9 @@ public class ProgressViewModel {
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
+    }
+
+    public String getViewName() {
+        return VIEW_NAME;
     }
 }

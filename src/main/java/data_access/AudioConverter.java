@@ -1,22 +1,30 @@
 package data_access;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class AudioConverter {
 
-    //TODO; change; input: cache, output: cache
-    public void convertToMp3(String folder, String title) {
+    public void convertToMP3(String folder, String title, String username) {
+        String destination = "appdata" + File.separator + username + File.separator + "media" + File.separator;
+        ensureOutputDirectory(destination);
         System.out.println("Converting to MP3...");
         String inputPath = folder + title + ".mp4";
-        String outputPath = folder + title + ".mp3";
+        String outputPath = destination + title + ".mp3";
+        outputPath = outputPath.replace("|", "");
+
+        String os = System.getProperty("os.name").toLowerCase();
+        boolean isWindows = os.contains("win");
+
+        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
 
         ProcessBuilder pb = new ProcessBuilder(
-                "ffmpeg",
+                ffmpegPath,
                 "-i", inputPath,
-                "-q:a", "0",
-                "-map", "a",
                 outputPath
         );
         pb.redirectErrorStream(true);
@@ -35,6 +43,16 @@ public class AudioConverter {
             System.out.println("✅ Conversion completed: " + outputPath);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    public void ensureOutputDirectory(String outputPath) {
+        Path path = Path.of(outputPath);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to create output directory: " + outputPath, e);
         }
     }
 }

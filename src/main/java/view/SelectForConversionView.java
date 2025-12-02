@@ -21,6 +21,8 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
 
     private final JButton skip;
     private final JButton begin;
+    private final JPanel bodyPanelLeft = new JPanel();
+    private final JPanel bodyPanelRight = new JPanel();
 
     public SelectForConversionView(SelectForConversionController selectForConversionController,
                                    SelectForConversionViewModel selectForConversionViewModel) {
@@ -31,8 +33,6 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
         title.setAlignmentX(CENTER_ALIGNMENT);
 
         final JPanel bodyPanel = new JPanel();
-        final JPanel bodyPanelLeft = new JPanel();
-        final JPanel bodyPanelRight = new JPanel();
         bodyPanelLeft.setLayout(new BoxLayout(bodyPanelLeft, BoxLayout.Y_AXIS));
         bodyPanelRight.setLayout(new BoxLayout(bodyPanelRight, BoxLayout.Y_AXIS));
         final JLabel bodyPanelLeftLabel = new JLabel(SelectForConversionViewModel.VIDEO_TITLE_LABEL);
@@ -41,13 +41,12 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
         bodyPanelRight.add(bodyPanelRightLabel);
         List<VideoData> playlist = currentState.getPlaylistData();
         if (playlist != null) {
-            for (int i = 0; i < playlist.size();  i++) {
-                final int index = i;
-                bodyPanelLeft.add(new JLabel(playlist.get(index).getTitle()));
+            for (VideoData videoData : playlist) {
+                bodyPanelLeft.add(new JLabel(videoData.getTitle()));
                 JCheckBox mp3Check = new JCheckBox("");
 
                 mp3Check.addItemListener(evt ->
-                        playlist.get(index).setMp3Bool(evt.getStateChange() == ItemEvent.SELECTED));
+                        videoData.setMP3Bool(evt.getStateChange() == ItemEvent.SELECTED));
                 bodyPanelRight.add(mp3Check);
             }
         }
@@ -60,9 +59,16 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
         buttonPanel.add(begin);
         buttonPanel.add(skip);
 
-        skip.addActionListener(evt -> selectForConversionController.switchToUrlView());
+        skip.addActionListener(evt -> selectForConversionController.switchToMenuView());
 
-        begin.addActionListener(evt -> selectForConversionController.execute(currentState.getPlaylistData()));
+        begin.addActionListener(evt -> {
+                    selectForConversionController.execute(
+                            currentState.getPlaylistData(),
+                            currentState.getLatestFilePath(),
+                            currentState.getUsername());
+                    System.out.println(currentState.getUsername());
+                    System.out.println(currentState.getLatestFilePath());
+        });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -74,9 +80,38 @@ public class SelectForConversionView extends JPanel implements PropertyChangeLis
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final SelectForConversionState state = (SelectForConversionState) evt.getNewValue();
+
+        // Show error if present
         if (state.getSelectForConversionError() != null) {
-            System.out.println("Select For Conversion Error Detected");
             JOptionPane.showMessageDialog(this, state.getSelectForConversionError());
+        }
+
+        System.out.println("Current input folder:" + state.getLatestFilePath());
+
+        // Update video list
+        List<VideoData> playlist = state.getPlaylistData();
+        if (playlist != null) {
+            bodyPanelLeft.removeAll();
+            bodyPanelRight.removeAll();
+
+            // Add labels
+            bodyPanelLeft.add(new JLabel(SelectForConversionViewModel.VIDEO_TITLE_LABEL));
+            bodyPanelRight.add(new JLabel(SelectForConversionViewModel.MP3_LABEL));
+
+            for (VideoData videoData : playlist) {
+                bodyPanelLeft.add(new JLabel(videoData.getTitle()));
+
+                JCheckBox mp3Check = new JCheckBox("");
+                mp3Check.setSelected(videoData.isMP3Bool());
+                mp3Check.addItemListener(evt2 ->
+                        videoData.setMP3Bool(evt2.getStateChange() == ItemEvent.SELECTED));
+                bodyPanelRight.add(mp3Check);
+            }
+
+            bodyPanelLeft.revalidate();
+            bodyPanelLeft.repaint();
+            bodyPanelRight.revalidate();
+            bodyPanelRight.repaint();
         }
     }
 

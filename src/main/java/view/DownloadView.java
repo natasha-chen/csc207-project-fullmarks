@@ -4,6 +4,7 @@ import data_access.PathManager;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.select_for_conversion.SelectForConversionViewModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final DownloadViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
     private final ProgressController progressController;
+    private SelectForConversionViewModel selectForConversionViewModel;
 
     private final PlaceholderTextField outputFolderField =
             new PlaceholderTextField("Select folder or use default…");
@@ -106,6 +108,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         chooseFolderButton.addActionListener(e -> chooseFolder());
 
         downloadButton.addActionListener(e -> {
+            selectForConversionViewModel.getState().setLatestFilePath(outputFolderField.getText());
             viewManagerModel.setActiveView("progress");
             viewManagerModel.firePropertyChanged();
 
@@ -165,5 +168,9 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
             nextButton.setVisible(false);
             nextButton.setEnabled(false);
         }
+    }
+
+    public void setSelectForConversionViewModel(SelectForConversionViewModel selectForConversionViewModel) {
+        this.selectForConversionViewModel = selectForConversionViewModel;
     }
 }

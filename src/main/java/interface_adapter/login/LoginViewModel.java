@@ -12,7 +12,6 @@ import interface_adapter.ViewModel;
 public class LoginViewModel extends ViewModel {
 
     public static final String VIEW_NAME = "login";
-    private String username;
 
 
     private LoginState state = new LoginState();
@@ -31,6 +30,4 @@ public class LoginViewModel extends ViewModel {
     public String getViewName() {
         return VIEW_NAME;
     }
-
-    public void setUsername(String name) { this.username = name; }
 }

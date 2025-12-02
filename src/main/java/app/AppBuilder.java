@@ -77,7 +77,7 @@ public class AppBuilder {
 
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
-        ProgressPresenter progressPresenter = new ProgressPresenter(progressViewModel);
+        ProgressPresenter progressPresenter = new ProgressPresenter(progressViewModel, viewManagerModel);
         ProgressInteractor progressInteractor = new ProgressInteractor(progressPresenter);
 
         // Controller needs downloadInteractor later
@@ -105,15 +105,6 @@ public class AppBuilder {
         DownloadView downloadView =
                 new DownloadView(downloadController, downloadViewModel, viewManagerModel, progressController);
 
-        //URL View
-        URLViewModel urlViewModel = new URLViewModel();
-        URLPresenter urlPresenter =
-                new URLPresenter(urlViewModel, downloadViewModel, viewManagerModel);
-        URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
-        URLController urlController = new URLController(urlInteractor);
-        URLView urlView = new URLView(urlViewModel, viewManagerModel);
-        urlView.setURLController(urlController);
-
         //TODO: CREATE PLAYLIST SETUP
 //        CreatePlaylistViewModel createPlaylistViewModel = new CreatePlaylistViewModel();
 //        CreatePlaylistPresenter createPlaylistPresenter =
@@ -123,16 +114,29 @@ public class AppBuilder {
 //        CreatePlaylistView createPlaylistView =
 //                new CreatePlaylistView();
 
+        //URL View
+        URLViewModel urlViewModel = new URLViewModel();
         // SELECT FOR CONVERSION
         SelectForConversionViewModel selectForConversionViewModel = new SelectForConversionViewModel();
         SelectForConversionPresenter selectForConversionPresenter =
-                new SelectForConversionPresenter(selectForConversionViewModel, viewManagerModel);
+                new SelectForConversionPresenter(selectForConversionViewModel, menuViewModel, viewManagerModel);
         SelectForConversionInputBoundary selectForConversionInteractor =
                 new SelectForConversionInteractor(selectForConversionPresenter);
         SelectForConversionController selectForConversionController =
                 new SelectForConversionController(selectForConversionInteractor);
         SelectForConversionView selectForConversionView =
                 new SelectForConversionView(selectForConversionController, selectForConversionViewModel);
+
+        downloadView.setSelectForConversionViewModel(selectForConversionViewModel);
+        loginView.setSelectForConversionViewModel(selectForConversionViewModel);
+
+
+        URLPresenter urlPresenter =
+                new URLPresenter(urlViewModel, downloadViewModel, selectForConversionViewModel, viewManagerModel);
+        URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
+        URLController urlController = new URLController(urlInteractor);
+        URLView urlView = new URLView(urlViewModel, viewManagerModel);
+        urlView.setURLController(urlController);
 
         // MENU VIEW (AFTER LOGIN)
         MenuView menuView = new MenuView(
