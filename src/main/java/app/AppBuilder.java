@@ -143,24 +143,6 @@ public class AppBuilder {
         // ** LIBRARY setup
         LibraryView libraryView = getLibraryView(playlistDAO);
 
-
-        // ** PLAYLIST setup
-        PlaylistViewModel playlistViewModel = new PlaylistViewModel();
-
-        PlaylistOutputBoundary PlaylistPresenter =
-                new PlaylistPresenter(playlistViewModel, viewManagerModel);
-
-        ModifyPlaylistOutputBoundary modifyPlaylistPresenter =
-                new ModifyPlaylistPresenter(playlistViewModel);
-
-        ModifyPlaylistInputBoundary modifyPlaylistInputBoundary =
-                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistPresenter);
-        ModifyPlaylistController modifyPlaylistController =
-                new ModifyPlaylistController(modifyPlaylistInputBoundary);
-        PlaylistView playlistView =
-                new PlaylistView(playlistViewModel, modifyPlaylistController,
-                        playlistDAO, viewManagerModel);
-
 // Menu view
 //        MenuView menuView =
 //                new MenuView(viewManagerModel, createPlaylistController);
@@ -321,6 +303,7 @@ public class AppBuilder {
         DeletePlaylistController deletePlaylistController =
                 new DeletePlaylistController(deleteInteractor);
 
+        // ** PLAYLIST setup
         PlaylistViewModel playlistViewModel =
                 new PlaylistViewModel();
         PlaylistPresenter playlistPresenter =
@@ -341,6 +324,7 @@ public class AppBuilder {
                         modifyPlaylistController,
                         playlistDAO,
                         viewManagerModel);
+
         // View
         return new LibraryView(
                 libraryViewModel,

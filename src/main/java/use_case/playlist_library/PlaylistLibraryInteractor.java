@@ -19,7 +19,6 @@ public class PlaylistLibraryInteractor
 
     @Override
     public void execute() {
-        // however you identify the current user – adjust as needed
         List<Playlist> playlistNames = DAI.getAllPlaylists();
 
         if (playlistNames.isEmpty()) {
