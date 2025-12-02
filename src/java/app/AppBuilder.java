@@ -8,6 +8,11 @@ import data_access.PlaylistDataAccessObject;
 
 // 1: library
 
+// delete playlist
+import use_case.delete_playlist.DeletePlaylistInteractor;
+import interface_adapter.delete_playlist.DeletePlaylistController;
+import interface_adapter.delete_playlist.DeletePlaylistPresenter;
+
 // load playlist library
 import interface_adapter.create_playlist.CreatePlaylistController;
 import interface_adapter.create_playlist.CreatePlaylistPresenter;
