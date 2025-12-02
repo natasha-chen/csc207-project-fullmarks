@@ -57,14 +57,6 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-        // Display username
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(usernameLabel);
-        panel.add(urlButton);
-//        panel.add(playlistButton);
-        panel.add(playlistLibraryButton);
-        panel.add(logoutButton);
 
         gbc.gridx = 0; gbc.gridy = 0;
         this.add(usernameLabel, gbc);
