@@ -26,7 +26,8 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 
 
     private JButton urlButton = new JButton("Download from URL");
-    private JButton playlistButton = new JButton("Create Playlist");
+//    private JButton playlistButton = new JButton("Create Playlist");
+    private JButton playlistLibraryButton = new JButton("Playlist Library");
     private JButton logoutButton = new JButton("Logout");
 
     public MenuView(ViewManagerModel viewManagerModel,
@@ -50,7 +51,8 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(usernameLabel);
         panel.add(urlButton);
-        panel.add(playlistButton);
+//        panel.add(playlistButton);
+        panel.add(playlistLibraryButton);
         panel.add(logoutButton);
 
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -80,19 +82,23 @@ public class MenuView extends JPanel implements PropertyChangeListener {
         });
 
         // ---- Playlist button ----
-        playlistButton.addActionListener(e -> {
-
-            // TODO: playlistViewModel is updated with files corresponding to username
-            //  would this be done by having the same prefix and changing the last part of the filepath?
-//             createPlaylistViewModel.getState().setFilePath();
-//             createPlaylistViewModel.firePropertyChanged();
-
-            // 3. Switch to create playlist view
-//            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
-//            viewManagerModel.firePropertyChanged();
+//        playlistButton.addActionListener(e -> {
+//
+//            // TODO: playlistViewModel is updated with files corresponding to username
+//            //  would this be done by having the same prefix and changing the last part of the filepath?
+////             createPlaylistViewModel.getState().setFilePath();
+////             createPlaylistViewModel.firePropertyChanged();
+//
+//            // 3. Switch to create playlist view
+////            viewManagerModel.setActiveView(createPlaylistViewModel.getViewName());
+////            viewManagerModel.firePropertyChanged();
+//        });
+        // ---- Playlist Library button ----
+        playlistLibraryButton.addActionListener(e -> {
+            viewManagerModel.setActiveView("playlist_library");
+            viewManagerModel.firePropertyChanged();
         });
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

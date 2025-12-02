@@ -1,5 +1,7 @@
 package view.playlist;
 
+import data_access.PlaylistDataAccessInterface;
+import entity.MediaFile;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.modify_playlist.ModifyPlaylistController;
 import interface_adapter.playlist_view.PlaylistViewModel;
@@ -12,10 +14,11 @@ import java.util.List;
 
 public class PlaylistView extends JPanel implements PropertyChangeListener {
 
-    public static final String VIEW_NAME = "playlist";
+    public static final String VIEW_NAME = "playlist_view";
 
     private final PlaylistViewModel playlistViewModel;
     private final ModifyPlaylistController modifyPlaylistController;
+    private final PlaylistDataAccessInterface playlistDAO;
     private final ViewManagerModel viewManagerModel;
 
     private final JLabel playlistNameLabel = new JLabel();
@@ -29,10 +32,12 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
 
     public PlaylistView(PlaylistViewModel playlistViewModel,
                         ModifyPlaylistController modifyPlaylistController,
+                        PlaylistDataAccessInterface playlistDAO,
                         ViewManagerModel viewManagerModel) {
 
         this.playlistViewModel = playlistViewModel;
         this.modifyPlaylistController = modifyPlaylistController;
+        this.playlistDAO = playlistDAO;
         this.viewManagerModel = viewManagerModel;
 
         this.playlistViewModel.addPropertyChangeListener(this);
@@ -61,24 +66,57 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
     }
 
     private void wireListeners() {
-        // Add Song(s) – simplified: type a song ID/name
+        // ADD SONG: show scrollable list of all media files
         addSongButton.addActionListener(e -> {
             String playlistName = playlistViewModel.getPlaylistName();
-            String songId = JOptionPane.showInputDialog(
+
+            List<MediaFile> mediaFiles = playlistDAO.getAllMedia();
+            if (mediaFiles.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "No media files found in the media folder.",
+                        "No songs",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                return;
+            }
+
+            // display title but use fileID (mp3 filename) when adding
+            String[] display = mediaFiles.stream()
+                    .map(m -> m.getTitle() + " (" + m.getFileID() + ")")
+                    .toArray(String[]::new);
+
+            JList<String> mediaList = new JList<>(display);
+            mediaList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+            JScrollPane scroll = new JScrollPane(mediaList);
+            scroll.setPreferredSize(new Dimension(350, 200));
+
+            int result = JOptionPane.showConfirmDialog(
                     this,
-                    "Enter song ID / filename to add:",
+                    scroll,
                     "Add song to " + playlistName,
+                    JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE
             );
 
-            if (songId == null || songId.isBlank()) {
-                return; // cancelled or empty
+            if (result != JOptionPane.OK_OPTION) {
+                return;
             }
 
-            modifyPlaylistController.addSong(playlistName, songId.trim());
+            int[] indices = mediaList.getSelectedIndices();
+            if (indices.length == 0) {
+                return;
+            }
+
+            for (int idx : indices) {
+                MediaFile mf = mediaFiles.get(idx);
+                String songId = mf.getFileID(); // this is the ID stored in playlist
+                modifyPlaylistController.addSong(playlistName, songId);
+            }
         });
 
-        // Delete song → confirm → ModifyPlaylistController
+        // DELETE SONG
         deleteButton.addActionListener(e -> {
             int idx = songList.getSelectedIndex();
             if (idx == -1) {
@@ -87,7 +125,7 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
             }
 
             String playlistName = playlistViewModel.getPlaylistName();
-            String songId = songList.getSelectedValue(); // each entry is a unique ID/name
+            String songId = songList.getSelectedValue(); // each entry is unique ID/name
 
             int result = JOptionPane.showConfirmDialog(
                     this,
@@ -101,14 +139,14 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
             }
         });
 
-        // Play button – stub for now
+        // PLAY (stub)
         playButton.addActionListener(e ->
                 playlistViewModel.setErrorMessage("Play playlist is not implemented yet.")
         );
 
-        // Back to library
+        // BACK TO LIBRARY
         libraryButton.addActionListener(e -> {
-            viewManagerModel.setActiveView("library");
+            viewManagerModel.setActiveView("playlist_library");
             viewManagerModel.firePropertyChanged();
         });
     }

@@ -32,6 +32,10 @@ import interface_adapter.library.LibraryController;
 // library view
 import view.playlist.LibraryView;
 
+// delete playlist usecase
+import use_case.delete_playlist.*;
+import interface_adapter.delete_playlist.*;
+
 // 2: playlist
 
 // load playlist
@@ -145,13 +149,12 @@ public class AppBuilder {
         ModifyPlaylistController modifyPlaylistController =
                 new ModifyPlaylistController(modifyPlaylistInputBoundary);
         PlaylistView playlistView =
-                new PlaylistView(playlistViewModel, modifyPlaylistController, viewManagerModel);
+                new PlaylistView(playlistViewModel, modifyPlaylistController,
+                        playlistDAO, viewManagerModel);
 
 // Menu view
 //        MenuView menuView =
 //                new MenuView(viewManagerModel, createPlaylistController);
-
-
 
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
@@ -182,7 +185,6 @@ public class AppBuilder {
                 new DownloadController(downloadInteractor);
         DownloadView downloadView =
                 new DownloadView(downloadController, downloadViewModel, viewManagerModel);
-
 
         //URL View
         URLViewModel urlViewModel = new URLViewModel();
@@ -280,14 +282,25 @@ public class AppBuilder {
         CreatePlaylistController createPlaylistController =
                 new CreatePlaylistController(createPlaylistInteractor);
 
+        // DELETE PLAYLIST use case wiring (uses the same libraryViewModel)
+        DeletePlaylistPresenter deletePresenter =
+                new DeletePlaylistPresenter(libraryViewModel);
+
+        DeletePlaylistInteractor deleteInteractor =
+                new DeletePlaylistInteractor(playlistDAO, deletePresenter);
+
+        DeletePlaylistController deletePlaylistController =
+                new DeletePlaylistController(deleteInteractor);
+
         PlaylistViewModel playlistViewModel =
                 new PlaylistViewModel();
         // View
         return new LibraryView(
                 libraryViewModel,
                 libraryController,
+                deletePlaylistController,
                 createPlaylistController,
-                playlistViewModel,          // ← ADD THIS
+                playlistViewModel,
                 viewManagerModel
         );
     }
