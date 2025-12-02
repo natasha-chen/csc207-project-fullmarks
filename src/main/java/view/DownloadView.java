@@ -1,14 +1,12 @@
 package view;
 
+import data_access.PathManager;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.url.URLState;
-import interface_adapter.url.URLViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -19,8 +17,9 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final ViewManagerModel viewManagerModel;
     private final ProgressController progressController;
 
+    private final PlaceholderTextField outputFolderField =
+            new PlaceholderTextField("Select folder or use default…");
 
-    private final JTextField outputFolderField = new JTextField(20);
     private final JLabel statusLabel = new JLabel("");
 
     private final JButton chooseFolderButton = new JButton("Choose Folder");
@@ -40,45 +39,60 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
 
         viewModel.addPropertyChangeListener(this);
 
+        // ---------- UI LAYOUT ----------
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        // Title
         JLabel title = new JLabel("Download Video");
         title.setFont(title.getFont().deriveFont(Font.BOLD, 22));
-
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
         this.add(title, gbc);
 
-        // Output folder
-        gbc.gridx = 0; gbc.gridy++;
-        this.add(new JLabel("Save To Folder:"), gbc);
-
-        gbc.gridx = 1;
+        // Text field for folder
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         this.add(outputFolderField, gbc);
 
-        gbc.gridy++;
+        // Default path
+        outputFolderField.setText(PathManager.getDefaultDownloadFolder());
+
+        // "Choose folder" button
+        gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridwidth = 1;
         this.add(chooseFolderButton, gbc);
 
-        // Buttons
-        gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 2;
+        // Download button
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
         this.add(downloadButton, gbc);
 
-        gbc.gridy++;
+        // Back button
+        gbc.gridy = 4;
         this.add(backButton, gbc);
 
-        gbc.gridy++;
+        // Next button (hidden until download succeeds)
+        gbc.gridy = 5;
         nextButton.setVisible(false);
         nextButton.setEnabled(false);
         this.add(nextButton, gbc);
 
-        // Status
-        gbc.gridy++;
+        // Status label
+        gbc.gridy = 6;
         statusLabel.setForeground(Color.BLUE);
         this.add(statusLabel, gbc);
 
-        // Button actions
+        // ---------- BUTTON ACTIONS ----------
+
         chooseFolderButton.addActionListener(e -> chooseFolder());
+
         downloadButton.addActionListener(e -> {
             viewManagerModel.setActiveView("progress");
             viewManagerModel.firePropertyChanged();
@@ -115,9 +129,11 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         DownloadState state = viewModel.getState();
 
+        // Update UI
         outputFolderField.setText(state.getOutputFolder());
         statusLabel.setText(state.getStatusMessage());
-        if (viewModel.getState().isSuccess()) {
+
+        if (state.isSuccess()) {
             nextButton.setVisible(true);
             nextButton.setEnabled(true);
         }
