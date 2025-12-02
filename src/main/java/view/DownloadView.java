@@ -114,6 +114,18 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
             viewManagerModel.setActiveView("select for conversion");
             viewManagerModel.firePropertyChanged();
         });
+
+        viewManagerModel.addPropertyChangeListener(evt -> {
+            if ("activeView".equals(evt.getPropertyName())) {
+
+                String newView = (String) evt.getNewValue();
+
+                if ("download".equals(newView)) {
+                    outputFolderField.setText(PathManager.getDefaultDownloadFolder());
+                }
+            }
+        });
+
     }
 
     private void chooseFolder() {
