@@ -19,6 +19,7 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
     private final JLabel statusLabel = new JLabel("Ready");
     private final JButton cancelButton = new JButton("Cancel");
     private final JButton backButton = new JButton("Back");
+    private final JButton menuButton = new JButton("Menu");
 
     private ProgressController progressController;
     private ViewManagerModel viewManagerModel;
@@ -47,12 +48,20 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
             viewManagerModel.firePropertyChanged();
         });
 
+        menuButton.setVisible(true);
+        menuButton.addActionListener(e -> {
+            // go to menu
+            viewManagerModel.setActiveView("url"); // placeholder until playlist use case is merged
+            viewManagerModel.firePropertyChanged();
+        });
+
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
         this.add(progressBar);
         this.add(statusLabel);
         this.add(cancelButton);
         this.add(backButton);
+        this.add(menuButton);
     }
 
     /** Updating progress bar */
@@ -72,12 +81,14 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
         if (state.isComplete()) {
             cancelButton.setEnabled(false);
             backButton.setVisible(true);
+            menuButton.setVisible(true);
         }
 
         // If cancelled or error, disable Cancel and show Close
         if (state.isError() && state.getMessage().contains("cancel")) {
             cancelButton.setEnabled(false);
             backButton.setVisible(true);   //
+            menuButton.setVisible(true);
         }
 
 
@@ -85,6 +96,7 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
         if (state.isError()) {
             cancelButton.setEnabled(false);
             backButton.setVisible(true);
+            menuButton.setVisible(true);
         }
     }
 
