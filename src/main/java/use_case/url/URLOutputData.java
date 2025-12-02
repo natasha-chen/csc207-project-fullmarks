@@ -10,6 +10,7 @@ import java.util.List;
 public class URLOutputData {
     private final String url;
     private final List<VideoData> playlistData;
+    private boolean success;
 
     public URLOutputData(String url, List<VideoData> playlistData) {
         this.url = url;
@@ -21,4 +22,10 @@ public class URLOutputData {
     }
 
     public List<VideoData> getPlaylistData() {return playlistData;}
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {this.success = success;}
 }

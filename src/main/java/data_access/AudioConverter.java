@@ -1,5 +1,7 @@
 package data_access;
 
+import use_case.select_for_conversion.ConverterInterface;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -7,8 +9,9 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AudioConverter {
+public class AudioConverter implements ConverterInterface {
 
+    @Override
     public void convertToMP3(String folder, String title, String username) {
         String destination = "appdata" + File.separator + username + File.separator + "media" + File.separator;
         ensureOutputDirectory(destination);

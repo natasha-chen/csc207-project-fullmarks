@@ -10,8 +10,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 // data access
-import data_access.PlaylistDataAccessInterface;
-import data_access.PlaylistDataAccessObject;
+import data_access.*;
 
 // 1: library
 
@@ -60,7 +59,6 @@ import interface_adapter.playlist_view.PlaylistController;
 import view.playlist.PlaylistView;
 
 //
-import data_access.Downloader;
 import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.ProgressBar.ProgressPresenter;
 import interface_adapter.ProgressBar.ProgressViewModel;
@@ -213,7 +211,7 @@ public class AppBuilder {
         SelectForConversionPresenter selectForConversionPresenter =
                 new SelectForConversionPresenter(selectForConversionViewModel, menuViewModel, viewManagerModel);
         SelectForConversionInputBoundary selectForConversionInteractor =
-                new SelectForConversionInteractor(selectForConversionPresenter);
+                new SelectForConversionInteractor(selectForConversionPresenter, new AudioConverter());
         SelectForConversionController selectForConversionController =
                 new SelectForConversionController(selectForConversionInteractor);
         SelectForConversionView selectForConversionView =
@@ -225,7 +223,7 @@ public class AppBuilder {
 
         URLPresenter urlPresenter =
                 new URLPresenter(urlViewModel, downloadViewModel, selectForConversionViewModel, viewManagerModel);
-        URLInputBoundary urlInteractor = new URLInteractor(urlPresenter);
+        URLInputBoundary urlInteractor = new URLInteractor(urlPresenter, new Fetcher());
         URLController urlController = new URLController(urlInteractor);
         URLView urlView = new URLView(urlViewModel, viewManagerModel);
         urlView.setURLController(urlController);

@@ -1,13 +1,15 @@
 package data_access;
 
 import org.json.JSONObject;
+import use_case.url.FetcherInterface;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
-public class Fetcher {
+public class Fetcher implements FetcherInterface {
 
+    @Override
     public JSONObject fetchInfo(String url) throws Exception {
 
         String os = System.getProperty("os.name");
