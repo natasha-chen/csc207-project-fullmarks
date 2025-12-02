@@ -15,8 +15,6 @@ public class Playlist {
     }
 
     public String getName() { return name; }
-    public void rename(String newName) { this.name = newName; }
-
     // note: all mp3 files are referred to by ID/filename, not the name given by user
 
     // returns the filename/ID of the songs in playlist

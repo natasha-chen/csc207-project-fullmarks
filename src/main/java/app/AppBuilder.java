@@ -323,6 +323,24 @@ public class AppBuilder {
 
         PlaylistViewModel playlistViewModel =
                 new PlaylistViewModel();
+        PlaylistPresenter playlistPresenter =
+                new PlaylistPresenter(playlistViewModel,  viewManagerModel);
+        PlaylistInputBoundary playlistInteractor =
+                new PlaylistInteractor(playlistDAO, playlistPresenter);
+        PlaylistController playlistController =
+                new PlaylistController(playlistInteractor);
+        ModifyPlaylistOutputBoundary modifyPlaylistOutputBoundary =
+                new ModifyPlaylistPresenter(playlistViewModel);
+        ModifyPlaylistInteractor modifyPlaylistInteractor =
+                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistOutputBoundary);
+        ModifyPlaylistController modifyPlaylistController =
+                new ModifyPlaylistController(modifyPlaylistInteractor);
+        PlaylistView playlistView =
+                new PlaylistView(
+                        playlistViewModel,
+                        modifyPlaylistController,
+                        playlistDAO,
+                        viewManagerModel);
         // View
         return new LibraryView(
                 libraryViewModel,
