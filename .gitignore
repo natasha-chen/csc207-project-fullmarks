@@ -2,3 +2,5 @@
 /target/*
 /target
 users.csv
+*.mp3
+*.mp4

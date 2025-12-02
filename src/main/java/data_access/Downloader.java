@@ -2,18 +2,19 @@ package data_access;
 
 import use_case.download.DownloadDataAccessInterface;
 import use_case.progress.ProgressCallback;
+import use_case.progress.ProgressInputBoundary;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Downloader implements DownloadDataAccessInterface {
 
-    public void downloadVideo(String url, String outputFolder, ProgressCallback progressCallback) {
-        System.out.println("Starting download...");
+    @Override
+    public void downloadVideo(String url,
+                              String outputFolder,
+                              ProgressInputBoundary progressUpdater) throws Exception {
 
         String os =  System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
@@ -26,32 +27,37 @@ public class Downloader implements DownloadDataAccessInterface {
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url
         );
+
         pb.redirectErrorStream(true);
+        Process process = pb.start();
 
-        try {
-            Process process = pb.start();
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Look for progress lines
-                if (line.contains("[download]")) {
+        String line;
+        while ((line = reader.readLine()) != null) {
 
-                    // Find percentage using regex
-                    Matcher m = Pattern.compile("(\\d+\\.\\d+)%").matcher(line);
-                    if (m.find()) {
-                        double percent = Double.parseDouble(m.group(1));
-                        progressCallback.reportProgress((int) percent, "Downloading");
-                    }
-                }
+            if (progressUpdater.isCancelled()) {
+                process.destroy();
+                progressUpdater.reportProgress(0, "Download cancelled.");
+                return;
             }
-            progressCallback.reportProgress(100, "Finished");
 
-            process.waitFor();
-            System.out.println("✅ Video downloaded successfully!");
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            if (line.contains("[download]") && line.contains("%")) {
+                try {
+                    String percentStr = line.replaceAll(".*?([0-9.]+)%.*", "$1");
+                    double percent = Double.parseDouble(percentStr);
+
+                    progressUpdater.reportProgress(
+                            (int) percent,
+                            "Downloading... " + percent + "%"
+                    );
+
+                } catch (Exception ignored) {}
+            }
         }
+
+        process.waitFor();
+        progressUpdater.reportProgress(100, "Download completed!");
     }
 }

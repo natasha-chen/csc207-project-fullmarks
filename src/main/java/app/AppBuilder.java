@@ -104,8 +104,7 @@ public class AppBuilder {
         DownloadController downloadController =
                 new DownloadController(downloadInteractor);
         DownloadView downloadView =
-                new DownloadView(downloadController, downloadViewModel, viewManagerModel);
-
+                new DownloadView(downloadController, downloadViewModel, viewManagerModel, progressController);
 
 
 

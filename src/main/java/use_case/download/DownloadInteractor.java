@@ -37,8 +37,12 @@ public class DownloadInteractor implements DownloadInputBoundary {
         }
 
         try {
-            presenter.prepareProgressBar();
-            downloader.downloadVideo(url, outputFolder, progressCallback);
+            downloader.downloadVideo(url, outputFolder, progressInteractor);
+
+            DownloadOutputData outputData =
+                    new DownloadOutputData("Download completed successfully.", url);
+
+            presenter.prepareSuccessView(outputData);
 
         } catch (Exception e) {
             presenter.prepareFailView("Download failed: " + e.getMessage());

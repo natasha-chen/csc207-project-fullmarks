@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.ProgressBar.ProgressController;
 import interface_adapter.download.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.select_for_conversion.SelectForConversionViewModel;
@@ -15,7 +16,8 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
     private final DownloadController controller;
     private final DownloadViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
-    private SelectForConversionViewModel selectForConversionViewModel;
+    private final ProgressController progressController;
+
 
     private final JTextField outputFolderField = new JTextField(20);
     private final JLabel statusLabel = new JLabel("");
@@ -27,10 +29,13 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
 
     public DownloadView(DownloadController controller,
                         DownloadViewModel viewModel,
-                        ViewManagerModel viewManagerModel) {
+                        ViewManagerModel viewManagerModel,
+                        ProgressController progressController) {
+
         this.controller = controller;
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
+        this.progressController = progressController;
 
         viewModel.addPropertyChangeListener(this);
 
