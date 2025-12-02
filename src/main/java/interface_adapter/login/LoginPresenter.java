@@ -1,5 +1,6 @@
 package interface_adapter.login;
 
+import data_access.PathManager;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.menu.MenuState;
 import interface_adapter.menu.MenuViewModel;
@@ -31,12 +32,14 @@ public class LoginPresenter implements LoginOutputBoundary {
         // Update MenuViewModel with logged-in user's username
         MenuState state = menuViewModel.getState();
         state.setUsername(outputData.getUsername());
+        PathManager.setLoggedInUsername(outputData.getUsername());
         menuViewModel.setState(state);
         menuViewModel.firePropertyChanged();
 
         // Now switch the view
         viewManagerModel.setActiveView("menu");
         viewManagerModel.firePropertyChanged();
+        loginViewModel.setUsername(outputData.getUsername());
     }
 
     @Override

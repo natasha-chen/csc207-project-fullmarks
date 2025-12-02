@@ -51,7 +51,7 @@ public class ProgressView extends JPanel implements PropertyChangeListener {
         menuButton.setVisible(true);
         menuButton.addActionListener(e -> {
             // go to menu
-            viewManagerModel.setActiveView("url"); // placeholder until playlist use case is merged
+            viewManagerModel.setActiveView("menu");
             viewManagerModel.firePropertyChanged();
         });
 
