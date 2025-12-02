@@ -6,6 +6,7 @@ import interface_adapter.library.LibraryController;
 import interface_adapter.library.LibraryState;
 import interface_adapter.library.LibraryViewModel;
 import interface_adapter.playlist_view.PlaylistViewModel;
+import interface_adapter.delete_playlist.DeletePlaylistController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +22,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
 
     private final LibraryViewModel viewModel;
     private final LibraryController controller;
+    private final DeletePlaylistController deletePlaylistController;
     private final ViewManagerModel viewManagerModel;
     private final PlaylistViewModel playlistViewModel;
     private final CreatePlaylistController createPlaylistController;
@@ -28,19 +30,21 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
     private final JList<String> playlistList = new JList<>();
     private final JButton menuButton = new JButton("Menu");
     private final JButton newPlaylistButton = new JButton("New Playlist");
-    private final JButton deleteButton = new JButton("Delete");
+    private final JButton deleteButton = new JButton("Delete Playlist");
     private final JButton playButton = new JButton("Play");
     private final JButton enterButton = new JButton("Enter Playlist");
     private final JLabel errorLabel = new JLabel();
 
     public LibraryView(LibraryViewModel viewModel,
                        LibraryController controller,
+                       DeletePlaylistController deletePlaylistController,
                        CreatePlaylistController createPlaylistController,
                        PlaylistViewModel playlistViewModel,
                        ViewManagerModel viewManagerModel) {
 
         this.viewModel = viewModel;
         this.controller = controller;
+        this.deletePlaylistController = deletePlaylistController;
         this.createPlaylistController = createPlaylistController;
         this.viewManagerModel = viewManagerModel;
         this.playlistViewModel = playlistViewModel;
@@ -110,16 +114,40 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
             createPlaylistController.createPlaylist(name.trim());
         });
 
+        // delete button listener
         deleteButton.addActionListener(e -> {
             if (playlistList.isSelectionEmpty()) {
                 errorLabel.setText("Please select a playlist to delete.");
-            } else {
-                int index = playlistList.getSelectedIndex();
-                String playlistName = playlistList.getModel().getElementAt(index);
-                // TODO: show confirmation + call DeletePlaylist use case
-                System.out.println("Delete playlist: " + playlistName);
+                return;
             }
+
+            int index = playlistList.getSelectedIndex();
+            String playlistName = playlistList.getModel().getElementAt(index);
+
+            // Optional: Swing confirmation dialog
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete playlist \"" + playlistName + "\"?",
+                    "Delete Playlist",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            // Call the Delete Playlist use case
+            deletePlaylistController.execute(playlistName);
+
+            // Clear UI error state
+            errorLabel.setText("");
+
+            // Reload library (you already have a libraryController)
+            controller.execute();
+
+            System.out.println("Deleted playlist: " + playlistName);
         });
+
 
         playButton.addActionListener(e -> {
             if (playlistList.isSelectionEmpty()) {
@@ -127,7 +155,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
             } else {
                 int index = playlistList.getSelectedIndex();
                 String playlistName = playlistList.getModel().getElementAt(index);
-                // TODO: call PlayPlaylist use case (your friend's part)
+                // TODO: call PlayPlaylist use case (friend's part)
                 System.out.println("Play playlist: " + playlistName);
             }
         });

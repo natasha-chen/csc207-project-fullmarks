@@ -145,13 +145,12 @@ public class AppBuilder {
         ModifyPlaylistController modifyPlaylistController =
                 new ModifyPlaylistController(modifyPlaylistInputBoundary);
         PlaylistView playlistView =
-                new PlaylistView(playlistViewModel, modifyPlaylistController, viewManagerModel);
+                new PlaylistView(playlistViewModel, modifyPlaylistController,
+                        playlistDAO, viewManagerModel);
 
 // Menu view
 //        MenuView menuView =
 //                new MenuView(viewManagerModel, createPlaylistController);
-
-
 
         // PROGRESS BAR SETUP
         ProgressViewModel progressViewModel = new ProgressViewModel();
@@ -279,14 +278,25 @@ public class AppBuilder {
         CreatePlaylistController createPlaylistController =
                 new CreatePlaylistController(createPlaylistInteractor);
 
+        // DELETE PLAYLIST use case wiring (uses the same libraryViewModel)
+        DeletePlaylistPresenter deletePresenter =
+                new DeletePlaylistPresenter(libraryViewModel);
+
+        DeletePlaylistInteractor deleteInteractor =
+                new DeletePlaylistInteractor(playlistDAO, deletePresenter);
+
+        DeletePlaylistController deletePlaylistController =
+                new DeletePlaylistController(deleteInteractor);
+
         PlaylistViewModel playlistViewModel =
                 new PlaylistViewModel();
         // View
         return new LibraryView(
                 libraryViewModel,
                 libraryController,
+                deletePlaylistController,
                 createPlaylistController,
-                playlistViewModel,          // ← ADD THIS
+                playlistViewModel,
                 viewManagerModel
         );
     }

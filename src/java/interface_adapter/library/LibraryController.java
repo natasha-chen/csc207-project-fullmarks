@@ -13,4 +13,7 @@ public class LibraryController {
     public void loadLibrary() {
         loadPlaylistLibraryInteractor.execute();
     }
+
+    public void execute() {
+    }
 }
