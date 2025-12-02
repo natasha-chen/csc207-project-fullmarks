@@ -10,11 +10,12 @@ public class Downloader implements DownloadDataAccessInterface {
 
     @Override
     public void downloadVideo(String url,
-                         String outputFolder,
-                         ProgressInputBoundary progressUpdater) throws Exception {
+                              String outputFolder,
+                              ProgressInputBoundary progressUpdater) throws Exception {
 
         ProcessBuilder pb = new ProcessBuilder(
                 "yt-dlp",
+                "--newline",
                 "-f", "mp4",
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url
@@ -27,35 +28,25 @@ public class Downloader implements DownloadDataAccessInterface {
                 new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         String line;
-
         while ((line = reader.readLine()) != null) {
 
-            // handle cancel
             if (progressUpdater.isCancelled()) {
                 process.destroy();
                 progressUpdater.reportProgress(0, "Download cancelled.");
                 return;
             }
 
-            // parse yt-dlp percentage
-            if (line.contains("[download]")) {
-                int percentIndex = line.indexOf('%');
-                if (percentIndex > 12) {
-                    String number = line.substring(percentIndex - 6, percentIndex).trim();
+            if (line.contains("[download]") && line.contains("%")) {
+                try {
+                    String percentStr = line.replaceAll(".*?([0-9.]+)%.*", "$1");
+                    double percent = Double.parseDouble(percentStr);
 
-                    try {
-                        double percent = Double.parseDouble(number);
-                        progressUpdater.reportProgress(
-                                (int) percent,
-                                "Downloading... " + percent + "%"
-                        );
-                    } catch (NumberFormatException ignored) {}
-                }
-            }
+                    progressUpdater.reportProgress(
+                            (int) percent,
+                            "Downloading... " + percent + "%"
+                    );
 
-            // Completed
-            if (line.contains("100%")) {
-                progressUpdater.reportProgress(100, "Download completed!");
+                } catch (Exception ignored) {}
             }
         }
 
