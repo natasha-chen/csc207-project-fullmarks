@@ -23,7 +23,11 @@ public class AudioConverter implements ConverterInterface {
         String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
 
-        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
+        // Decide command: prefer local bin/ copy on Windows, otherwise use system command
+        String ffmpegName = isWindows ? "ffmpeg.exe" : "ffmpeg";
+        File localFfmpeg = new File("bin" + File.separator + ffmpegName);
+        String ffmpegPath = localFfmpeg.exists() ? localFfmpeg.getAbsolutePath() : ffmpegName;
+//        String ffmpegPath = "bin" + File.separator + (isWindows ? "ffmpeg.exe" : "ffmpeg");
 
         ProcessBuilder pb = new ProcessBuilder(
                 ffmpegPath,
@@ -48,7 +52,6 @@ public class AudioConverter implements ConverterInterface {
             e.printStackTrace();
         }
     }
-
 
     public void ensureOutputDirectory(String outputPath) {
         Path path = Path.of(outputPath);

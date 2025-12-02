@@ -17,12 +17,16 @@ public class Downloader implements DownloadDataAccessInterface {
                               String outputFolder,
                               ProgressInputBoundary progressUpdater) throws Exception {
 
-        String os = System.getProperty("os.name");
+        String os = System.getProperty("os.name").toLowerCase();
         boolean isWindows = os.contains("win");
-        String ytDlpPath = "bin" + File.separator + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+
+        // accomodating for both mac and windows:
+        String ytName = isWindows ? "yt-dlp.exe" : "yt-dlp";
+        File localYt = new File("bin" + File.separator + ytName);
+        String ytDlpCmd = localYt.exists() ? localYt.getAbsolutePath() : ytName;
 
         ProcessBuilder pb = new ProcessBuilder(
-                ytDlpPath,
+                ytDlpCmd,
                 "-f", "mp4",
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url
@@ -52,7 +56,8 @@ public class Downloader implements DownloadDataAccessInterface {
                             "Downloading... " + percent + "%"
                     );
 
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
 

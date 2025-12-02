@@ -15,7 +15,12 @@ public class Fetcher implements FetcherInterface {
         String os = System.getProperty("os.name");
         boolean isWindows = os.contains("win");
 
-        String ytDlpPath = "bin" + File.separator + (isWindows ? "yt-dlp.exe" : "yt-dlp");
+        // Prefer local bin copy on Windows, otherwise use system yt-dlp
+        String ytName = isWindows ? "yt-dlp.exe" : "yt-dlp";
+        File localYt = new File("bin" + File.separator + ytName);
+        String ytDlpPath = localYt.exists() ? localYt.getAbsolutePath() : ytName;
+
+//        String ytDlpPath = "bin" + File.separator + (isWindows ? "yt-dlp.exe" : "yt-dlp");
 
 
         ProcessBuilder pb = new ProcessBuilder(

@@ -111,6 +111,28 @@ public class AppBuilder {
                 new PlaylistDataAccessObject();
         PlaylistDataAccessInterface playlistDAO = playlistDataAccessObject;
 
+        // ** PLAYLIST setup
+        PlaylistViewModel playlistViewModel =
+                new PlaylistViewModel();
+        PlaylistPresenter playlistPresenter =
+                new PlaylistPresenter(playlistViewModel,  viewManagerModel);
+        PlaylistInputBoundary playlistInteractor =
+                new PlaylistInteractor(playlistDAO, playlistPresenter);
+        PlaylistController playlistController =
+                new PlaylistController(playlistInteractor);
+        ModifyPlaylistOutputBoundary modifyPlaylistOutputBoundary =
+                new ModifyPlaylistPresenter(playlistViewModel);
+        ModifyPlaylistInteractor modifyPlaylistInteractor =
+                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistOutputBoundary);
+        ModifyPlaylistController modifyPlaylistController =
+                new ModifyPlaylistController(modifyPlaylistInteractor);
+        PlaylistView playlistView =
+                new PlaylistView(
+                        playlistViewModel,
+                        modifyPlaylistController,
+                        playlistDAO,
+                        viewManagerModel);
+
         // MENU VIEWMODEL (home page)
         MenuViewModel menuViewModel = new MenuViewModel();
 
@@ -141,7 +163,7 @@ public class AppBuilder {
                 new SignupLoginMenuView(viewManagerModel);
 
         // ** LIBRARY setup
-        LibraryView libraryView = getLibraryView(playlistDAO);
+        LibraryView libraryView = getLibraryView(playlistDAO, playlistViewModel);
 
 // Menu view
 //        MenuView menuView =
@@ -269,7 +291,8 @@ public class AppBuilder {
         return userRoot;  // AppBuilder will pass this into DAOs
     }
 
-    private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO) {
+    private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO,
+                                       PlaylistViewModel playlistViewModel) {
         // Shared view model for the library screen
         LibraryViewModel libraryViewModel = new LibraryViewModel();
 
@@ -302,28 +325,6 @@ public class AppBuilder {
 
         DeletePlaylistController deletePlaylistController =
                 new DeletePlaylistController(deleteInteractor);
-
-        // ** PLAYLIST setup
-        PlaylistViewModel playlistViewModel =
-                new PlaylistViewModel();
-        PlaylistPresenter playlistPresenter =
-                new PlaylistPresenter(playlistViewModel,  viewManagerModel);
-        PlaylistInputBoundary playlistInteractor =
-                new PlaylistInteractor(playlistDAO, playlistPresenter);
-        PlaylistController playlistController =
-                new PlaylistController(playlistInteractor);
-        ModifyPlaylistOutputBoundary modifyPlaylistOutputBoundary =
-                new ModifyPlaylistPresenter(playlistViewModel);
-        ModifyPlaylistInteractor modifyPlaylistInteractor =
-                new ModifyPlaylistInteractor(playlistDAO, modifyPlaylistOutputBoundary);
-        ModifyPlaylistController modifyPlaylistController =
-                new ModifyPlaylistController(modifyPlaylistInteractor);
-        PlaylistView playlistView =
-                new PlaylistView(
-                        playlistViewModel,
-                        modifyPlaylistController,
-                        playlistDAO,
-                        viewManagerModel);
 
         // View
         return new LibraryView(
