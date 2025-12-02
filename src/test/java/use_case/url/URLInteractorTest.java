@@ -1,10 +1,6 @@
-package use_case.URLTest;
+package use_case.url;
 
 import org.junit.jupiter.api.Test;
-import use_case.url.URLInputData;
-import use_case.url.URLInteractor;
-import use_case.url.URLOutputBoundary;
-import use_case.url.URLOutputData;
 
 import static org.junit.jupiter.api.Assertions.*;
 
