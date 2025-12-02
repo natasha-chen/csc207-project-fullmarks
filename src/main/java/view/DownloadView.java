@@ -48,7 +48,7 @@ public class DownloadView extends JPanel implements PropertyChangeListener {
         gbc.gridx = 0; gbc.gridy++;
         this.add(new JLabel("Save To Folder:"), gbc);
 
-        gbc.gridx = 1;
+        gbc.gridy++;
         this.add(outputFolderField, gbc);
 
         gbc.gridy++;
