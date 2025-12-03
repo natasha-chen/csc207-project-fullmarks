@@ -39,6 +39,7 @@ public class CreatePlaylistInteractor implements CreatePlaylistInputBoundary {
         // create and save
         Playlist playlist = new Playlist(name);
         DAO.savePlaylist(playlist);
+        DAO.updateMedia();
 
         // build updated list of playlist names for the library view
         List<String> allNames = DAO.getAllPlaylists()

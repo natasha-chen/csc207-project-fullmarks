@@ -27,6 +27,7 @@ public class Downloader implements DownloadDataAccessInterface {
 
         ProcessBuilder pb = new ProcessBuilder(
                 ytDlpCmd,
+                "--restrict-filenames",      // <--- add this
                 "-f", "mp4",
                 "-o", outputFolder + "%(title)s.%(ext)s",
                 url

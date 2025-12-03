@@ -5,6 +5,7 @@ import interface_adapter.create_playlist.CreatePlaylistController;
 import interface_adapter.library.LibraryController;
 import interface_adapter.library.LibraryState;
 import interface_adapter.library.LibraryViewModel;
+import interface_adapter.playlist_view.PlaylistController;
 import interface_adapter.playlist_view.PlaylistViewModel;
 import interface_adapter.delete_playlist.DeletePlaylistController;
 
@@ -26,6 +27,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
     private final ViewManagerModel viewManagerModel;
     private final PlaylistViewModel playlistViewModel;
     private final CreatePlaylistController createPlaylistController;
+    private final PlaylistController playlistController;
 
     private final JList<String> playlistList = new JList<>();
     private final JButton menuButton = new JButton("Menu");
@@ -40,7 +42,8 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
                        DeletePlaylistController deletePlaylistController,
                        CreatePlaylistController createPlaylistController,
                        PlaylistViewModel playlistViewModel,
-                       ViewManagerModel viewManagerModel) {
+                       ViewManagerModel viewManagerModel,
+                       PlaylistController playlistController) {
 
         this.viewModel = viewModel;
         this.controller = controller;
@@ -48,6 +51,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
         this.createPlaylistController = createPlaylistController;
         this.viewManagerModel = viewManagerModel;
         this.playlistViewModel = playlistViewModel;
+        this.playlistController =  playlistController;
         this.viewModel.addPropertyChangeListener(this);
 
         setLayout(new BorderLayout());
@@ -170,7 +174,7 @@ public class LibraryView extends JPanel implements PropertyChangeListener {
 
             playlistViewModel.setPlaylistName(playlistName);
             playlistViewModel.firePropertyChanged();
-
+            playlistController.execute(playlistName);
             viewManagerModel.setActiveView("playlist_view");
             viewManagerModel.firePropertyChanged();
         });

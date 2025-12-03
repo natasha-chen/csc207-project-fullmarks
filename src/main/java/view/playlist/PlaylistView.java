@@ -70,6 +70,7 @@ public class PlaylistView extends JPanel implements PropertyChangeListener {
         addSongButton.addActionListener(e -> {
             String playlistName = playlistViewModel.getPlaylistName();
 
+            playlistDAO.updateMedia();
             List<MediaFile> mediaFiles = playlistDAO.getAllMedia();
             if (mediaFiles.isEmpty()) {
                 JOptionPane.showMessageDialog(

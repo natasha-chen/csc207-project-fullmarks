@@ -1,9 +1,11 @@
 package view;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.library.LibraryController;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.menu.MenuState;
 import interface_adapter.menu.MenuViewModel;
+import interface_adapter.playlist_view.PlaylistViewModel;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.signup.SignupState;
 import interface_adapter.url.URLViewModel;
@@ -19,7 +21,7 @@ public class MenuView extends JPanel implements PropertyChangeListener {
     private final LoginViewModel loginViewModel;
     private final SignupViewModel signupViewModel;
     private final URLViewModel urlViewModel;
-    // private final CreatePlaylistViewModel createPlaylistViewModel;
+    private final LibraryController libraryController;
     private final MenuViewModel viewModel;
 
     private JLabel usernameLabel = new JLabel("");
@@ -34,14 +36,14 @@ public class MenuView extends JPanel implements PropertyChangeListener {
                     LoginViewModel loginViewModel,
                     SignupViewModel signupViewModel,
                     URLViewModel urlViewModel,
-                    // CreatePlaylistViewModel createPlaylistViewModel,
+                    LibraryController libraryController,
                     MenuViewModel menuViewModel) {
 
         this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
         this.urlViewModel = urlViewModel;
-        // this.createPlaylistViewModel = createPlaylistViewModel;
+        this.libraryController = libraryController;
         this.viewModel = menuViewModel;
 
         viewModel.addPropertyChangeListener(this);
@@ -107,6 +109,7 @@ public class MenuView extends JPanel implements PropertyChangeListener {
 //        });
         // ---- Playlist Library button ----
         playlistLibraryButton.addActionListener(e -> {
+            libraryController.loadLibrary();
             viewManagerModel.setActiveView("playlist_library");
             viewManagerModel.firePropertyChanged();
         });

@@ -163,7 +163,21 @@ public class AppBuilder {
                 new SignupLoginMenuView(viewManagerModel);
 
         // ** LIBRARY setup
-        LibraryView libraryView = getLibraryView(playlistDAO, playlistViewModel);
+        // Shared view model for the library screen
+        LibraryViewModel libraryViewModel = new LibraryViewModel();
+
+        // LIBRARY use case wiring
+        PlaylistLibraryOutputBoundary libraryPresenter =
+                new LibraryPresenter(libraryViewModel);
+
+        PlaylistLibraryInputBoundary loadLibraryInteractor =
+                new PlaylistLibraryInteractor(playlistDAO, libraryPresenter);
+
+        LibraryController libraryController =
+                new LibraryController(loadLibraryInteractor);
+
+        LibraryView libraryView = getLibraryView(playlistDAO, playlistViewModel,
+                libraryViewModel,libraryController, playlistController);
 
 // Menu view
 //        MenuView menuView =
@@ -238,7 +252,7 @@ public class AppBuilder {
                 loginViewModel,
                 signupViewModel,
                 urlViewModel,
-                // createPlaylistViewModel,
+                libraryController,
                 menuViewModel
         );
 
@@ -292,19 +306,10 @@ public class AppBuilder {
     }
 
     private LibraryView getLibraryView(PlaylistDataAccessInterface playlistDAO,
-                                       PlaylistViewModel playlistViewModel) {
-        // Shared view model for the library screen
-        LibraryViewModel libraryViewModel = new LibraryViewModel();
-
-        // LIBRARY use case wiring
-        PlaylistLibraryOutputBoundary libraryPresenter =
-                new LibraryPresenter(libraryViewModel);
-
-        PlaylistLibraryInputBoundary loadLibraryInteractor =
-                new PlaylistLibraryInteractor(playlistDAO, libraryPresenter);
-
-        LibraryController libraryController =
-                new LibraryController(loadLibraryInteractor);
+                                       PlaylistViewModel playlistViewModel,
+                                       LibraryViewModel libraryViewModel,
+                                       LibraryController libraryController,
+                                       PlaylistController playlistController) {
 
         // CREATE PLAYLIST use case wiring (reuses same libraryViewModel)
         CreatePlaylistOutputBoundary createPlaylistPresenter =
@@ -333,7 +338,8 @@ public class AppBuilder {
                 deletePlaylistController,
                 createPlaylistController,
                 playlistViewModel,
-                viewManagerModel
+                viewManagerModel,
+                playlistController
         );
     }
 
